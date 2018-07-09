@@ -24,4 +24,14 @@ export class PersonaService {
   modificarPersona(id,persona){
     return this.apiService.put('persona/'+id, persona);
   }
+
+  buscarUnaPersona(termino,empresa) {
+    return this.apiService.get('persona?empresa='+empresa+'&where={"or":[{"cedula": {"contains":"'+termino+'"}}, {"nombre": {"contains":"'+termino+'"}} , {"telefono": {"contains":"'+termino+'"}}, {"correo": {"contains":"'+termino+'"}}    ]}')
+  }
+
+  obtenerPersonas(empresa){
+    return this.apiService.get('persona?empresa='+empresa);
+  }
+
+ 
 }

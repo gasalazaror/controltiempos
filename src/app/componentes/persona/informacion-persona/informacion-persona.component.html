@@ -1,3 +1,162 @@
-<p>
-  informacion-persona works!
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+
+        <div class="float-md-right">
+          <a class="btn btn-primary" href="#/persona/crearpersona/{{persona.id}}">
+            <i class="mdi mdi-pencil"></i>
+          </a>
+        </div>
+
+      </div>
+      <ul class="list-group list-group-flush">
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Estado:</strong>
+            </div>
+            <div class="col-md-9">{{persona.estado}}</div>
+          </div>
+        </li>
+
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Cédula/RUC:</strong>
+            </div>
+            <div class="col-md-9">{{persona.cedula}}</div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Nombre:</strong>
+            </div>
+            <div class="col-md-9">{{persona.nombre}}</div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Teléfono:</strong>
+            </div>
+            <div class="col-md-9">{{persona.telefono}}</div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Dirección:</strong>
+            </div>
+            <div class="col-md-9">{{persona.direccion}}</div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Correo:</strong>
+            </div>
+            <div class="col-md-9">{{persona.correo}}</div>
+          </div>
+        </li>
+
+
+      </ul>
+    </div>
+  </div>
+
+
+</div>
+
+<div class="card">
+  <div class="card-body">
+    <h3 class="card-title">Rol de persona en la empresa</h3>
+
+    <ngb-accordion #acc="ngbAccordion" class="accordion">
+
+
+      <ngb-panel id="toggle-1" title="Cliente">
+        <ng-template ngbPanelContent>
+
+          <button *ngIf="persona.cliente.length==0" class="btn btn-primary" (click)="activarCliente()">Activar</button>
+
+          <div *ngIf="persona.cliente.length==1" class="col-md-12">
+            <div class="card">
+              <div class="card-header">
+
+                <div class="float-md-right">
+                  <a class="btn btn-primary" href="#/persona/crearpersona/{{persona.id}}">
+                    <i class="mdi mdi-plus"></i>
+                  </a>
+                </div>
+              </div>
+              <div class="card-body">
+                <table class="table table-responsive-sm">
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th scope="col">Placa</th>
+                      <th scope="col">Marca</th>
+                      <th scope="col">Modelo</th>
+                      <th scope="col">Color</th>
+                      <th scope="col">Dueño actual</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of vehiculos">
+
+                      <td>
+                        <a class="btn btn-sm btn-primary" title="Nueva Orden de trabajo" href="#/ordenes/crearorden/{{item.id}}">
+                          <i class="mdi mdi-play"></i>
+                        </a>
+                        <a class="btn btn-sm btn-success" title="Modificar vehículo" href="#/ordenes/crearorden">
+                          <i class="mdi mdi-pencil"></i>
+                        </a>
+                        <a class="btn btn-sm btn-danger" title="Desvincular vehiculo" href="#/ordenes/crearorden">
+                          <i class="mdi mdi-delete"></i>
+                        </a>
+                      </td>
+                      <td>{{item.vehiculo.placa}}</td>
+                      <td>{{item.vehiculo.marca}}</td>
+                      <td>{{item.vehiculo.modelo}}</td>
+                      <td>{{item.vehiculo.color}}</td>
+                      <td>
+                        <input [checked]="item.esActual" type="checkbox">
+                      </td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+              </div>
+
+            </div>
+          </div>
+
+
+        </ng-template>
+      </ngb-panel>
+      <ngb-panel id="toggle-2" title="Empleado">
+        <ng-template ngbPanelContent>
+          <button *ngIf="persona.usuario.length==0" class="btn btn-primary" (click)="activarUsuario()">Activar</button>
+         
+          <div *ngIf="persona.usuario.length==1">
+            <div class="form-check" *ngFor="let rol of roles">
+              <input class="form-check-input" type="checkbox" value="" id="{{rol.id}}">
+              <label class="form-check-label" for="{{rol.id}}">
+                {{rol.descripcion}}
+              </label>
+            </div>
+          </div>
+
+
+
+        </ng-template>
+      </ngb-panel>
+    </ngb-accordion>
+
+  </div>
+</div>

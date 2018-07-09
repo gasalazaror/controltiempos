@@ -17,6 +17,7 @@ import { CardsComponent } from './card/card.component';
 import { ButtonsComponent } from './buttons/buttons.component';
 import { CrearPersonaComponent } from '../componentes/persona/crear-persona/crear-persona.component';
 import { ConsultarPersonaComponent } from '../componentes/persona/consultar-persona/consultar-persona.component';
+import { InformacionPersonaComponent } from '../componentes/persona/informacion-persona/informacion-persona.component';
 
 export const ComponentsRoutes: Routes = [
   {
@@ -31,7 +32,7 @@ export const ComponentsRoutes: Routes = [
         }
       },
       {
-        path: 'consultarpersona/:id',
+        path: 'consultarpersona',
         component: ConsultarPersonaComponent,
         data: {
           title: 'Consultar Persona',
@@ -39,8 +40,8 @@ export const ComponentsRoutes: Routes = [
         }
       },
       {
-        path: 'informacionpersona',
-        component: CrearPersonaComponent,
+        path: 'informacionpersona/:id',
+        component: InformacionPersonaComponent,
         data: {
           title: 'Información Persona',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Información' }]

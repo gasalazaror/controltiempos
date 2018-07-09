@@ -4,11 +4,11 @@ import { ApiService } from '../api/api.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ClienteService {
+export class UsuarioService {
 
   constructor(private apiService: ApiService) { }
 
-  activarCliente(persona){
-    return this.apiService.post('cliente', {persona: persona});
+  activarUsuario(persona){
+    return this.apiService.post('usuario', {persona: persona});
   }
 }
