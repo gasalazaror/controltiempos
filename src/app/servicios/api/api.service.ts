@@ -5,7 +5,9 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ApiService {
   //url: string = 'https://controltiempo.herokuapp.com';
-  url: string = 'http://localhost:1337';
+  //url: string = 'http://localhost:1337';
+    url: string = "http://192.168.1.111:1337"
+
   constructor(public http: HttpClient) {
   }
   httpOptions = {
