@@ -13,7 +13,9 @@ export const Approutes: Routes = [
         { path: 'starter', loadChildren: './starter/starter.module#StarterModule' },
         { path: 'component', loadChildren: './component/component.module#ComponentsModule' },
         { path: 'persona', loadChildren: './component/component.module#ComponentsModule' },
+        { path: 'vehiculo', loadChildren: './component/component.module#ComponentsModule' },
     ]
+    
 },
 {
     path: '**',

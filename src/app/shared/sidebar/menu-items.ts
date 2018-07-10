@@ -16,6 +16,13 @@ export const ROUTES: RouteInfo[] = [
             { path: '/persona/consultarpersona', title: 'Consultar Persona', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
         
         ]
+    } ,{
+        path: '', title: 'Vehículos', icon: 'mdi mdi-bullseye', class: 'has-arrow', label: '', labelClass: '', extralink: false,
+        submenu: [
+            { path: '/vehiculo/crearvehiculo/nuevo', title: 'Registrar Vehículo', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+            { path: '/vehiculo/consultarvehiculo', title: 'Consultar Persona', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+        
+        ]
     }     
 ];
 

@@ -18,6 +18,9 @@ import { ButtonsComponent } from './buttons/buttons.component';
 import { CrearPersonaComponent } from '../componentes/persona/crear-persona/crear-persona.component';
 import { ConsultarPersonaComponent } from '../componentes/persona/consultar-persona/consultar-persona.component';
 import { InformacionPersonaComponent } from '../componentes/persona/informacion-persona/informacion-persona.component';
+import { CrearVehiculoComponent } from '../componentes/vehiculo/crear-vehiculo/crear-vehiculo.component';
+import { ConsultarVehiculoComponent } from '../componentes/vehiculo/consultar-vehiculo/consultar-vehiculo.component';
+import { InformacionVehiculoComponent } from '../componentes/vehiculo/informacion-vehiculo/informacion-vehiculo.component';
 
 export const ComponentsRoutes: Routes = [
   {
@@ -27,8 +30,16 @@ export const ComponentsRoutes: Routes = [
         path: 'crearpersona/:id',
         component: CrearPersonaComponent,
         data: {
-          title: 'Crear Persona',
+          title: 'Crear Vehículo',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
+        }
+      },
+      {
+        path: 'crearvehiculo/:id',
+        component: CrearVehiculoComponent,
+        data: {
+          title: 'Crear Persona',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Vehículo' }, { title: 'Crear' }]
         }
       },
       {
@@ -40,11 +51,27 @@ export const ComponentsRoutes: Routes = [
         }
       },
       {
+        path: 'consultarvehiculo',
+        component: ConsultarVehiculoComponent,
+        data: {
+          title: 'Consultar Vehículo',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Vehículo' }, { title: 'Consultar' }]
+        }
+      },
+      {
         path: 'informacionpersona/:id',
         component: InformacionPersonaComponent,
         data: {
           title: 'Información Persona',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Información' }]
+        }
+      },
+      {
+        path: 'informacionvehiculo/:id',
+        component: InformacionVehiculoComponent,
+        data: {
+          title: 'Información Vehículo',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Vehículo' }, { title: 'Información' }]
         }
       },
       {
