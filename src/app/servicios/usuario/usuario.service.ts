@@ -11,4 +11,8 @@ export class UsuarioService {
   activarUsuario(persona){
     return this.apiService.post('usuario', {persona: persona});
   }
+
+  obtenerRolesUsuario(usuario){
+    	return this.apiService.get('usuario/'+usuario+'/roles')
+  }
 }

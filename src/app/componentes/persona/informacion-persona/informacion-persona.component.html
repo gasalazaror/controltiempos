@@ -88,9 +88,10 @@
               <div class="card-header">
 
                 <div class="float-md-right">
-                  <a class="btn btn-primary" href="#/persona/crearpersona/{{persona.id}}">
+                  
+                  <button class="btn btn-primary" (click)="agregarVehiculo()">
                     <i class="mdi mdi-plus"></i>
-                  </a>
+                  </button>
                 </div>
               </div>
               <div class="card-body">
@@ -106,7 +107,7 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let item of vehiculos">
+                    <tr *ngFor="let item of persona.cliente[0].vehiculos">
 
                       <td>
                         <a class="btn btn-sm btn-primary" title="Nueva Orden de trabajo" href="#/ordenes/crearorden/{{item.id}}">
@@ -119,10 +120,10 @@
                           <i class="mdi mdi-delete"></i>
                         </a>
                       </td>
-                      <td>{{item.vehiculo.placa}}</td>
-                      <td>{{item.vehiculo.marca}}</td>
-                      <td>{{item.vehiculo.modelo}}</td>
-                      <td>{{item.vehiculo.color}}</td>
+                      <td>{{item.placa}}</td>
+                      <td>{{item.marca}}</td>
+                      <td>{{item.modelo}}</td>
+                      <td>{{item.color}}</td>
                       <td>
                         <input [checked]="item.esActual" type="checkbox">
                       </td>
@@ -142,14 +143,31 @@
       <ngb-panel id="toggle-2" title="Empleado">
         <ng-template ngbPanelContent>
           <button *ngIf="persona.usuario.length==0" class="btn btn-primary" (click)="activarUsuario()">Activar</button>
-         
+
           <div *ngIf="persona.usuario.length==1">
-            <div class="form-check" *ngFor="let rol of roles">
-              <input class="form-check-input" type="checkbox" value="" id="{{rol.id}}">
-              <label class="form-check-label" for="{{rol.id}}">
-                {{rol.descripcion}}
-              </label>
-            </div>
+
+            <input [checked]="roles.Administrador" (change)="modificarRoles()" [(ngModel)]="roles.Administrador" class="form-check-input" type="checkbox" value="1"
+              id="rol1">
+            <label class="form-check-label" for="rol1">
+              Administrador
+            </label>
+            <br>
+
+            <input [checked]="roles.Tecnico" [(ngModel)]="roles.Tecnico" (change)="modificarRoles()" class="form-check-input" type="checkbox" value="2" id="rol2">
+            <label class="form-check-label" for="rol2">
+              Técnico
+            </label>
+            <br>
+
+
+            <input [checked]="roles.AsesorServicio" [(ngModel)]="roles.AsesorServicio" (change)="modificarRoles()" class="form-check-input" type="checkbox" value="3"
+              id="rol3">
+            <label class="form-check-label" for="rol3">
+              Asesor de servicio
+            </label>
+            <br>
+            <br>
+
           </div>
 
 

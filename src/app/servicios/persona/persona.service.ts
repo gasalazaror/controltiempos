@@ -33,5 +33,11 @@ export class PersonaService {
     return this.apiService.get('persona?empresa='+empresa);
   }
 
+  modificarRoles(usuario, roles){
+ 
+    
+    return this.apiService.put('usuario/'+usuario, roles);
+  }
+
  
 }

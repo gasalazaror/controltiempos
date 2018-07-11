@@ -11,4 +11,8 @@ export class ClienteService {
   activarCliente(persona){
     return this.apiService.post('cliente', {persona: persona});
   }
+
+  obtenerCliente(cliente){
+    return this.apiService.get('cliente/'+cliente);
+  }
 }
