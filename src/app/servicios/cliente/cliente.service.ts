@@ -15,4 +15,10 @@ export class ClienteService {
   obtenerCliente(cliente){
     return this.apiService.get('cliente/'+cliente);
   }
+
+  modificarVehiculos(usuario, vehiculos){
+ 
+    
+    return this.apiService.put('cliente/'+usuario, vehiculos);
+  }
 }

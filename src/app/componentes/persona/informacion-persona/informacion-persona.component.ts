@@ -26,7 +26,7 @@ export class InformacionPersonaComponent implements OnInit {
     private route: ActivatedRoute,
     private usuarioService: UsuarioService,
     private rolService: RolService,
-    private router:Router
+    private router: Router
     ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.vehiculos = []
@@ -66,14 +66,14 @@ export class InformacionPersonaComponent implements OnInit {
         if (res[0]) {
 
           this.persona = res[0]
-          
-          if (this.persona.cliente.length>0) {
+
+          if (this.persona.cliente.length > 0) {
             this.clienteService.obtenerCliente(this.persona.cliente[0].id)
-            .subscribe(res=>{
-              this.persona.cliente[0] = res;
-            })
+              .subscribe(res => {
+                this.persona.cliente[0] = res;
+              })
           } else {
-         
+
           }
 
           if (this.persona.usuario.length > 0) {
@@ -128,25 +128,63 @@ export class InformacionPersonaComponent implements OnInit {
     }
   }
 
-  agregarVehiculo(){
+  existeVehiculo(placa) {
+    var aux = false
+    this.persona.cliente[0].vehiculos.forEach(vehiculo => {
+      alert(vehiculo.placa+" "+placa)
+      if (vehiculo.placa== placa) {
+       aux = true
+      } 
+    });
+    
+    return aux
+  }
+
+  agregarVehiculo() {
+
    
-    var placa = prompt('Por favor ingrese la placa del vehículo', '');
 
-    this.vehiculoService.obtenerUnVehiculo(this.persona.empresa.id, 'placa', placa)
-    .subscribe(res=>{
-      if (res[0]) {
-        alert(JSON.stringify(res[0]))
-        
-      } else {
-        var confirmacion = confirm('No existe el vehículo con la placa ingresada ¿Desea crearlo?')
-        if (confirmacion) {
-          this.router.navigate(['vehiculo/crearvehiculo/nuevo']);
-        } else {
+    var placa = prompt('Por favor ingrese el id del vehículo', '');
+
+    if (placa.trim()!='') {
+      this.vehiculoService.obtenerUnVehiculo(this.persona.empresa.id, 'placa', placa)
+      .subscribe(res => {
+        if (res[0]) {
+
+     
+          if (this.existeVehiculo(res[0].placa)) {
+            alert('Ya se encuentra asignado el vehículo al cliente seleccionado')
+          } else {
+          var vehiculos = []
           
-        }
+          this.persona.cliente[0].vehiculos.forEach(vehiculo => {
+            vehiculos.push(vehiculo.id)
+          });
+          
+          vehiculos.push(res[0].id)
 
-      }
-    })
+          this.clienteService.modificarVehiculos(this.persona.cliente[0].id, {vehiculos: vehiculos})
+          .subscribe(res=>{
+            this.persona.cliente[0] = res
+          })
+          
+          }
+
+
+
+        } else {
+          var confirmacion = confirm('No existe el vehículo con la placa ingresada ¿Desea crearlo?')
+          if (confirmacion) {
+            this.router.navigate(['vehiculo/crearvehiculo/nuevo']);
+          } else {
+
+          }
+
+        }
+      })
+    }
+
+    
 
 
   }
@@ -163,7 +201,7 @@ export class InformacionPersonaComponent implements OnInit {
     if (this.roles.Administrador) { roles.push(1) }
     if (this.roles.Tecnico) { roles.push(2) }
     if (this.roles.AsesorServicio) { roles.push(3) }
-    this.personaService.modificarRoles(this.persona.usuario[0].id, {roles:roles}).subscribe(res=>{
+    this.personaService.modificarRoles(this.persona.usuario[0].id, { roles: roles }).subscribe(res => {
 
     })
 
