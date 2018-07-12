@@ -1,3 +1,80 @@
-<p>
-  informacion-vehiculo works!
-</p>
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+
+        <div class="float-md-right">
+          <a class="btn btn-primary" href="#/vehiculo/crearvehiculo/{{vehiculo.id}}">
+            <i class="mdi mdi-pencil"></i>
+          </a>
+        </div>
+
+      </div>
+      <ul class="list-group list-group-flush">
+
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Identificación:</strong>
+            </div>
+            <div class="col-md-9">{{vehiculo.placa}}</div>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Marca:</strong>
+            </div>
+            <div class="col-md-9">{{vehiculo.marca}}</div>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Modelo:</strong>
+            </div>
+            <div class="col-md-9">{{vehiculo.modelo}}</div>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>Color:</strong>
+            </div>
+            <div class="col-md-9">{{vehiculo.color}}</div>
+          </div>
+        </li>
+
+
+       
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>No. de chasis:</strong>
+            </div>
+            <div class="col-md-9">{{vehiculo.numeroChasis}}</div>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-md-3">
+              <strong>No. de motor:</strong>
+            </div>
+            <div class="col-md-9">{{vehiculo.numeroMotor}}</div>
+          </div>
+        </li>
+
+
+      </ul>
+    </div>
+  </div>
+
+
+</div>
+

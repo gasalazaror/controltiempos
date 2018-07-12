@@ -17,8 +17,6 @@ export class ClienteService {
   }
 
   modificarVehiculos(usuario, vehiculos){
- 
-    
     return this.apiService.put('cliente/'+usuario, vehiculos);
   }
 }

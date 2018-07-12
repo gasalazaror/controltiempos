@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from '../../../servicios/usuario/usuario.service';
 import { RolService } from '../../../servicios/rol/rol.service';
 import { VehiculoService } from '../../../servicios/vehiculo/vehiculo.service';
+import { GrupoService } from '../../../servicios/grupo/grupo.service';
 
 @Component({
   selector: 'app-informacion-persona',
@@ -17,6 +18,7 @@ export class InformacionPersonaComponent implements OnInit {
   vehiculos: any;
   id: any;
   roles: any;
+  grupos: any;
 
   constructor
     (
@@ -26,8 +28,11 @@ export class InformacionPersonaComponent implements OnInit {
     private route: ActivatedRoute,
     private usuarioService: UsuarioService,
     private rolService: RolService,
+    private grupoService: GrupoService,
     private router: Router
     ) {
+
+    this.grupos = []
     this.id = this.route.snapshot.paramMap.get('id');
     this.vehiculos = []
     this.persona = {
@@ -54,7 +59,13 @@ export class InformacionPersonaComponent implements OnInit {
 
   ngOnInit() {
     this.buscarUnaPersonaId();
-    //this.obtenerRoles()
+    this.cargarGrupos()
+  }
+
+  cargarGrupos() {
+    this.grupoService.obtenerGrupos(this.persona.empresa).subscribe(res => {
+      this.grupos = res;
+    })
   }
 
   buscarUnaPersonaId() {
@@ -66,6 +77,7 @@ export class InformacionPersonaComponent implements OnInit {
         if (res[0]) {
 
           this.persona = res[0]
+
 
           if (this.persona.cliente.length > 0) {
             this.clienteService.obtenerCliente(this.persona.cliente[0].id)
@@ -131,60 +143,104 @@ export class InformacionPersonaComponent implements OnInit {
   existeVehiculo(placa) {
     var aux = false
     this.persona.cliente[0].vehiculos.forEach(vehiculo => {
-      alert(vehiculo.placa+" "+placa)
-      if (vehiculo.placa== placa) {
-       aux = true
-      } 
+
+      if (vehiculo.placa == placa) {
+        aux = true
+      }
     });
-    
+
     return aux
+  }
+
+  cambiarEsDueno(vehiculo, esDueno) {
+    if (esDueno) {
+
+      this.vehiculoService.cambiarEsDueno(vehiculo, { dueno: null }).subscribe(res => {
+        this.buscarUnaPersonaId()
+      })
+
+    } else {
+
+      this.vehiculoService.cambiarEsDueno(vehiculo, { dueno: this.persona.cliente[0].id }).subscribe(res => {
+        this.buscarUnaPersonaId()
+      })
+
+    }
+
+  }
+
+  desvincularVehiculo(vehiculoPorEliminar, estado) {
+    var confirmacion = confirm("¿Está seguro que desea desvincular el vehículo con el cliente")
+    if (confirmacion) {
+      if (estado) {
+        this.vehiculoService.cambiarEsDueno(vehiculoPorEliminar.id, { dueno: null }).subscribe(res => {
+          this.buscarUnaPersonaId()
+        })
+      }
+      var vehiculos = []
+      this.persona.cliente[0].vehiculos.forEach(vehiculo => {
+        if (vehiculoPorEliminar.id != vehiculo.id) {
+          vehiculos.push(vehiculo.id)
+        }
+      });
+
+      this.clienteService.modificarVehiculos
+        (
+        this.persona.cliente[0].id,
+        { vehiculos: vehiculos }
+        ).subscribe(res => {
+          this.persona.cliente[0] = res
+        })
+    }
+
+
   }
 
   agregarVehiculo() {
 
-   
+
 
     var placa = prompt('Por favor ingrese el id del vehículo', '');
 
-    if (placa.trim()!='') {
+    if (placa.trim() != '') {
       this.vehiculoService.obtenerUnVehiculo(this.persona.empresa.id, 'placa', placa)
-      .subscribe(res => {
-        if (res[0]) {
+        .subscribe(res => {
+          if (res[0]) {
 
-     
-          if (this.existeVehiculo(res[0].placa)) {
-            alert('Ya se encuentra asignado el vehículo al cliente seleccionado')
+
+            if (this.existeVehiculo(res[0].placa)) {
+              alert('Ya se encuentra asignado el vehículo al cliente seleccionado')
+            } else {
+              var vehiculos = []
+
+              this.persona.cliente[0].vehiculos.forEach(vehiculo => {
+                vehiculos.push(vehiculo.id)
+              });
+
+              vehiculos.push(res[0].id)
+
+              this.clienteService.modificarVehiculos(this.persona.cliente[0].id, { vehiculos: vehiculos })
+                .subscribe(res => {
+                  this.persona.cliente[0] = res
+                })
+
+            }
+
+
+
           } else {
-          var vehiculos = []
-          
-          this.persona.cliente[0].vehiculos.forEach(vehiculo => {
-            vehiculos.push(vehiculo.id)
-          });
-          
-          vehiculos.push(res[0].id)
+            var confirmacion = confirm('No existe el vehículo con la placa ingresada ¿Desea crearlo?')
+            if (confirmacion) {
+              this.router.navigate(['vehiculo/crearvehiculo/nuevo']);
+            } else {
 
-          this.clienteService.modificarVehiculos(this.persona.cliente[0].id, {vehiculos: vehiculos})
-          .subscribe(res=>{
-            this.persona.cliente[0] = res
-          })
-          
-          }
-
-
-
-        } else {
-          var confirmacion = confirm('No existe el vehículo con la placa ingresada ¿Desea crearlo?')
-          if (confirmacion) {
-            this.router.navigate(['vehiculo/crearvehiculo/nuevo']);
-          } else {
+            }
 
           }
-
-        }
-      })
+        })
     }
 
-    
+
 
 
   }
@@ -199,7 +255,13 @@ export class InformacionPersonaComponent implements OnInit {
   modificarRoles() {
     var roles = []
     if (this.roles.Administrador) { roles.push(1) }
-    if (this.roles.Tecnico) { roles.push(2) }
+    if (this.roles.Tecnico) {
+      roles.push(2)
+    } else {
+      this.usuarioService.modificarUsuario(this.persona.usuario[0].id, { grupo: null }).subscribe(res => {
+
+      })
+    }
     if (this.roles.AsesorServicio) { roles.push(3) }
     this.personaService.modificarRoles(this.persona.usuario[0].id, { roles: roles }).subscribe(res => {
 
@@ -210,6 +272,14 @@ export class InformacionPersonaComponent implements OnInit {
 
   verEstado(rol) {
     alert(JSON.stringify(rol))
+  }
+
+
+  cambiarGrupo() {
+    this.usuarioService.modificarUsuario(this.persona.usuario[0].id, {grupo: this.persona.usuario[0].grupo})
+    .subscribe(res=>{
+      this.persona.usuario[0].id = res
+    })
   }
 
 }

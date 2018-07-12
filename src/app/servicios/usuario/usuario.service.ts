@@ -8,11 +8,17 @@ export class UsuarioService {
 
   constructor(private apiService: ApiService) { }
 
-  activarUsuario(persona){
-    return this.apiService.post('usuario', {persona: persona});
+  activarUsuario(persona) {
+    return this.apiService.post('usuario', { persona: persona });
   }
 
-  obtenerRolesUsuario(usuario){
-    	return this.apiService.get('usuario/'+usuario+'/roles')
+  obtenerRolesUsuario(usuario) {
+    return this.apiService.get('usuario/' + usuario + '/roles')
   }
+
+  modificarUsuario(id, usuario) {
+    return this.apiService.put('usuario/'+id, usuario )
+  }
+
+ 
 }

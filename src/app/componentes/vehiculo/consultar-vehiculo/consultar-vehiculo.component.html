@@ -5,18 +5,13 @@
     <div class="card-body">
         <div class="row">
             <div class="col-md-6">
-
                 <div class="input-group mb-3">
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="basic-addon3">Filtro</span>
                     </div>
-                    <input [(ngModel)]="termino" (input)="buscarPersona()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+                    <input [(ngModel)]="termino" (input)="buscarVehiculo()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
                 </div>
 
-            </div>
-
-            <div class="col-md-1">
-                <a class="btn btn-primary" href="#/persona/crearpersona/nuevo"><i class="mdi mdi-plus"></i></a>
             </div>
 
 
@@ -32,35 +27,33 @@
     <div class="card-body">
         <table class="table table-sm table-striped table-responsive-sm">
             <thead class=" ">
-                 <tr>
+                <tr>
                     <th></th>
+                    <th scope="col">Placa</th>
                     <th scope="col">Marca</th>
                     <th scope="col">Modelo</th>
                     <th scope="col">Año</th>
-                    <th scope="col">Número de Chasis</th>
-                    <th scope="col">Número de Motor</th>
-                    <th scope="col">Placa</th>
-                    <th scope="col">Color</th>
-                    <th scope="col">Empresa</th>
+                    <th scope="col">Número chasis</th>
+                    <th scope="col">Número motor</th>
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let persona of personas">
+                <tr *ngFor="let vehiculo of vehiculos">
 
                     <td>
-                        <a class="btn btn-sm btn-primary" title="Editar persona" href="#/persona/crearpersona/{{persona.id}}"><i class="mdi mdi-pencil"></i></a>
-                        <button class="btn btn-sm btn-danger" title="Elimina persona"><i class="mdi mdi-delete"></i></button>
-
+                            <a class="btn btn-sm btn-primary"  title="Editar persona" href="#/vehiculo/crearvehiculo/{{vehiculo.id}}"><i class="mdi mdi-pencil"></i></a>
+                        <button [disabled]="vehiculo.clientes.length>0 || vehiculo.ordenes.length>0" (click)="eliminarVehiculo(vehiculo.id)" class="btn btn-sm btn-danger">
+                            <i class="mdi mdi-delete"></i>
+                        </button>
                     </td>
-                    <td>{{vehiculo.id}}</td>
-                    <td><a class="btn btn-link" href="#/persona/informacionpersona/{{persona.id}}">{{vehiculo.marca}}</a></td>
+                    <td>
+                        <a href="/#/vehiculo/informacionvehiculo/{{vehiculo.id}}" class="btn btn-link">{{vehiculo.placa }}</a>
+                    </td>
+                    <td>{{vehiculo.marca}}</td>
                     <td>{{vehiculo.modelo}}</td>
                     <td>{{vehiculo.anio}}</td>
                     <td>{{vehiculo.numeroChasis}}</td>
-                    <td>{{vehiculo.numeroMoto}}</td>
-                    <td>{{vehiculo.placa}}</td>
-                    <td>{{vehiculo.color}}</td>
-                    <td>{{vehiculo.empresa}}</td>
+                    <td>{{vehiculo.numeroMotor}}</td>
                 </tr>
 
 

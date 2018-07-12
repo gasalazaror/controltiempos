@@ -12,7 +12,33 @@ export class VehiculoService {
     return this.apiService.get('vehiculo?empresa=' + empresa)
   }
 
+  obtenerVehiculoId(vehiculo) {
+    return this.apiService.get('vehiculo/' + vehiculo)
+  }
+
   obtenerUnVehiculo(empresa, termino, valor) {
     return this.apiService.get('vehiculo?' + termino + '=' + valor + '&empresa=' + empresa)
   }
+
+  guardarVehiculo(vehiculo) {
+    return this.apiService.post('vehiculo', vehiculo)
+  }
+
+  buscarUnVehiculo(termino, empresa) {
+    return this.apiService.get('vehiculo?empresa='+empresa+'&where={"or":[{"placa": {"contains":"'+termino+'"}}, {"modelo": {"contains":"'+termino+'"}} , {"marca": {"contains":"'+termino+'"}}, {"anio": {"contains":"'+termino+'"}}, {"numeroChasis": {"contains":"'+termino+'"}}, {"numeroMotor": {"contains":"'+termino+'"}}    ]}')
+  }
+
+  modificarVehiculo(id,vehiculo){
+    return this.apiService.put('vehiculo/'+id, vehiculo);
+  }
+
+  cambiarEsDueno(vehiculo, valor) {
+    return this.apiService.put('vehiculo/' + vehiculo, valor)
+  }
+
+  eliminarVehiculo(vehiculo){
+    return this.apiService.delete('vehiculo/'+vehiculo)
+  }
+
+  
 }

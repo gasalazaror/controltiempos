@@ -95,6 +95,9 @@
                 </div>
               </div>
               <div class="card-body">
+
+                <h4>Vehículos</h4>
+                <hr>
                 <table class="table table-responsive-sm">
                   <thead>
                     <tr>
@@ -110,22 +113,20 @@
                     <tr *ngFor="let item of persona.cliente[0].vehiculos">
 
                       <td>
-                        <a class="btn btn-sm btn-primary" title="Nueva Orden de trabajo" href="#/ordenes/crearorden/{{item.id}}">
-                          <i class="mdi mdi-play"></i>
-                        </a>
-                        <a class="btn btn-sm btn-success" title="Modificar vehículo" href="#/ordenes/crearorden">
+                     
+                        <a class="btn btn-sm btn-success" title="Modificar vehículo" href="#/vehiculo/crearvehiculo/{{item.id}}">
                           <i class="mdi mdi-pencil"></i>
                         </a>
-                        <a class="btn btn-sm btn-danger" title="Desvincular vehiculo" href="#/ordenes/crearorden">
+                        <button  class="btn btn-sm btn-danger" (click)="desvincularVehiculo(item, item.dueno==persona.cliente[0].id)" title="Desvincular vehiculo" >
                           <i class="mdi mdi-delete"></i>
-                        </a>
+                        </button>
                       </td>
                       <td>{{item.placa}}</td>
                       <td>{{item.marca}}</td>
                       <td>{{item.modelo}}</td>
                       <td>{{item.color}}</td>
                       <td>
-                        <input [checked]="item.esActual" type="checkbox">
+                        <input [checked]="item.dueno==persona.cliente[0].id" (change)="cambiarEsDueno(item.id, item.dueno==persona.cliente[0].id)" type="checkbox">
                       </td>
                     </tr>
 
@@ -158,6 +159,16 @@
               Técnico
             </label>
             <br>
+
+            <div *ngIf="roles.Tecnico"> 
+              <label for="grupo" class="form-label">Seleccionar un grupo</label>
+              <select id="grupo" [(ngModel)]="persona.usuario[0].grupo" (change)="cambiarGrupo()"   name="" id="">
+              
+                <option *ngFor="let grupo of grupos" value="{{grupo.id}}">{{grupo.descripcion}}</option>
+              </select>
+              <br>
+            </div>
+            
 
 
             <input [checked]="roles.AsesorServicio" [(ngModel)]="roles.AsesorServicio" (change)="modificarRoles()" class="form-check-input" type="checkbox" value="3"

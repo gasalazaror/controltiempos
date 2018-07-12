@@ -46,7 +46,7 @@
              
               <td>
                   <a class="btn btn-sm btn-primary"  title="Editar persona" href="#/persona/crearpersona/{{persona.id}}"><i class="mdi mdi-pencil"></i></a>
-                <button class="btn btn-sm btn-danger" title="Elimina persona"><i class="mdi mdi-delete"></i></button>
+                <button [disabled]="persona.cliente.length>0 || persona.usuario.length>0" (click)="eliminarPersona(persona.id)" class="btn btn-sm btn-danger" title="Elimina persona"><i class="mdi mdi-delete"></i></button>
                 
               </td>
               <td>{{persona.cedula }}</td>
