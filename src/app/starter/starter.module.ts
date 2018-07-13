@@ -5,6 +5,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { StarterComponent } from './starter.component';
 
+import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+
 
 const routes: Routes = [{
 	path: '',
@@ -23,4 +25,5 @@ const routes: Routes = [{
     ],
 	declarations: [StarterComponent]
 })
-export class StarterModule { }
+export class StarterModule { 
+}

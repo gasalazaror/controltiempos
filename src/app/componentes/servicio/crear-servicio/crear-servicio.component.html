@@ -1,3 +1,66 @@
-<p>
-  crear-servicio works!
-</p>
+<div class="row">
+
+  <div class="col-md-12 card">
+    <div class="card-body">
+      Categorías:
+      <button class="btn btn-link" (click)="obtenerCategoriasPadre()">Todas</button> {{categoriaSeleccionada.descripcion}}
+      <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div *ngFor="let categoria of categorias" class="btn-group mr-2" role="group" aria-label="First group">
+
+          <div class="btn-group mr-2 group-sm" role="group" aria-label="First group">
+            <button type="button" (click)="obtenerCategoriasHijas(categoria.id)" class="btn btn-secondary">{{categoria.descripcion}}</button>
+            <button type="button" (click)="agregarCategoriaConPadre(categoria.id)" class="btn btn-secondary">
+              <i class="mdi mdi-plus"></i>
+            </button>
+           
+         
+          </div>
+
+        </div>
+        <button class="btn btn-primary" (click)=agregarCategoria()>
+          <i class="mdi mdi-plus"></i>
+        </button>
+      </div>
+
+      <hr>
+    </div>
+  </div>
+
+
+
+  <div class="col-md-6">
+
+
+
+    <label for="descripcion">Categoria: {{servicio.categoriaDescripcion}}</label>
+
+    <div class="form-group">
+
+      <input maxlength="50" type="hidden" [(ngModel)]="servicio.categoria" class="form-control" id="categoria">
+
+    </div>
+
+
+    <div class="form-group">
+      <label for="descripcion">Servicio</label>
+      <input (input)="validarDescripcion()" maxlength="50" type="text" [(ngModel)]="servicio.descripcion" class="form-control"
+        id="descripcion">
+      <div *ngIf="error.descripcion!=''" class="alert alert-danger" role="alert">
+        <strong>Error: </strong> {{error.descripcion}}
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="tiempoEstandar">Tiempo estandar en minutos</label>
+      <input type="number" (input)="validarTiempoEstandar()" [(ngModel)]="servicio.tiempoEstandar" class="form-control" id="tiempoEstandar">
+      <div *ngIf="error.tiempoEstandar!=''" class="alert alert-danger" role="alert">
+        <strong>Error: </strong> {{error.tiempoEstandar}}
+      </div>
+    </div>
+    <div class="form-group">
+      <button [disabled]="error.descripcion!='' || servicio.descripcion==''  || error.tiempoEstandar!='' || servicio.tiempoEstandar==null || servicio.categoria ==''  "
+        (click)="guardarServicio()" class="btn btn-primary">Guardar</button>
+    </div>
+
+  </div>
+</div>

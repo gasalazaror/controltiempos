@@ -1,3 +1,52 @@
-<p>
-  consultar-servicio works!
-</p>
+<div class="card">
+    <div class="card-header">
+      Búsqueda
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3">Filtro</span>
+            </div>
+            <input [(ngModel)]="termino" (input)="buscarServicios()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      Resultados
+    </div>
+    <div class="card-body">
+      <table class="table table-sm table-striped table-responsive-sm">
+        <thead class=" ">
+          <tr>
+            <th></th>
+            <th scope="col">Descripción</th>
+            <th scope="col">Tiempo estandar</th>
+            <th scope="col">Categoría</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let servicio of servicios">
+  
+            <td>
+                <a class="btn btn-sm btn-primary" href="#/servicio/crearservicio/{{servicio.id}}">
+                    <i class="mdi mdi-pencil"></i>
+                </a>
+              <button class="btn btn-sm btn-danger">
+                <i class="mdi mdi-delete"></i>
+              </button>
+            </td>
+            <td>
+              <a href="">{{servicio.descripcion}}</a>
+            </td>
+            <td>{{servicio.tiempoEstandar}}</td>
+            <td>{{servicio.categoria.descripcion}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>

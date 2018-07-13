@@ -21,6 +21,8 @@ import { InformacionPersonaComponent } from '../componentes/persona/informacion-
 import { CrearVehiculoComponent } from '../componentes/vehiculo/crear-vehiculo/crear-vehiculo.component';
 import { ConsultarVehiculoComponent } from '../componentes/vehiculo/consultar-vehiculo/consultar-vehiculo.component';
 import { InformacionVehiculoComponent } from '../componentes/vehiculo/informacion-vehiculo/informacion-vehiculo.component';
+import { CrearServicioComponent } from '../componentes/servicio/crear-servicio/crear-servicio.component';
+import { ConsultarServicioComponent } from '../componentes/servicio/consultar-servicio/consultar-servicio.component';
 
 export const ComponentsRoutes: Routes = [
   {
@@ -43,6 +45,14 @@ export const ComponentsRoutes: Routes = [
         }
       },
       {
+        path: 'crearservicio/:id',
+        component: CrearServicioComponent,
+        data: {
+          title: 'Crear Servicio',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Servicio' }, { title: 'Crear' }]
+        }
+      },
+      {
         path: 'consultarpersona',
         component: ConsultarPersonaComponent,
         data: {
@@ -59,6 +69,14 @@ export const ComponentsRoutes: Routes = [
         }
       },
       {
+        path: 'consultarservicio',
+        component: ConsultarServicioComponent,
+        data: {
+          title: 'Consultar Servicio',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Servicio' }, { title: 'Consultar' }]
+        }
+      },
+      {
         path: 'informacionpersona/:id',
         component: InformacionPersonaComponent,
         data: {
@@ -72,6 +90,15 @@ export const ComponentsRoutes: Routes = [
         data: {
           title: 'Información Vehículo',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Vehículo' }, { title: 'Información' }]
+        }
+      },
+
+      {
+        path: 'informacionservicio/:id',
+        component: InformacionVehiculoComponent,
+        data: {
+          title: 'Información Servicio',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Servicio' }, { title: 'Información' }]
         }
       },
       {
