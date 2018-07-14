@@ -12,6 +12,8 @@ export class ClienteService {
     return this.apiService.post('cliente', {persona: persona});
   }
 
+  
+
   obtenerCliente(cliente){
     return this.apiService.get('cliente/'+cliente);
   }

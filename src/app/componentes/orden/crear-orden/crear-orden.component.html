@@ -1,3 +1,114 @@
-<p>
-  crear-orden works!
-</p>
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Búsqueda
+  </div>
+  <div class="card-body">
+    Buscar por:
+    <select [(ngModel)]="filtro" (change)="cambiarFiltro()">
+      <option *ngFor="let filtro of filtros"  value="{{filtro}}">{{filtro}}</option>
+    </select>
+
+
+    <input [(ngModel)]="termino" (change)="buscar()" type="text">
+    <button (click)="buscar()" class="">Buscar</button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        Cliente
+      </div>
+      <div class="card-body">
+
+        <div *ngIf="clienteSeleccionado!=null">
+          <div class="row">
+            <div class="col-md-4">ID:</div>
+            <div class="col-md-8">
+              <input readonly [(ngModel)]="clienteSeleccionado.persona.cedula" type="text">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">Nombre:</div>
+            <div class="col-md-8">
+              <input readonly [(ngModel)]="clienteSeleccionado.persona.nombre" type="text">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">Dirección:</div>
+            <div class="col-md-8">
+              <input readonly [(ngModel)]="clienteSeleccionado.persona.direccion" type="text">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">Teléfono:</div>
+            <div class="col-md-8">
+              <input readonly [(ngModel)]="clienteSeleccionado.persona.telefono" type="text">
+            </div>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6">
+    <div class="card">
+      <div class="card-header bg-primary text-white">
+        Vehículo
+      </div>
+      <div class="card-body">
+
+        <div *ngIf="vehiculoSeleccionado.vehiculo!=null">
+          <div class="row">
+            <div class="col-md-4">ID:</div>
+            <div class="col-md-8">
+              <input readonly [(ngModel)]="vehiculoSeleccionado.vehiculo.placa" type="text">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">Color:</div>
+            <div class="col-md-8">
+              <input readonly [(ngModel)]="vehiculoSeleccionado.vehiculo.color" type="text">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">Marca:</div>
+            <div class="col-md-8">
+              <input readonly [(ngModel)]="vehiculoSeleccionado.vehiculo.marca" type="text">
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-4">Modelo:</div>
+            <div class="col-md-8">
+              <input readonly [(ngModel)]="vehiculoSeleccionado.vehiculo.modelo" type="text">
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <button [disabled]="vehiculos.length==0" (click)="navegarVehiculos('-')"><<</button>
+         {{vehiculoSeleccionado.posicion+1}}-{{vehiculos.length}}
+          <button [disabled]="vehiculos.length==0" (click)="navegarVehiculos('+')">>></button>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col-md-12">
+
+  </div>
+</div>

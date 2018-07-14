@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ServicioService } from '../../../servicios/servicio/servicio.service';
 
 @Component({
@@ -14,19 +14,22 @@ export class CrearServicioComponent implements OnInit {
   categorias: any
   empresa: any
   categoriaSeleccionada: any
+  id: any
 
   constructor
     (
     private route: ActivatedRoute,
-    private servicioService: ServicioService
+    private servicioService: ServicioService,
+    private router: Router
     ) {
+
+    this.id = this.route.snapshot.paramMap.get('id');
 
     this.servicio = {
       empresa: 1,
       descripcion: '',
       tiempoEstandar: null,
-      categoria: '',
-      categoriaDescripcion: ''
+      categoria: { id: '', descripcion: '' },
     }
 
     this.error = {
@@ -38,6 +41,18 @@ export class CrearServicioComponent implements OnInit {
 
     this.empresa = 1
     this.categoriaSeleccionada = { id: null, descripcion: '' }
+
+
+  }
+
+  obtenerUnServicio() {
+
+    if (this.id != 'nuevo') {
+      this.servicioService.obtenerUnServicio(this.id).subscribe(res => {
+        this.servicio = res;
+      })
+    }
+
   }
 
   reanudar() {
@@ -46,8 +61,7 @@ export class CrearServicioComponent implements OnInit {
       empresa: 1,
       descripcion: '',
       tiempoEstandar: null,
-      categoria: '',
-      categoriaDescripcion: ''
+      categoria: { id: '', descripcion: '' },
     }
 
     this.error = {
@@ -57,8 +71,8 @@ export class CrearServicioComponent implements OnInit {
   }
 
   cambiarCategoria(categoria) {
-    this.servicio.categoria = categoria.id;
-    this.servicio.categoriaDescripcion = categoria.descripcion;
+    this.servicio.categoria.id = categoria.id;
+    this.servicio.categoria.descripcion = categoria.descripcion;
   }
 
   obtenerCategoriasPadre() {
@@ -78,8 +92,8 @@ export class CrearServicioComponent implements OnInit {
   obtenerCategoriasHijas(id) {
     this.servicioService.obtenerCategoria(id).subscribe((res: any) => {
       if (res.categorias.length == 0) {
-        this.servicio.categoria = res.id;
-        this.servicio.categoriaDescripcion = res.descripcion
+        this.servicio.categoria = { id: res.id, descripcion: res.descripcion };
+
       } else {
         this.categoriaSeleccionada.descripcion = res.descripcion
         this.categoriaSeleccionada.id = res.id
@@ -130,7 +144,7 @@ export class CrearServicioComponent implements OnInit {
             alert('La categoría ' + categoria.toUpperCase() + ' ya existe')
           } else {
 
-            this.servicioService.guardarCategoria({ padre:id, empresa: this.empresa, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
+            this.servicioService.guardarCategoria({ padre: id, empresa: this.empresa, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
               this.obtenerCategoriasHijas(id);
             }, error => { alert('Existió un error') })
 
@@ -153,9 +167,9 @@ export class CrearServicioComponent implements OnInit {
     }
   }
   validarTiempoEstandar() {
-    
-    
-    
+
+
+
     var tiempo = ''
     tiempo = this.servicio.tiempoEstandar + ""
     if (tiempo.trim() == '') {
@@ -168,15 +182,36 @@ export class CrearServicioComponent implements OnInit {
   }
 
   guardarServicio() {
-    var confirmacion = confirm("¿Está seguro que desea guardar el servicio?")
+    var confirmacion = confirm("¿Está seguro que desea guardar el servicio?");
 
-    this.servicioService.guardarServicio(this.servicio).subscribe(res => {
-      alert('Servicio guardado correctamente')
-      this.reanudar();
-    }, error => {
-      alert('Existió un error al guardar el servicio')
-    })
+    if (confirmacion) {
+
+      if (this.id == 'nuevo') {
+
+        this.servicioService.guardarServicio({empresa: this.servicio.empresa, descripcion: this.servicio.descripcion.toUpperCase().trim(), tiempoEstandar: this.servicio.tiempoEstandar, categoria: this.servicio.categoria.id }).subscribe(res => {
+          alert('Servicio guardado correctamente')
+          this.reanudar();
+        }, error => {
+          alert('Existió un error al guardar el servicio')
+        })
+
+      } else {
+        this.servicioService.modificarServicio(this.servicio.id, { descripcion: this.servicio.descripcion.toUpperCase().trim(), tiempoEstandar: this.servicio.tiempoEstandar, categoria: this.servicio.categoria.id })
+          .subscribe(res => {
+            alert('Servicio modificado correctamente')
+            this.servicio = res;
+          }, error => {
+            alert('Existió un error al modificar el servicio')
+          })
+      }
+
+    }
+
+
   }
+
+
+  
 
 
   buscarUnServicio() {
@@ -191,7 +226,12 @@ export class CrearServicioComponent implements OnInit {
 
   ngOnInit() {
 
-    this.obtenerCategoriasPadre()
+    this.obtenerCategoriasPadre();
+
+
+    if (this.servicio != 'nuevo') {
+      this.obtenerUnServicio()
+    }
   }
 
 }

@@ -19,6 +19,14 @@ export class ServicioService {
     return this.apiService.get('servicio?empresa='+empresa);
   }
 
+  eliminarServicio(servicio) {
+    return this.apiService.delete('servicio/'+servicio);
+  }
+
+  obtenerUnServicio(servicio){
+    return this.apiService.get('servicio/'+servicio)
+  }
+
 
   
   obtenerCategorias(empresa){
@@ -43,6 +51,10 @@ export class ServicioService {
 
   guardarServicio(servicio) {
     return this.apiService.post('servicio', servicio)
+  }
+
+  modificarServicio(id,servicio) {
+    return this.apiService.put('servicio/'+id, servicio)
   }
 
   obtenerCategoriasPadre(empresa){

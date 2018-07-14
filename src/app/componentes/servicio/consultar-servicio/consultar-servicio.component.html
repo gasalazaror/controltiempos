@@ -1,5 +1,5 @@
 <div class="card">
-    <div class="card-header">
+    <div class="card-header bg-primary text-white">
       Búsqueda
     </div>
     <div class="card-body">
@@ -12,11 +12,14 @@
             <input [(ngModel)]="termino" (input)="buscarServicios()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
           </div>
         </div>
+        <div class="col-md-1">
+            <a class="btn btn-primary" href="#/servicio/crearservicio/nuevo"><i class="mdi mdi-plus"></i></a>
+          </div>
       </div>
     </div>
   </div>
   <div class="card">
-    <div class="card-header">
+    <div class="card-header bg-primary text-white">
       Resultados
     </div>
     <div class="card-body">
@@ -36,14 +39,14 @@
                 <a class="btn btn-sm btn-primary" href="#/servicio/crearservicio/{{servicio.id}}">
                     <i class="mdi mdi-pencil"></i>
                 </a>
-              <button class="btn btn-sm btn-danger">
+              <button [disabled]="servicio.ordenServicio.length!=0" (click)="eliminarServicio(servicio)" class="btn btn-sm btn-danger">
                 <i class="mdi mdi-delete"></i>
               </button>
             </td>
             <td>
-              <a href="">{{servicio.descripcion}}</a>
+                {{servicio.descripcion}}
             </td>
-            <td>{{servicio.tiempoEstandar}}</td>
+            <td>{{servicio.tiempoEstandar }}</td>
             <td>{{servicio.categoria.descripcion}}</td>
           </tr>
         </tbody>

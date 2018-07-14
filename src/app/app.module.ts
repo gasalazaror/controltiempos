@@ -23,6 +23,8 @@ import { SpinnerComponent } from './shared/spinner.component';
 import { ApiService } from './servicios/api/api.service';
 
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
+import { TiempoPipe } from './pipes/tiempo/tiempo.pipe';
+
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
@@ -38,6 +40,8 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NavigationComponent,
     BreadcrumbComponent,
     SidebarComponent,
+    TiempoPipe
+
 
   ],
   imports: [

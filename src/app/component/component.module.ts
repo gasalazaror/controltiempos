@@ -44,7 +44,8 @@ import { InformacionOrdenComponent } from '../componentes/orden/informacion-orde
     FormsModule,
     ReactiveFormsModule,
     JsonpModule,
-    NgbModule
+    NgbModule,
+
   ],
   declarations: [
     NgbdpregressbarBasic,

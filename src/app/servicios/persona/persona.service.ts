@@ -20,6 +20,9 @@ export class PersonaService {
     return this.apiService.get('persona?cedula=' + cedula + '&empresa=' + empresa)
   }
 
+  obtenerUnCliente(cedula,empresa) {
+    return this.apiService.get('persona?cedula='+cedula+'&empresa='+empresa)
+  }
 
   guardarPersona(persona) {
     return this.apiService.post('persona', persona);
@@ -32,6 +35,11 @@ export class PersonaService {
   buscarUnaPersona(termino, empresa) {
     return this.apiService.get('persona?empresa=' + empresa + '&where={"or":[{"cedula": {"contains":"' + termino + '"}}, {"nombre": {"contains":"' + termino + '"}} , {"telefono": {"contains":"' + termino + '"}}, {"correo": {"contains":"' + termino + '"}}    ]}')
   }
+
+  buscarUnaPersonaFiltro(termino,valor, empresa) {
+    return this.apiService.get('persona?empresa=' + empresa + '&'+termino+"="+valor)
+  }
+
 
   obtenerPersonas(empresa) {
     return this.apiService.get('persona?empresa=' + empresa);

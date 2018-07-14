@@ -23,6 +23,9 @@ import { ConsultarVehiculoComponent } from '../componentes/vehiculo/consultar-ve
 import { InformacionVehiculoComponent } from '../componentes/vehiculo/informacion-vehiculo/informacion-vehiculo.component';
 import { CrearServicioComponent } from '../componentes/servicio/crear-servicio/crear-servicio.component';
 import { ConsultarServicioComponent } from '../componentes/servicio/consultar-servicio/consultar-servicio.component';
+import { CrearOrdenComponent } from '../componentes/orden/crear-orden/crear-orden.component';
+import { ConsultarOrdenComponent } from '../componentes/orden/consultar-orden/consultar-orden.component';
+import { InformacionOrdenComponent } from '../componentes/orden/informacion-orden/informacion-orden.component';
 
 export const ComponentsRoutes: Routes = [
   {
@@ -33,6 +36,14 @@ export const ComponentsRoutes: Routes = [
         component: CrearPersonaComponent,
         data: {
           title: 'Crear Vehículo',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
+        }
+      },
+      {
+        path: 'crearorden/:id',
+        component: CrearOrdenComponent,
+        data: {
+          title: 'Crear Orden',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
         }
       },
@@ -61,6 +72,14 @@ export const ComponentsRoutes: Routes = [
         }
       },
       {
+        path: 'consultarorden',
+        component: ConsultarOrdenComponent,
+        data: {
+          title: 'Consultar Orden',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Consultar' }]
+        }
+      },
+      {
         path: 'consultarvehiculo',
         component: ConsultarVehiculoComponent,
         data: {
@@ -81,6 +100,14 @@ export const ComponentsRoutes: Routes = [
         component: InformacionPersonaComponent,
         data: {
           title: 'Información Persona',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Información' }]
+        }
+      },
+      {
+        path: 'informacionorden/:id',
+        component: InformacionOrdenComponent,
+        data: {
+          title: 'Información Orden',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Información' }]
         }
       },
