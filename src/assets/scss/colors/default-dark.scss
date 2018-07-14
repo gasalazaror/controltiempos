@@ -8,11 +8,11 @@ File: scss
 @import '../variable';
 $themecolor: #398bf7;
 $themecolor-dark: #028ee1;
-$topbar: #fff;
+$topbar: #1f6db5;
 $sidebar:#242a33;
-$sidebar-text: #687384;
+$sidebar-text: white;
 $sidebar-icons: #424a56;
-$sidebar-dark: #1c2128;
+$sidebar-dark: white;
 $sidebar-alt:#1c2128;
 $themecolor-alt: #26c6da;
 $topbar-alt: #398bf7;
@@ -97,46 +97,6 @@ $topbar-alt: #398bf7;
 /*******************
 /*sidebar navigation
 *******************/
-    .left-sidebar,
-    .card-no-border .left-sidebar,
-    .card-no-border .sidebar-nav {
-        background: $sidebar;
-    }
-    .user-profile .profile-text a {
-        color: $sidebar-text!important;
-    }
-    .card-no-border .sidebar-footer {
-        background: $sidebar-dark;
-    }
-    .label-themecolor {
-        background: $themecolor;
-    }
-    .sidebar-nav>ul>li.active>a {
-        color: $themecolor;
-        border-color: $themecolor;
-        i {
-            color: $themecolor;
-        }
-    }
-    .sidebar-nav ul li a {
-        &.router-link-active,
-        &:hover {
-            color: $themecolor;
-            i {
-                color: $themecolor;
-            }
-        }
-    }
-    .sidebar-nav ul li.nav-small-cap {
-        color: $sidebar-text;
-    }
-    @media (min-width: 768px) {
-    &.mini-sidebar .sidebar-nav #sidebarnav > li > ul {
-        background: $sidebar-alt;
-    }
-    &.mini-sidebar .sidebar-nav #sidebarnav > li:hover > a {
-        background: $sidebar-alt;
-    }
-}
+
 }
 

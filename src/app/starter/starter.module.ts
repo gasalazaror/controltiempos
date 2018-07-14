@@ -11,8 +11,8 @@ import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 const routes: Routes = [{
 	path: '',
 	data: {
-        title: 'Starter Page',
-        urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'Starter Page'}]
+        title: 'Panel de control',
+        urls: [{title: 'Dashboard',url: '/dashboard'},{title: 'Panel de control'}]
     },
 	component: StarterComponent
 }];

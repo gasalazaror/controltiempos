@@ -20,6 +20,7 @@ export class ServicioService {
   }
 
 
+  
   obtenerCategorias(empresa){
     return this.apiService.get('categoria?empresa='+empresa)
   }
