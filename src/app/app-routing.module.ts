@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { FullComponent } from './layouts/full/full.component';
+import { LoginComponent } from './login/login/login.component';
 
 export const Approutes: Routes = [
 {
@@ -19,6 +20,7 @@ export const Approutes: Routes = [
     ]
     
 },
+
 {
     path: '**',
     redirectTo: '/starter' 

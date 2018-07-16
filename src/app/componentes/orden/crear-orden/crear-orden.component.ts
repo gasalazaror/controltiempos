@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ClienteService } from '../../../servicios/cliente/cliente.service';
 import { PersonaService } from '../../../servicios/persona/persona.service';
+import { ServicioService } from '../../../servicios/servicio/servicio.service';
+import { OrdenService } from '../../../servicios/orden/orden.service';
 
 @Component({
   selector: 'app-crear-orden',
@@ -16,26 +18,39 @@ export class CrearOrdenComponent implements OnInit {
   termino: any
   empresa: any
   persona: any
+  orden: any
 
-  clienteSeleccionado: any
+
   vehiculoSeleccionado: any
+  serviciosDisponibles: any
+  servicios: any
 
   constructor(
     private clienteService: ClienteService,
-    private personaService: PersonaService
+    private personaService: PersonaService,
+    private servicioService: ServicioService,
+    private ordenService: OrdenService
 
   ) {
     this.filtro = 'ID Cliente'
     this.termino = ''
     this.empresa = 1;
-    this.clienteSeleccionado = null
+
     this.vehiculoSeleccionado = { posicion: 0, vehiculo: null }
     this.vehiculos = []
+    this.serviciosDisponibles = []
+    this.orden = { cliente: null, vehiculo: null, servicios: [] }
 
   }
 
 
   ngOnInit() {
+    this.cargarServicios()
+  }
+
+  anadirServicio() {
+    this.orden.servicios.push({ id: 0 })
+    alert(JSON.stringify(this.orden.servicios))
   }
 
   buscar() {
@@ -55,6 +70,17 @@ export class CrearOrdenComponent implements OnInit {
     }
   }
 
+  onChange(servicio) {
+
+
+    this.servicioService.obtenerUnServicio(servicio).subscribe(res => {
+      this.orden.servicios.push(res);
+
+    })
+
+
+  }
+
   buscarCliente() {
     this.personaService.obtenerUnCliente(this.termino, this.empresa).subscribe((res: any) => {
       if (res[0]) {
@@ -63,11 +89,12 @@ export class CrearOrdenComponent implements OnInit {
         if (persona.cliente[0]) {
 
           this.clienteService.obtenerCliente(persona.cliente[0].id).subscribe(res => {
-            this.clienteSeleccionado = res
+            this.orden.cliente = res
 
-            if (this.clienteSeleccionado.pertenencias.length != 0) {
-              this.vehiculos = this.clienteSeleccionado.pertenencias
+            if (this.orden.cliente.pertenencias.length != 0) {
+              this.vehiculos = this.orden.cliente.pertenencias
               this.vehiculoSeleccionado = { posicion: 0, vehiculo: this.vehiculos[0] }
+              this.orden.vehiculo = this.vehiculoSeleccionado.vehiculo
             } else {
 
             }
@@ -90,6 +117,35 @@ export class CrearOrdenComponent implements OnInit {
     })
   }
 
+  cargarServicios() {
+    this.servicioService.obtenerServicios(this.empresa).subscribe(res => {
+      this.serviciosDisponibles = res
+    })
+  }
+
+  guardarOrden() {
+    var servicios = []
+
+    this.orden.servicios.forEach(servicio => {
+      servicios.push(servicio.id)
+    });
+    var nuevaOrden = { cliente: this.orden.cliente.id, vehiculo: this.orden.vehiculo.id, servicios: servicios, empresa: this.empresa }
+
+    alert(JSON.stringify(nuevaOrden))
+    this.ordenService.guardarOrden(nuevaOrden).subscribe(res => {
+      alert('Se ha guardado correctamente la orden')
+    })
+
+  }
+
+  buscarServicio(termino) {
+
+    this.servicioService.buscarUnServicioDescripcion(termino, this.empresa).subscribe(res => {
+      this.serviciosDisponibles = res
+
+    })
+  }
+
   cambiarFiltro() {
     this.reiniciarClienteVehiculo()
   }
@@ -97,7 +153,7 @@ export class CrearOrdenComponent implements OnInit {
   reiniciarClienteVehiculo() {
     this.termino = ''
     this.vehiculos = []
-    this.clienteSeleccionado = null
+    this.orden.cliente = null
     this.vehiculoSeleccionado = { posicion: 0, vehiculo: null }
   }
 
@@ -110,6 +166,7 @@ export class CrearOrdenComponent implements OnInit {
           posicionActual = -1
         }
         this.vehiculoSeleccionado = { posicion: posicionActual + 1, vehiculo: this.vehiculos[posicionActual + 1] }
+        this.orden.vehiculo = this.vehiculoSeleccionado.vehiculo
         break;
 
       case '-':
@@ -120,6 +177,7 @@ export class CrearOrdenComponent implements OnInit {
         }
 
         this.vehiculoSeleccionado = { posicion: posicionActual - 1, vehiculo: this.vehiculos[posicionActual - 1] }
+        this.orden.vehiculo = this.vehiculoSeleccionado.vehiculo
         break;
 
       default:

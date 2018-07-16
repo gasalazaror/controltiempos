@@ -39,7 +39,7 @@
                 <a class="btn btn-sm btn-primary" href="#/servicio/crearservicio/{{servicio.id}}">
                     <i class="mdi mdi-pencil"></i>
                 </a>
-              <button [disabled]="servicio.ordenServicio.length!=0" (click)="eliminarServicio(servicio)" class="btn btn-sm btn-danger">
+              <button [disabled]="servicio.ordenes.length!=0" (click)="eliminarServicio(servicio)" class="btn btn-sm btn-danger">
                 <i class="mdi mdi-delete"></i>
               </button>
             </td>

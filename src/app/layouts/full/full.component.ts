@@ -14,6 +14,7 @@ export class FullComponent implements OnInit {
     showSettings = false;
     showMinisidebar = false; 
     showDarktheme = false;
+    showMenu= true
 
 	public config: PerfectScrollbarConfigInterface = {};
 
@@ -23,6 +24,8 @@ export class FullComponent implements OnInit {
         if (this.router.url === '/') {
             this.router.navigate(['/dashboard/dashboard1']);
         }
+
+       
     }
 
 }
