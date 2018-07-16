@@ -1,3 +1,135 @@
-<p>
-  informacion-orden works!
-</p>
+
+  <div class="row">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          Cliente
+        </div>
+        <div class="card-body">
+  
+          <div *ngIf="orden.cliente!=null">
+            <div class="row">
+              <div class="col-md-4">ID:</div>
+              <div class="col-md-8">
+                <a class="btn btn-link" target="_blank" href="/#/persona/informacionpersona/{{orden.cliente.persona.id}}">{{orden.cliente.persona.cedula}}</a>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-4">Nombre:</div>
+              <div class="col-md-8">
+                {{orden.cliente.persona.nombre}}
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-4">Dirección:</div>
+              <div class="col-md-8">
+                {{orden.cliente.persona.direccion}}
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-4">Teléfono:</div>
+              <div class="col-md-8">
+                {{orden.cliente.persona.telefono}}
+              </div>
+            </div>
+          </div>
+  
+  
+  
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          Vehículo
+        </div>
+        <div class="card-body">
+  
+          <div *ngIf="vehiculoSeleccionado.vehiculo!=null">
+            <div class="row">
+              <div class="col-md-4">ID:</div>
+              <div class="col-md-8">
+                <a target="_blank" class="btn btn-link" href="/#/vehiculo/informacionvehiculo/{{vehiculoSeleccionado.vehiculo.id}}">{{vehiculoSeleccionado.vehiculo.placa}}</a>
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-4">Color:</div>
+              <div class="col-md-8">
+                {{vehiculoSeleccionado.vehiculo.color}}
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-4">Marca:</div>
+              <div class="col-md-8">
+                {{vehiculoSeleccionado.vehiculo.marca}}
+              </div>
+            </div>
+  
+            <div class="row">
+              <div class="col-md-4">Modelo:</div>
+              <div class="col-md-8">
+                {{vehiculoSeleccionado.vehiculo.modelo}}
+              </div>
+            </div>
+          </div>
+  
+         
+  
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          Servicios
+        </div>
+        <div class="card-body">
+  
+           
+  
+          <table *ngIf="orden.servicios.length>0" class="table table-sm">
+            <thead class="thead-primary">
+              <tr>
+             
+                
+                <th scope="col">Servicio</th>
+                <th scope="col">Tiempo estandar</th>
+                <th  scope="col">Estado</th>
+                <th  scope="col">Grupo Asignado</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let servicio of orden.servicios;let i = index" [attr.data-index]="i">
+              
+                <td>{{servicio.servicio.descripcion}}</td>
+                <td>{{servicio.servicio.tiempoEstandar}}</td>
+                <td>{{servicio.estado}}</td>
+                <td>
+                  <select  (change)="cambiarGrupo(servicio, servicio.grupo.id)" [(ngModel)]="servicio.grupo.id">
+                    <option *ngFor="let grupo of grupos" value="{{grupo.id}}">{{grupo.descripcion}}</option>
+                  </select>
+                </td>
+              </tr>
+  
+  
+            </tbody>
+          </table>
+  
+  
+  
+  
+        </div>
+      </div>
+    </div>
+  </div>

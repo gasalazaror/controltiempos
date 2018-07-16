@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { OrdenService } from '../../../servicios/orden/orden.service';
 
 @Component({
   selector: 'app-consultar-orden',
@@ -7,9 +8,21 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ConsultarOrdenComponent implements OnInit {
 
-  constructor() { }
+  empresa:any
+  ordenes:any
+
+  constructor(private ordenService: OrdenService) { 
+    this.empresa = 1
+  }
 
   ngOnInit() {
+    this.obtenerOrdenes()
+  }
+
+  obtenerOrdenes(){
+    this.ordenService.obtenerOrdenes(this.empresa).subscribe(res=>{
+      this.ordenes = res
+    })
   }
 
 }

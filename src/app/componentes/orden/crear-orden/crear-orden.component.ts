@@ -3,6 +3,7 @@ import { ClienteService } from '../../../servicios/cliente/cliente.service';
 import { PersonaService } from '../../../servicios/persona/persona.service';
 import { ServicioService } from '../../../servicios/servicio/servicio.service';
 import { OrdenService } from '../../../servicios/orden/orden.service';
+import { ActivatedRoute, Router } from '../../../../../node_modules/@angular/router';
 
 @Component({
   selector: 'app-crear-orden',
@@ -19,6 +20,7 @@ export class CrearOrdenComponent implements OnInit {
   empresa: any
   persona: any
   orden: any
+  id:any
 
 
   vehiculoSeleccionado: any
@@ -29,9 +31,13 @@ export class CrearOrdenComponent implements OnInit {
     private clienteService: ClienteService,
     private personaService: PersonaService,
     private servicioService: ServicioService,
-    private ordenService: OrdenService
+    private ordenService: OrdenService,
+    private route: ActivatedRoute,
+    private router: Router
 
   ) {
+
+    this.id = this.route.snapshot.paramMap.get('id');
     this.filtro = 'ID Cliente'
     this.termino = ''
     this.empresa = 1;
@@ -40,6 +46,30 @@ export class CrearOrdenComponent implements OnInit {
     this.vehiculos = []
     this.serviciosDisponibles = []
     this.orden = { cliente: null, vehiculo: null, servicios: [] }
+
+    if (this.id!='nuevo') {
+    
+      this.ordenService.obtenerUnaOrden(this.id).subscribe((res:any)=>{
+        if (res) {
+
+         
+          this.orden = res
+
+          this.ordenService.obtenerServiciosOrden(this.orden.id).subscribe(res=>{
+          
+            this.orden.servicios = res
+          })
+
+
+          this.clienteService.obtenerCliente(res.cliente.id).subscribe(res=>{
+            this.orden.cliente = res
+            this.vehiculos = this.orden.cliente.pertenencias
+            this.vehiculoSeleccionado = this.vehiculoSeleccionado = { posicion: 0, vehiculo: this.orden.vehiculo }
+          })
+          
+        }
+      })
+    } 
 
   }
 
@@ -74,7 +104,7 @@ export class CrearOrdenComponent implements OnInit {
 
 
     this.servicioService.obtenerUnServicio(servicio).subscribe(res => {
-      this.orden.servicios.push(res);
+      this.orden.servicios.push({servicio: res});
 
     })
 
@@ -90,6 +120,8 @@ export class CrearOrdenComponent implements OnInit {
 
           this.clienteService.obtenerCliente(persona.cliente[0].id).subscribe(res => {
             this.orden.cliente = res
+
+           
 
             if (this.orden.cliente.pertenencias.length != 0) {
               this.vehiculos = this.orden.cliente.pertenencias
@@ -123,18 +155,54 @@ export class CrearOrdenComponent implements OnInit {
     })
   }
 
-  guardarOrden() {
-    var servicios = []
+  eliminarServicio(indice): void {
+    this.orden.servicios.splice(indice, 1)
+  }
+
+
+  quitarServicio(servicioRecibido){
+    var nuevosServicios=[];
 
     this.orden.servicios.forEach(servicio => {
-      servicios.push(servicio.id)
-    });
-    var nuevaOrden = { cliente: this.orden.cliente.id, vehiculo: this.orden.vehiculo.id, servicios: servicios, empresa: this.empresa }
+      if (servicio!= servicioRecibido) {
 
-    alert(JSON.stringify(nuevaOrden))
-    this.ordenService.guardarOrden(nuevaOrden).subscribe(res => {
-      alert('Se ha guardado correctamente la orden')
-    })
+        
+      
+        nuevosServicios.push(servicio)
+      } 
+    });
+
+    this.orden.servicios = nuevosServicios
+  }
+
+  guardarOrden() {
+
+    var confirmacion = confirm('¿Está seguro que desea guardar la orden de trabajo');
+
+    if (confirmacion) {
+      var servicios = []
+      this.orden.servicios.forEach(servicio => {
+    
+        servicios.push(servicio.servicio.id)
+      });
+
+     
+      var nuevaOrden = { cliente: this.orden.cliente.id, vehiculo: this.orden.vehiculo.id, empresa: this.empresa } 
+      this.ordenService.guardarOrden(nuevaOrden).subscribe((res: any) => {
+        if (res.id) {
+          this.ordenService.modificarOrden(res.id, { servicios: servicios }).subscribe((res:any) => {
+            alert('Orden creada correctamente'),
+            this.router.navigate(['/orden/informacionorden/' + res.id]);
+          }, error => {
+            alert('Existió un error al almancenar la orden de trabajo')
+          })
+        }
+      }, error => {
+        alert('Existió un error al almancenar la orden de trabajo')
+      })
+    }
+
+
 
   }
 
@@ -147,7 +215,7 @@ export class CrearOrdenComponent implements OnInit {
   }
 
   cambiarFiltro() {
-    this.reiniciarClienteVehiculo()
+    this.reiniciarClienteVehiculo();
   }
 
   reiniciarClienteVehiculo() {
@@ -155,6 +223,9 @@ export class CrearOrdenComponent implements OnInit {
     this.vehiculos = []
     this.orden.cliente = null
     this.vehiculoSeleccionado = { posicion: 0, vehiculo: null }
+    this.orden.servicios = []
+    this.orden.vehiculo = null
+    this.orden.cliente = null
   }
 
   navegarVehiculos(condicion) {

@@ -1,3 +1,64 @@
-<p>
-  consultar-orden works!
-</p>
+<div class="card">
+    <div class="card-header bg-primary text-white">
+      Búsqueda
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+  
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon3">Filtro</span>
+            </div>
+            <input [(ngModel)]="termino" (input)="buscarOrden()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+          </div>
+  
+        </div>
+  
+        <div class="col-md-1">
+          <a class="btn btn-primary" href="#/orden/crearorden/nuevo"><i class="mdi mdi-plus"></i></a>
+        </div>
+  
+  
+       
+      </div>
+    </div>
+  </div>
+  
+  <div class="card">
+    <div class="card-header bg-primary text-white">
+      Resultados
+    </div>
+    <div class="card-body">
+        <table class="table table-sm table-striped table-responsive-sm">
+            <thead class=" ">
+              <tr>
+                <th></th>
+                <th scope="col">No. Orden</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">Vehículo</th>
+                <th scope="col">No tareas</th>
+            
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let orden of ordenes"> 
+               
+                <td>
+                    <a class="btn btn-sm btn-primary"  title="Editar orden" href="#/orden/crearorden/{{orden.id}}"><i class="mdi mdi-pencil"></i></a>
+                  <button [disabled]="" (click)="eliminarorden(orden.id)" class="btn btn-sm btn-danger" title="Elimina orden"><i class="mdi mdi-delete"></i></button>
+                  
+                </td>
+                <td><a href="/#/orden/informacionorden/{{orden.id}}">{{orden.id}}</a></td>
+                <td>{{orden.cliente.persona}}</td>
+                <td>{{orden.vehiculo.placa}}</td>
+                <td>{{orden.servicios.length}}</td>
+            
+              </tr>
+           
+           
+            </tbody>
+          </table>
+  
+    </div>
+  </div>
