@@ -1,0 +1,165 @@
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Información
+  </div>
+
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+
+        <div class="row">
+          <div class="col-md-3">
+            <strong>Usuario:</strong>
+          </div>
+          <div class="col-md-9">{{usuario.persona.nombre}}</div>
+        </div>
+        <div class="row">
+          <div class="col-md-3">
+            <strong>Grupo:</strong>
+          </div>
+          <div class="col-md-9">{{usuario.grupo.descripcion}}</div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Mis tareas
+  </div>
+  <div class="card-body">
+
+    <div class="row">
+      <div class="col-md-4">
+        Estado:
+        <select class="form-control" [(ngModel)]="termino" (change)="reiniciar()">
+          <option value="0">TODAS</option>
+          <option value="1">EN ESPERA DE PRODUCCIÓN</option>
+          <option value="2">EN PRODUCCIÓN</option>
+          <option value="3">PAUSADO</option>
+          <option value="4">POR FACTURAR</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+
+        Registros
+
+        <select class="form-control" [(ngModel)]="registros" (change)="reiniciar()">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="40">40</option>
+
+
+        </select>
+
+      </div>
+
+      <div class="col-md-2">
+
+        Orden
+
+        <select class="form-control" [(ngModel)]="orden" (change)="reiniciar()">
+          <option value="ASC">Más antiguas</option>
+          <option value="DESC">Más nuevas</option>
+
+
+
+        </select>
+
+      </div>
+      <div class="col-md-2">
+        <button class="btn btn-primary" (click)="reiniciar">
+          <i class="mdi mdi-refresh"></i>
+        </button>
+
+      </div>
+    </div>
+
+
+    <hr>
+
+    <table class="table table-bordered table-striped text-black">
+      <thead>
+        <tr>
+          <th></th>
+          <th scope="col">No. orden</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Tarea</th>
+          <th scope="col">Tiempo estandar</th>
+          <th scope="col">Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let servicio of servicios" [class.table-danger]="servicio.estado=='EN ESPERA DE PRODUCCIÓN'" [class.table-primary]="servicio.estado=='EN PRODUCCIÓN'"
+          [class.table-warning]="servicio.estado=='EN PRODUCCIÓN - PAUSADO'" [class.table-success]="servicio.estado=='POR FACTURAR'">
+          <td>
+            <button title="Iniciar tarea" *ngIf="servicio.horaInicio=='' && servicio.horaFin=='' && servicio.estado=='EN ESPERA DE PRODUCCIÓN'"
+              (click)="iniciarServicio(servicio)" class="btn btn-primary btn-sm">
+              <i class="mdi mdi-play"></i>
+            </button>
+
+
+            <button title="Pausar tarea" (click)="pausarServicio(servicio)" *ngIf="servicio.horaInicio!='' && servicio.horaFin=='' && servicio.estado!='EN PRODUCCIÓN - PAUSADO'"
+              class="btn btn-warning btn-sm">
+              <i class="mdi mdi-pause"></i>
+            </button>
+
+            <button title="Reanudar tarea" (click)="reanudarServicio(servicio)" *ngIf="servicio.estado=='EN PRODUCCIÓN - PAUSADO'" class="btn btn-warning btn-sm">
+              <i class="mdi mdi-play"></i>
+            </button>
+
+            <button title="Finalizar tarea" (click)="finalizarServicio(servicio)" *ngIf="servicio.horaInicio!='' && servicio.horaFin=='' && servicio.estado!='EN PRODUCCIÓN - PAUSADO'"
+              class="btn btn-danger btn-sm">
+              <i class="mdi mdi-stop"></i>
+            </button>
+
+
+          </td>
+          <td>{{servicio.orden.id}}</td>
+          <td>{{servicio.orden.createdAt}}</td>
+          <td>{{servicio.servicio.descripcion}}</td>
+          <td>{{servicio.servicio.tiempoEstandar}}</td>
+          <td class="">{{servicio.estado}}</td>
+
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        
+        <li class="page-item " [class.disabled]="pagina==1">
+          <button class="page-link" (click)="navegarPaginas('-')" tabindex="-1"><<</button>
+        </li>
+        <li  class="page-item" >
+          <span  class="page-link">
+            Página {{pagina}}
+            <span class="sr-only">(current)</span>
+          </span>
+        </li>
+        <li class="page-item " [class.disabled]="servicios.length < registros">
+          <button class="page-link" (click)="navegarPaginas('+')">>></button>
+        </li>
+      </ul>
+    </nav>
+
+
+
+  </div>
+</div>

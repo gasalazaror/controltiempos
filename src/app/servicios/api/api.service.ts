@@ -30,7 +30,7 @@ export class ApiService {
       }
     }
 
-    return this.http.get(this.url + '/' + endpoint, this.httpOptions);
+    return this.http.get(this.url + '/' + endpoint, reqOpts);
   }
 
   post(endpoint: string, body: any, reqOpts?: any) {

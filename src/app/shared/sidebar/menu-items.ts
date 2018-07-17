@@ -25,6 +25,7 @@ export const ROUTES: RouteInfo[] = [
         submenu: [
             { path: '/servicio/crearservicio/nuevo', title: 'Registrar Servicio', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
             { path: '/servicio/consultarservicio', title: 'Consultar Servicio', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+            { path: '/servicio/mistareas', title: 'Mis tareas', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
 
         ]
     },

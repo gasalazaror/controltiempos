@@ -35,6 +35,7 @@ import { InformacionServicioComponent } from '../componentes/servicio/informacio
 import { CrearOrdenComponent } from '../componentes/orden/crear-orden/crear-orden.component';
 import { ConsultarOrdenComponent } from '../componentes/orden/consultar-orden/consultar-orden.component';
 import { InformacionOrdenComponent } from '../componentes/orden/informacion-orden/informacion-orden.component';
+import { MisTareasComponent } from '../componentes/servicio/misTareas/mis-tareas/mis-tareas.component';
 
 
 @NgModule({
@@ -74,7 +75,8 @@ import { InformacionOrdenComponent } from '../componentes/orden/informacion-orde
     InformacionServicioComponent,
     CrearOrdenComponent,
     ConsultarOrdenComponent,
-    InformacionOrdenComponent
+    InformacionOrdenComponent,
+    MisTareasComponent
   ]
 })
 

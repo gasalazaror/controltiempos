@@ -37,6 +37,10 @@ export class ServicioService {
     return this.apiService.get('categoria?'+descripcion+'='+valor+'&empresa='+empresa)
   }
 
+  pausarServicio(servicio, horaInicio) {
+    return this.apiService.post('pausa', { ordenServicio: servicio, horaInicio: horaInicio })
+  }
+
   obtenerCategoria(id){
     return this.apiService.get('categoria/'+id)
   }
@@ -59,5 +63,30 @@ export class ServicioService {
 
   obtenerCategoriasPadre(empresa){
     return this.apiService.get('')
+  }
+
+  obtenerServiciosGrupo(grupo, limit, skip, orden){
+    return this.apiService.get('ordenservicio?grupo='+grupo+'&limit='+limit+'&skip='+skip+"&sort=createdAt "+orden)
+  }
+
+  obtenerServiciosGrupoEstado(grupo, estado, limit, skip, orden){
+    return this.apiService.get('ordenservicio?grupo='+grupo+"&estado="+estado+'&limit='+limit+'&skip='+skip +"&sort=createdAt "+orden)
+  }
+
+  reanudarServicio(pausa, horaFin) {
+    alert
+    return this.apiService.put('pausa/' + pausa, { horaFin: horaFin })
+  }
+
+  iniciarServicio(servicio, horaInicio) {
+    return this.apiService.put('ordenservicio/' + servicio, { horaInicio: horaInicio, estado: 'EN PRODUCCIÓN' });
+  }
+
+  finalizarServicio(servicio, horaFin) {
+    return this.apiService.put('ordenservicio/' + servicio, { horaFin: horaFin, estado: 'POR FACTURAR' });
+  }
+
+  modificarEstado(ordenServicio, estado, pausaActual) {
+    return this.apiService.put('ordenServicio/' + ordenServicio, { estado: estado, pausaActual: pausaActual })
   }
 }

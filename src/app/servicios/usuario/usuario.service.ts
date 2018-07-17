@@ -12,6 +12,10 @@ export class UsuarioService {
     return this.apiService.post('usuario', { persona: persona });
   }
 
+  obtenerUnUsuario(id){
+    return this.apiService.get('usuario/'+id)
+  }
+
   obtenerRolesUsuario(usuario) {
     return this.apiService.get('usuario/' + usuario + '/roles')
   }
