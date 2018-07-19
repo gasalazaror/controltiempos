@@ -1,73 +1,73 @@
 <div class="card">
-  <div class="card-header bg-primary text-white">
-    Datos de la persona
-  </div>
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-4">
-    
-        <div class="form-group input-group-sm">
-          <label for="estado">Estado</label>
-          <select [(ngModel)]="persona.estado" class="form-control input-sm" id="estado">
-            <option value="ACTIVO">Activo</option>
-            <option value="INACTIVO">Inactivo</option>
-          </select>
-        </div>
-        <div class="form-group input-group-sm">
-          <label for="cedula">Cédula / RUC</label>
-          <input [disabled]="id!='nuevo'" type="text" (input)="validarCedula()" maxlength="13" [(ngModel)]="persona.cedula" class="form-control input-sm"
-            id="cedula">
-          <div *ngIf="error.cedula!=''" class="alert alert-danger" role="alert">
-            <strong>Error: </strong> {{error.cedula}}
+    <div class="card-header bg-primary text-white">
+      Datos de la persona
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-4">
+      
+          <div class="form-group input-group-sm">
+            <label for="estado">Estado</label>
+            <select [(ngModel)]="persona.estado" class="form-control input-sm" id="estado">
+              <option value="ACTIVO">Activo</option>
+              <option value="INACTIVO">Inactivo</option>
+            </select>
           </div>
-        </div>
-    
-        <div class="form-group input-group-sm">
-          <label for="nombre">Nombre / Razón social</label>
-          <input (input)="validarNombre()" type="text" [(ngModel)]="persona.nombre" maxlength="50" class="form-control" id="nombre">
-          <div *ngIf="error.nombre!=''" class="alert alert-danger" role="alert">
-            <strong>Error: </strong> {{error.nombre}}
+          <div class="form-group input-group-sm">
+            <label for="cedula">Cédula / RUC</label>
+            <input [disabled]="id!='nuevo'" type="text" (input)="validarCedula()" maxlength="13" [(ngModel)]="persona.cedula" class="form-control input-sm"
+              id="cedula">
+            <div *ngIf="error.cedula!=''" class="alert alert-danger" role="alert">
+              <strong>Error: </strong> {{error.cedula}}
+            </div>
           </div>
-        </div>
-    
-    
-    
-      </div>
-    
-      <div class="col-md-4">
-        <div class="form-group input-group-sm">
-          <label for="telefono">Teléfono</label>
-          <input (input)="validarTelefono()" type="text" [(ngModel)]="persona.telefono" maxlength="50" class="form-control" id="telefono">
-          <div *ngIf="error.telefono!=''" class="alert alert-danger" role="alert">
-            <strong>Error: </strong> {{error.telefono}}
+      
+          <div class="form-group input-group-sm">
+            <label for="nombre">Nombre / Razón social</label>
+            <input (input)="validarNombre()" type="text" [(ngModel)]="persona.nombre" maxlength="50" class="form-control" id="nombre">
+            <div *ngIf="error.nombre!=''" class="alert alert-danger" role="alert">
+              <strong>Error: </strong> {{error.nombre}}
+            </div>
           </div>
+      
+      
+      
         </div>
-    
-    
-        <div class="form-group input-group-sm">
-          <label for="direccion">Dirección</label>
-          <input (input)="validarDireccion()" [(ngModel)]="persona.direccion" type="text" class="form-control" id="direccion">
-          <div *ngIf="error.direccion!=''" class="alert alert-danger" role="alert">
-            <strong>Error: </strong> {{error.direccion}}
+      
+        <div class="col-md-4">
+          <div class="form-group input-group-sm">
+            <label for="telefono">Teléfono</label>
+            <input (input)="validarTelefono()" type="text" [(ngModel)]="persona.telefono" maxlength="50" class="form-control" id="telefono">
+            <div *ngIf="error.telefono!=''" class="alert alert-danger" role="alert">
+              <strong>Error: </strong> {{error.telefono}}
+            </div>
           </div>
-        </div>
-    
-    
-        <div class="form-group input-group-sm">
-          <label for="correo">Correo electrónico</label>
-          <input (input)="validarEmail()" [(ngModel)]="persona.correo" type="email" class="form-control" id="correo">
-          <div *ngIf="error.correo!=''" class="alert alert-danger" role="alert">
-            <strong>Error: </strong> {{error.correo}}
+      
+      
+          <div class="form-group input-group-sm">
+            <label for="direccion">Dirección</label>
+            <input (input)="validarDireccion()" [(ngModel)]="persona.direccion" type="text" class="form-control" id="direccion">
+            <div *ngIf="error.direccion!=''" class="alert alert-danger" role="alert">
+              <strong>Error: </strong> {{error.direccion}}
+            </div>
           </div>
+      
+      
+          <div class="form-group input-group-sm">
+            <label for="correo">Correo electrónico</label>
+            <input (input)="validarEmail()" [(ngModel)]="persona.correo" type="email" class="form-control" id="correo">
+            <div *ngIf="error.correo!=''" class="alert alert-danger" role="alert">
+              <strong>Error: </strong> {{error.correo}}
+            </div>
+          </div>
+      
+          <div class="form-group input-group-sm">
+            <button [disabled]="error.cedula!='' || persona.cedula==''  || error.nombre!='' || persona.nombre=='' || error.direccion!='' || persona.direccion=='' || error.telefono!='' || persona.telefono=='' || error.cedula!='' || persona.cedula=='' || error.correo!='' || persona.correo=='' "
+              (click)="guardarPersona()" class="btn btn-primary">Guardar</button>
+          </div>
+      
         </div>
-    
-        <div class="form-group input-group-sm">
-          <button [disabled]="error.cedula!='' || persona.cedula==''  || error.nombre!='' || persona.nombre=='' || error.direccion!='' || persona.direccion=='' || error.telefono!='' || persona.telefono=='' || error.cedula!='' || persona.cedula=='' || error.correo!='' || persona.correo=='' "
-            (click)="guardarPersona()" class="btn btn-primary">Guardar</button>
-        </div>
-    
       </div>
     </div>
   </div>
-</div>
-
+  

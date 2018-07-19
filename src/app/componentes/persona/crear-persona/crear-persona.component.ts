@@ -200,7 +200,7 @@ export class CrearPersonaComponent implements OnInit {
       if (confirmacion) {
         this.personaService.guardarPersona(this.persona).subscribe(res => {
           this.persona = res
-          this.router.navigate(['/persona/informacionpersona/' + this.persona.id]);
+          this.reanudar()
           alert('persona guardada correctamente correctamente');
         }, error => {
           alert('Existió un error')
@@ -214,8 +214,8 @@ export class CrearPersonaComponent implements OnInit {
           { nombre: this.persona.nombre, estado: this.persona.estado, telefono: this.persona.telefono, direccion: this.persona.direccion, correo: this.persona.correo }
         ).subscribe(res => {
           this.persona = res
-
-          this.router.navigate(['/persona/informacionpersona/' + this.persona.id]);
+          this.reanudar()
+     
           alert('Persona modificada correctamente');
 
         }, error => {

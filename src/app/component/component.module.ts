@@ -37,7 +37,6 @@ import { ConsultarOrdenComponent } from '../componentes/orden/consultar-orden/co
 import { InformacionOrdenComponent } from '../componentes/orden/informacion-orden/informacion-orden.component';
 import { MisTareasComponent } from '../componentes/servicio/misTareas/mis-tareas/mis-tareas.component';
 
-
 @NgModule({
   imports: [
     CommonModule,

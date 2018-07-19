@@ -17,6 +17,7 @@ export const Approutes: Routes = [
         { path: 'vehiculo', loadChildren: './component/component.module#ComponentsModule' },
         { path: 'servicio', loadChildren: './component/component.module#ComponentsModule' },
         { path: 'orden', loadChildren: './component/component.module#ComponentsModule' },
+        { path: 'tarea', loadChildren: './component/component.module#ComponentsModule' },
     ]
     
 },

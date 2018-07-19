@@ -143,12 +143,13 @@
 
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-center">
-        
+
         <li class="page-item " [class.disabled]="pagina==1">
-          <button class="page-link" (click)="navegarPaginas('-')" tabindex="-1"><<</button>
+          <button class="page-link" (click)="navegarPaginas('-')" tabindex="-1">
+            <<</button>
         </li>
-        <li  class="page-item" >
-          <span  class="page-link">
+        <li class="page-item">
+          <span class="page-link">
             Página {{pagina}}
             <span class="sr-only">(current)</span>
           </span>

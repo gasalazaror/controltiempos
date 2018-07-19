@@ -12,11 +12,22 @@ export class ConsultarPersonaComponent implements OnInit {
   personas: any;
   empresa: any;
 
+  registros: any
+  orden: any
+  pagina: any
+  skip: any
+
+
 
   constructor(private personaService: PersonaService) {
     this.termino = '';
     this.personas = []
     this.empresa = 1;
+
+    this.registros = '10'
+    this.orden = 'DESC'
+    this.pagina = 1
+    this.skip = 0
   }
 
   ngOnInit() {
@@ -24,8 +35,10 @@ export class ConsultarPersonaComponent implements OnInit {
   }
 
   buscarPersona() {
+    this.pagina = 1
+    this.skip = 0
     if (this.termino.length > 2) {
-      this.personaService.buscarUnaPersona(this.termino.toUpperCase(), this.empresa).subscribe(res => {
+      this.personaService.buscarUnaPersona(this.termino.toUpperCase(), this.empresa, this.registros, this.skip, this.orden).subscribe(res => {
         this.personas = res
       }, error => {
         this.cargarPersonas()
@@ -35,8 +48,32 @@ export class ConsultarPersonaComponent implements OnInit {
     }
   }
 
+  navegarPaginas(accion) {
+    var registros = this.personas.length
+    switch (accion) {
+      case '+':
+        this.pagina = this.pagina + 1
+        this.skip = parseInt(this.skip) + parseInt(this.registros)
+        break;
+      case '-':
+        this.pagina = this.pagina - 1
+        this.skip = parseInt(this.skip) - parseInt(this.registros)
+        break;
+      default:
+        break;
+    }
+    this.cargarPersonas()
+  }
+
+  reiniciar(){
+    this.pagina = 1
+    this.skip = 0
+
+    this.cargarPersonas()
+  }
+
   cargarPersonas() {
-    this.personaService.obtenerPersonas(this.empresa).subscribe(res => {
+    this.personaService.obtenerPersonas(this.empresa, this.registros, this.skip, this.orden).subscribe(res => {
       this.personas = res;
     })
   }

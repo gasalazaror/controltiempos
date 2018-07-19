@@ -1,111 +1,58 @@
 <div class="card">
   <div class="card-header bg-primary text-white">
-    Búsqueda
+    Información de la orden de trabajo
   </div>
   <div class="card-body">
-    Buscar por:
-    <select [(ngModel)]="filtro" (change)="cambiarFiltro()">
-      <option *ngFor="let filtro of filtros" value="{{filtro}}">{{filtro}}</option>
-    </select>
+    <div class="row">
+
+      <div class="col-md-6">
+        <div class="input-group input-group-sm mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Persona</span>
+          </div>
+          <input [(ngModel)]="personaSeleccionada" (click)="open(content)" readonly type="text" class="form-control" aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm">
+          <button class="btn btn-light" (click)="open(content)">
+            <i class="mdi mdi-magnify"></i>
+          </button>
+          <a class="btn btn-light " target="_blank" href="/#/persona/crearpersona/nuevo">
+            <i class="mdi mdi-plus"></i>
+          </a>
+
+        </div>
+      </div>
 
 
-    <input [(ngModel)]="termino" (change)="buscar()" type="text">
-    <button (click)="buscar()" class="">Buscar</button>
+    </div>
+
+    <div class="row">
+      <div *ngIf="personaSeleccionada!=''" class="col-md-6">
+        <div class="input-group input-group-sm mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-sm">Vehículo</span>
+          </div>
+          <input (click)="open3(content3)" [(ngModel)]="vehiculoSeleccionado" readonly type="text" class="form-control" aria-label="Sizing example input"
+            aria-describedby="inputGroup-sizing-sm">
+          <button class="btn btn-light" (click)="open(content3)">
+            <i class="mdi mdi-magnify"></i>
+          </button>
+          <a class="btn btn-light " target="_blank" href="/#/vehiculo/crearvehiculo/nuevo">
+            <i class="mdi mdi-plus"></i>
+          </a>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
   </div>
 </div>
 
-<div class="row">
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        Cliente
-      </div>
-      <div class="card-body">
-
-        <div *ngIf="orden.cliente!=null">
-          <div class="row">
-            <div class="col-md-4">ID:</div>
-            <div class="col-md-8">
-              <input readonly [(ngModel)]="orden.cliente.persona.cedula" type="text">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">Nombre:</div>
-            <div class="col-md-8">
-              <input readonly [(ngModel)]="orden.cliente.persona.nombre" type="text">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">Dirección:</div>
-            <div class="col-md-8">
-              <input readonly [(ngModel)]="orden.cliente.persona.direccion" type="text">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">Teléfono:</div>
-            <div class="col-md-8">
-              <input readonly [(ngModel)]="orden.cliente.persona.telefono" type="text">
-            </div>
-          </div>
-        </div>
 
 
 
-      </div>
-    </div>
-  </div>
-  <div class="col-md-6">
-    <div class="card">
-      <div class="card-header bg-primary text-white">
-        Vehículo
-      </div>
-      <div class="card-body">
-
-        <div *ngIf="vehiculoSeleccionado.vehiculo!=null">
-          <div class="row">
-            <div class="col-md-4">ID:</div>
-            <div class="col-md-8">
-              <input readonly [(ngModel)]="vehiculoSeleccionado.vehiculo.placa" type="text">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">Color:</div>
-            <div class="col-md-8">
-              <input readonly [(ngModel)]="vehiculoSeleccionado.vehiculo.color" type="text">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">Marca:</div>
-            <div class="col-md-8">
-              <input readonly [(ngModel)]="vehiculoSeleccionado.vehiculo.marca" type="text">
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-md-4">Modelo:</div>
-            <div class="col-md-8">
-              <input readonly [(ngModel)]="vehiculoSeleccionado.vehiculo.modelo" type="text">
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <button [disabled]="vehiculos.length==0" (click)="navegarVehiculos('-')">
-            <<</button>
-              {{vehiculoSeleccionado.posicion+1}}-{{vehiculos.length}}
-              <button [disabled]="vehiculos.length==0" (click)="navegarVehiculos('+')">>></button>
-        </div>
-
-
-      </div>
-    </div>
-  </div>
-</div>
 
 
 <div class="row">
@@ -118,13 +65,22 @@
 
         <hr> Seleccionar servicios
 
-        <div class="row">
-          <div class="col-md-4">
-            <select class="form-control"  (change)="onChange($event.target.value)">
-              <option *ngFor="let servicioDisponible of serviciosDisponibles" value="{{servicioDisponible.id}}">{{servicioDisponible.descripcion}}</option>
-            </select>
+      
+
+        <div class="col-md-6">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Servicios</span>
+            </div>
+   
+            <button class="btn btn-light" (click)="openServicio(content4)">
+              <i class="mdi mdi-magnify"></i>
+            </button>
+            <a class="btn btn-light " target="_blank" href="/#/servicio/crearservicio/nuevo">
+              <i class="mdi mdi-plus"></i>
+            </a>
+
           </div>
-  
         </div>
 
         <hr>
@@ -141,7 +97,9 @@
           <tbody>
             <tr *ngFor="let servicio of orden.servicios;let i = index" [attr.data-index]="i">
               <td>
-                  <button (click)="eliminarServicio(i)" type="button" class="btn btn-danger btn-sm"><i class="mdi mdi-delete"></i></button>
+                <button (click)="eliminarServicio(i)" type="button" class="btn btn-danger btn-sm">
+                  <i class="mdi mdi-delete"></i>
+                </button>
               </td>
               <td>{{servicio.servicio.descripcion}}</td>
               <td>{{servicio.servicio.tiempoEstandar}}</td>
@@ -152,12 +110,196 @@
           </tbody>
         </table>
 
-
-
-
       </div>
     </div>
   </div>
 </div>
 
-<button [disabled]="!orden.servicios.length>0 || orden.cliente== null || orden.vehiculo==null" (click)="guardarOrden()" class="btn btn-primary">Guardar</button>
+<button [disabled]="!orden.servicios.length>0 || persona== null || vehiculo==null" (click)="guardarOrden()" class="btn btn-primary">Guardar</button>
+
+<ng-template #content2 let-c="close" let-d="dismiss">
+  <div class="modal-header bg-primary text-white">
+    <h4 class="modal-title text-white">Crear persona</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <app-crear-persona></app-crear-persona>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-inverse" (click)="c('Close click')">Cerrar</button>
+  </div>
+</ng-template>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header bg-primary text-white">
+    <h4 class="modal-title text-white">Seleccionar persona</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <span class="input-group-text" id="basic-addon1">Filtro</span>
+      </div>
+      <input [(ngModel)]="terminoCliente" (input)="buscarPersona()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+    </div>
+
+
+    <table class="table table-responsive table-sm">
+      <thead>
+        <tr>
+
+          <th scope="col">Identificación</th>
+          <th scope="col">Nombre</th>
+
+          <th scope="col">Seleccionar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let persona of personas">
+
+          <td>{{persona.cedula}}</td>
+          <td>{{persona.nombre}}</td>
+
+          <td>
+            <button class="btn btn-success btn-sm" (click)="seleccionarPersona(persona); c('Close click')">
+              <i class="mdi mdi-arrow-down"></i>
+            </button>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+    <hr>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+
+        <li class="page-item " [class.disabled]="pagina==1">
+          <button class="page-link" (click)="navegarPaginas('-')" tabindex="-1">
+            <<</button>
+        </li>
+        <li class="page-item">
+          <span class="page-link">
+            Página {{pagina}}
+            <span class="sr-only">(current)</span>
+          </span>
+        </li>
+        <li class="page-item " [class.disabled]="personas.length < registros">
+          <button class="page-link" (click)="navegarPaginas('+')">>></button>
+        </li>
+      </ul>
+    </nav>
+
+
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-inverse" (click)="c('Close click')">Cerrar</button>
+  </div>
+</ng-template>
+
+<ng-template #content3 let-c="close" let-d="dismiss">
+  <div class="modal-header bg-primary text-white">
+    <h4 class="modal-title text-white">Seleccionar vehículo</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+
+
+
+    <table class="table table-responsive table-sm">
+      <thead>
+        <tr>
+
+          <th scope="col">Identificación</th>
+          <th scope="col">Marca</th>
+          <th scope="col">Modelo</th>
+          <th scope="col">Color</th>
+
+          <th scope="col">Seleccionar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let vehiculo of vehiculos">
+
+          <td>{{vehiculo.placa}}</td>
+          <td>{{vehiculo.marca}}</td>
+          <td>{{vehiculo.modelo}}</td>
+          <td>{{vehiculo.color}}</td>
+
+          <td>
+            <button class="btn btn-success btn-sm" (click)="seleccionarVehiculo(vehiculo); c('Close click')">
+              <i class="mdi mdi-arrow-down"></i>
+            </button>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+    <hr>
+    
+
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-inverse" (click)="c('Close click')">Cerrar</button>
+  </div>
+</ng-template>
+
+<ng-template #content4 let-c="close" let-d="dismiss">
+  <div class="modal-header bg-primary text-white">
+    <h4 class="modal-title text-white">Seleccionar Servicios</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+
+
+
+    <table class="table table-responsive table-sm">
+      <thead>
+        <tr>
+
+          <th scope="col">Servicio</th>
+          <th scope="col">Tiempo estandar</th>
+ 
+
+          <th scope="col">Seleccionar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let servicio of serviciosDisponibles">
+
+          <td>{{servicio.descripcion}}</td>
+          <td>{{servicio.tiempoEstandar}}</td>
+
+
+          <td>
+            <button class="btn btn-success btn-sm" (click)="seleccionarServicio(servicio); c('Close click')">
+              <i class="mdi mdi-arrow-down"></i>
+            </button>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+    <hr>
+    
+
+
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-inverse" (click)="c('Close click')">Cerrar</button>
+  </div>
+</ng-template>

@@ -25,10 +25,10 @@ export const ROUTES: RouteInfo[] = [
         submenu: [
             { path: '/servicio/crearservicio/nuevo', title: 'Registrar Servicio', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
             { path: '/servicio/consultarservicio', title: 'Consultar Servicio', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
-            { path: '/servicio/mistareas', title: 'Mis tareas', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
 
         ]
     },
+
     {
         path: '', title: 'Ordenes', icon: 'mdi mdi-file-document', class: 'has-arrow', label: '', labelClass: '', extralink: false,
         submenu: [
@@ -36,7 +36,16 @@ export const ROUTES: RouteInfo[] = [
             { path: '/orden/consultarorden', title: 'Consultar Orden', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
 
         ]
-    }
+    },
+
+    {
+        path: '', title: 'Tareas', icon: 'mdi mdi-format-list-numbers', class: 'has-arrow', label: '', labelClass: '', extralink: false,
+        submenu: [
+            { path: '/servicio/mistareas', title: 'Mis tareas', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+
+        ]
+    },
+
 
 ];
 

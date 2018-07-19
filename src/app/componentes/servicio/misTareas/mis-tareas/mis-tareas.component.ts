@@ -16,10 +16,13 @@ export class MisTareasComponent implements OnInit {
   usuario: any
   servicios: any
   termino: any
+ 
   registros: any
   orden: any
   pagina: any
   skip: any
+
+
 
   constructor
     (
@@ -31,6 +34,8 @@ export class MisTareasComponent implements OnInit {
     this.servicios = []
     this.usuario = { persona: { nombre: '' }, grupo: { descripcion: '' } }
     this.termino = '0'
+    
+    
     this.registros = '10'
     this.orden = 'DESC'
     this.pagina = 1
@@ -106,23 +111,16 @@ export class MisTareasComponent implements OnInit {
   }
 
   navegarPaginas(accion) {
-
     var registros = this.servicios.length
-
- 
-
     switch (accion) {
       case '+':
         this.pagina = this.pagina + 1
         this.skip = parseInt(this.skip) + parseInt(this.registros)
- 
         break;
-
       case '-':
         this.pagina = this.pagina - 1
         this.skip = parseInt(this.skip) - parseInt(this.registros)
         break;
-
       default:
         break;
     }

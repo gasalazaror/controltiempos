@@ -26,6 +26,7 @@ import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { TiempoPipe } from './pipes/tiempo/tiempo.pipe';
 
 
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true,
   wheelSpeed: 2,
@@ -46,6 +47,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
+
     FormsModule,
     HttpClientModule,
     NgbModule.forRoot(),

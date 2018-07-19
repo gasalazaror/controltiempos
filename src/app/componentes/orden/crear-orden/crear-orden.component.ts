@@ -4,6 +4,7 @@ import { PersonaService } from '../../../servicios/persona/persona.service';
 import { ServicioService } from '../../../servicios/servicio/servicio.service';
 import { OrdenService } from '../../../servicios/orden/orden.service';
 import { ActivatedRoute, Router } from '../../../../../node_modules/@angular/router';
+import { NgbModal, ModalDismissReasons } from '../../../../../node_modules/@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-crear-orden',
@@ -20,12 +21,21 @@ export class CrearOrdenComponent implements OnInit {
   empresa: any
   persona: any
   orden: any
-  id:any
+  id: any
+  terminoCliente: any
+  personaSeleccionada: any
+  personas: any
+  vehiculo: any
 
 
   vehiculoSeleccionado: any
   serviciosDisponibles: any
   servicios: any
+  closeResult: string;
+
+  registros: any
+  pagina: any
+  skip: any
 
   constructor(
     private clienteService: ClienteService,
@@ -33,7 +43,9 @@ export class CrearOrdenComponent implements OnInit {
     private servicioService: ServicioService,
     private ordenService: OrdenService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private modalService: NgbModal,
+    private modalService2: NgbModal
 
   ) {
 
@@ -41,36 +53,163 @@ export class CrearOrdenComponent implements OnInit {
     this.filtro = 'ID Cliente'
     this.termino = ''
     this.empresa = 1;
-
-    this.vehiculoSeleccionado = { posicion: 0, vehiculo: null }
+    this.personas = []
+    this.vehiculoSeleccionado = ''
     this.vehiculos = []
+    this.personaSeleccionada = ''
     this.serviciosDisponibles = []
+    
+    this.registros = '10'
+    this.pagina = 1
+    this.skip = 0
+
     this.orden = { cliente: null, vehiculo: null, servicios: [] }
 
-    if (this.id!='nuevo') {
-    
-      this.ordenService.obtenerUnaOrden(this.id).subscribe((res:any)=>{
+    if (this.id != 'nuevo') {
+
+      this.ordenService.obtenerUnaOrden(this.id).subscribe((res: any) => {
         if (res) {
-
-         
           this.orden = res
-
-          this.ordenService.obtenerServiciosOrden(this.orden.id).subscribe(res=>{
-          
+          this.ordenService.obtenerServiciosOrden(this.orden.id).subscribe(res => {
             this.orden.servicios = res
           })
 
+          this.vehiculoSeleccionado = res.vehiculo.placa
+          this.vehiculo = res.vehiculo
+          this.clienteService.obtenerCliente(res.cliente.id).subscribe((res: any) => {
+            this.persona = res.persona
+            this.personaSeleccionada = res.persona.cedula + " - " + res.persona.nombre
+            this.vehiculos = res.pertenencias
 
-          this.clienteService.obtenerCliente(res.cliente.id).subscribe(res=>{
-            this.orden.cliente = res
-            this.vehiculos = this.orden.cliente.pertenencias
-            this.vehiculoSeleccionado = this.vehiculoSeleccionado = { posicion: 0, vehiculo: this.orden.vehiculo }
           })
-          
+
         }
       })
-    } 
+    }
 
+  }
+
+  open2(content) {
+    this.modalService.open(content).result.then((result) => {
+      this.closeResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+
+  navegarPaginas(accion) {
+    var registros = this.personas.length
+    switch (accion) {
+      case '+':
+        this.pagina = this.pagina + 1
+        this.skip = parseInt(this.skip) + parseInt(this.registros)
+        break;
+      case '-':
+        this.pagina = this.pagina - 1
+        this.skip = parseInt(this.skip) - parseInt(this.registros)
+        break;
+      default:
+        break;
+    }
+    this.obtenerPersonas()
+  }
+
+
+  seleccionarPersona(persona) {
+    this.persona = persona
+    this.personaSeleccionada = persona.cedula + " - " + persona.nombre
+
+    this.clienteService.obtenerCliente(persona.cliente[0].id).subscribe(res => {
+      this.orden.cliente = res
+      if (this.orden.cliente.pertenencias.length != 0) {
+        this.vehiculos = this.orden.cliente.pertenencias
+        this.vehiculoSeleccionado = ''
+        this.orden.vehiculo = this.vehiculoSeleccionado.vehiculo
+      } else {
+      }
+    })
+  }
+
+  seleccionarVehiculo(vehiculo) {
+    this.vehiculo = vehiculo
+    this.vehiculoSeleccionado = vehiculo.placa
+  }
+
+
+  open(content) {
+    this.obtenerPersonas()
+    this.modalService2.open(content, { windowClass: 'dark-modal' });
+  }
+
+  openServicio(content) {
+    this.cargarServicios()
+
+    this.modalService2.open(content, { windowClass: 'dark-modal' });
+  }
+
+  open3(content) {
+    this.modalService2.open(content, { windowClass: 'dark-modal' });
+  }
+
+  reiniciar(){
+    this.registros = '10'
+    this.pagina = 1
+    this.skip = 0
+  }
+
+
+  buscarPersona() {
+
+    this.reiniciar()
+
+    if (this.terminoCliente.length > 2) {
+      this.personaService.buscarUnaPersonaSeleccionar(this.terminoCliente.toUpperCase(), this.empresa).subscribe((resultados:any) => {
+        var personas = []
+
+
+        resultados.forEach(persona => {
+  
+          if (persona.cliente.length == 1) {
+            personas.push(persona)
+          }
+        });
+  
+        this.personas = personas
+
+      }, error => {
+        this.obtenerPersonas()
+      })
+    } else {
+      this.obtenerPersonas()
+    }
+  }
+
+  obtenerPersonas() {
+    
+    this.personaService.obtenerPersonas(this.empresa, this.registros,this.skip, 'ASC', ).subscribe((res: any) => {
+      var personas = []
+
+
+      res.forEach(persona => {
+
+        if (persona.cliente.length == 1) {
+          personas.push(persona)
+        }
+      });
+
+
+      this.personas = personas
+    })
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
 
@@ -83,71 +222,19 @@ export class CrearOrdenComponent implements OnInit {
     alert(JSON.stringify(this.orden.servicios))
   }
 
-  buscar() {
-    switch (this.filtro) {
-      case 'ID Cliente':
 
-        this.buscarCliente()
-
-        break;
-
-      case 'ID Vehículo':
-
-        break;
-
-      default:
-        break;
-    }
-  }
 
   onChange(servicio) {
-
-
     this.servicioService.obtenerUnServicio(servicio).subscribe(res => {
-      this.orden.servicios.push({servicio: res});
-
-    })
-
-
-  }
-
-  buscarCliente() {
-    this.personaService.obtenerUnCliente(this.termino, this.empresa).subscribe((res: any) => {
-      if (res[0]) {
-        var persona = res[0]
-
-        if (persona.cliente[0]) {
-
-          this.clienteService.obtenerCliente(persona.cliente[0].id).subscribe(res => {
-            this.orden.cliente = res
-
-           
-
-            if (this.orden.cliente.pertenencias.length != 0) {
-              this.vehiculos = this.orden.cliente.pertenencias
-              this.vehiculoSeleccionado = { posicion: 0, vehiculo: this.vehiculos[0] }
-              this.orden.vehiculo = this.vehiculoSeleccionado.vehiculo
-            } else {
-
-            }
-
-
-          })
-
-
-        } else {
-
-          this.reiniciarClienteVehiculo()
-          var confirmacion = confirm("La persona " + persona.nombre + " con número número de identificación " + this.termino + " no consta como cliente ¿Desea activarlo?")
-        }
-      } else {
-        this.reiniciarClienteVehiculo()
-        var confirmacion = confirm("La persona con número número de identificación " + this.termino + " no existe ¿Desea crearlo?")
-      }
-
-
+      this.orden.servicios.push({ servicio: res });
     })
   }
+
+  seleccionarServicio(servicio) {
+    this.orden.servicios.push({ servicio: servicio });
+  }
+
+
 
   cargarServicios() {
     this.servicioService.obtenerServicios(this.empresa).subscribe(res => {
@@ -160,16 +247,16 @@ export class CrearOrdenComponent implements OnInit {
   }
 
 
-  quitarServicio(servicioRecibido){
-    var nuevosServicios=[];
+  quitarServicio(servicioRecibido) {
+    var nuevosServicios = [];
 
     this.orden.servicios.forEach(servicio => {
-      if (servicio!= servicioRecibido) {
+      if (servicio != servicioRecibido) {
 
-        
-      
+
+
         nuevosServicios.push(servicio)
-      } 
+      }
     });
 
     this.orden.servicios = nuevosServicios
@@ -182,17 +269,18 @@ export class CrearOrdenComponent implements OnInit {
     if (confirmacion) {
       var servicios = []
       this.orden.servicios.forEach(servicio => {
-    
+
         servicios.push(servicio.servicio.id)
       });
 
-     
-      var nuevaOrden = { cliente: this.orden.cliente.id, vehiculo: this.orden.vehiculo.id, empresa: this.empresa } 
+
+
+      var nuevaOrden = { cliente: this.persona.cliente[0].id, vehiculo: this.vehiculo.id, empresa: this.empresa }
       this.ordenService.guardarOrden(nuevaOrden).subscribe((res: any) => {
         if (res.id) {
-          this.ordenService.modificarOrden(res.id, { servicios: servicios }).subscribe((res:any) => {
+          this.ordenService.modificarOrden(res.id, { servicios: servicios }).subscribe((res: any) => {
             alert('Orden creada correctamente'),
-            this.router.navigate(['/orden/informacionorden/' + res.id]);
+              this.router.navigate(['/orden/informacionorden/' + res.id]);
           }, error => {
             alert('Existió un error al almancenar la orden de trabajo')
           })
@@ -222,38 +310,12 @@ export class CrearOrdenComponent implements OnInit {
     this.termino = ''
     this.vehiculos = []
     this.orden.cliente = null
-    this.vehiculoSeleccionado = { posicion: 0, vehiculo: null }
+    this.vehiculoSeleccionado = ''
     this.orden.servicios = []
     this.orden.vehiculo = null
     this.orden.cliente = null
   }
 
-  navegarVehiculos(condicion) {
-    var posicionActual = this.vehiculoSeleccionado.posicion;
-    switch (condicion) {
-      case '+':
 
-        if (posicionActual == this.vehiculos.length - 1) {
-          posicionActual = -1
-        }
-        this.vehiculoSeleccionado = { posicion: posicionActual + 1, vehiculo: this.vehiculos[posicionActual + 1] }
-        this.orden.vehiculo = this.vehiculoSeleccionado.vehiculo
-        break;
-
-      case '-':
-        if (posicionActual == 0) {
-          posicionActual = this.vehiculos.length
-        } else {
-
-        }
-
-        this.vehiculoSeleccionado = { posicion: posicionActual - 1, vehiculo: this.vehiculos[posicionActual - 1] }
-        this.orden.vehiculo = this.vehiculoSeleccionado.vehiculo
-        break;
-
-      default:
-        break;
-    }
-  }
 
 }
