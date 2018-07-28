@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../../../../favicon.ico">
+
+  <title>Floating labels example for Bootstrap</title>
+
+
+</head>
+
+<body>
+  <div class="form-signin">
+    <div class="text-center mb-4">
+      <img class="mb-4" src="../assets/images/kanban.png" alt="" width="100%">
+      <h1 class="h3 mb-3 font-weight-normal">Control de tiempos</h1>
+    </div>
+
+    <form [formGroup]="profileForm" (ngSubmit)="iniciarSesion()">
+
+      <label>
+        Correo electrónico
+        <input type="correo" class="form-control" formControlName="correo">
+      </label>
+
+      <label>
+        Contraseña
+        <input type="password" class="form-control" formControlName="password">
+      </label>
+
+      <div *ngIf="error!=''" class="alert alert-danger" role="alert">
+          <strong>Error: </strong> {{error}}
+        </div>
+      <button [disabled]="!profileForm.valid"  class="btn btn-lg btn-primary btn-block"  type="submit">Iniciar sesión</button>
+    </form>
+
+  
+
+    
+   
+
+
+  
+    <a href="#/registro" class="btn btn-link">Registrarse</a>
+    <p class="mt-5 mb-3 text-muted text-center">&copy; 2017-2018</p>
+  </div>
+</body>
+
+</html>

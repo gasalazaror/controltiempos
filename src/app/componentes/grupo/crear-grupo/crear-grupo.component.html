@@ -1,0 +1,74 @@
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Seleccionar integrantes
+  </div>
+  <div class="card-body">
+    <div class="row"></div>
+
+    <div *ngIf="continuar == false" class="col-md-6">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+            <div *ngFor="let usuario of usuariosSeleccionados" class="btn-group mr-2" role="group" aria-label="First group">
+              <div class="btn-group mr-2 group-sm" role="group" aria-label="First group">
+                <button type="button" class="btn btn-secondary">{{usuario.nombre}}</button>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Identificaciön</th>
+                <th scope="col">Nombre</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of usuarios" style="cursor: pointer" (click)="seleccionarUsuario(usuario)" [class.table-info]="usuario.esSeleccionado">
+                <td scope="row"></td>
+                <td>{{usuario.cedula}}</td>
+                <td>{{usuario.nombre}}</td>
+      
+              </tr>
+      
+            </tbody>
+          </table>
+          
+          <button [disabled]="usuariosSeleccionados.length<1" class="btn btn-primary">Continuar</button>
+    </div>
+  
+  </div>
+</div>
+
+<div *ngIf="usuariosSeleccionados.length>25000" class="card">
+  <div class="card-header bg-primary text-white">
+    Información del grupo
+  </div>
+  <div class="card-body">
+
+    <div class="row">
+      <div class="col-md-3">
+        <form [formGroup]="grupo" (ngSubmit)="guardarGrupo()">
+
+          <label>
+            Grupo
+            <input autofocus type="text" class="" formControlName="descripcion">
+          </label>
+          <label>
+            Capacidad
+            <input autofocus type="number" class="" formControlName="capacidad">
+          </label>
+          <label>
+            Contraseña
+            <input type="text" class="" formControlName="contrasena">
+          </label>
+          <div *ngIf="error!=''" class="alert alert-danger" role="alert">
+            <strong>Error: </strong> {{error}}
+          </div>
+          <button [disabled]="!grupo.valid" class="btn  btn-primary btn-block" type="submit">Guardar grupo</button>
+        </form>
+      </div>
+    </div>
+
+
+  </div>
+</div>

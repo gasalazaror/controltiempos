@@ -1,0 +1,111 @@
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Búsqueda
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">Filtro</span>
+          </div>
+          <input [(ngModel)]="termino" (input)="buscarGrupo()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+        </div>
+
+      </div>
+      <div class="col-md-2">
+        <select class="form-control" [(ngModel)]="registros" (change)="reiniciar()">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="40">40</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <select class="form-control" [(ngModel)]="orden" (change)="reiniciar()">
+          <option value="ASC">Ascendente</option>
+          <option value="DESC">Descendente</option>
+        </select>
+      </div>
+
+      <div class="col-md-1">
+        <a class="btn btn-primary" href="#/persona/creargrupo/nuevo">
+          <i class="mdi mdi-plus"></i>
+        </a>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-2">
+     <!--    <button class="btn btn-primary" (click)="reiniciar">
+          <i class="mdi mdi-refresh"></i>
+        </button> -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Resultados
+  </div>
+  <div class="card-body">
+
+    <div class="row">
+      <div class="col-md-6">
+          <table class="table table-sm table-striped table-responsive-sm table-responsive">
+              <thead class=" ">
+                <tr>
+                  <th></th>
+                  <th scope="col">Grupo</th>
+                  <th scope="col">Capacidad</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let grupo of grupos">
+                  <td>
+                    <a class="btn btn-sm btn-primary" title="Editar grupo" href="#/persona/creargrupo/{{grupo.id}}">
+                      <i class="mdi mdi-pencil"></i>
+                    </a>
+                    <button [disabled]="grupo.usuarios.length>0 || grupo.serviciosAsignados.length>0" (click)="eliminarGrupo(grupo.id)" class="btn btn-sm btn-danger"
+                      title="Elimina grupo">
+                      <i class="mdi mdi-delete"></i>
+                    </button>
+        
+                  </td>
+                  <td>
+                    <a class="btn btn-link" href="#/persona/informaciongrupo/{{grupo.id}}">{{grupo.descripcion}}</a>
+                  </td>
+                  <td>{{grupo.usuarios.length}} - {{grupo.capacidad}}</td>
+                </tr>
+              </tbody>
+            </table>
+            <hr>
+        
+            <nav aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+        
+                <li class="page-item " [class.disabled]="pagina==1">
+                  <button class="page-link" (click)="navegarPaginas('-')" tabindex="-1">
+                    <<</button>
+                </li>
+                <li class="page-item">
+                  <span class="page-link">
+                    Página {{pagina}}
+                    <span class="sr-only">(current)</span>
+                  </span>
+                </li>
+                <li class="page-item " [class.disabled]="grupos.length < registros">
+                  <button class="page-link" (click)="navegarPaginas('+')">>></button>
+                </li>
+              </ul>
+            </nav>
+      </div>
+    </div>
+
+
+
+  </div>
+</div>

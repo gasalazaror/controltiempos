@@ -50,9 +50,9 @@
       <div class="col-md-6">
         <div class="form-group">
           <label for="anio">Año</label>
-          <input (input)="validarAnio()" type="number" [(ngModel)]="vehiculo.anio" maxlength="4" class="form-control" id="anio">
-          <div *ngIf="error.anio!=''" class="alert alert-danger" role="alert">
-            <strong>Error: </strong> {{error.anio}}
+          <input (input)="validarAnio()" type="number" [(ngModel)]="vehiculo.anioFabricacion" maxlength="4" class="form-control" id="anio">
+          <div *ngIf="error.anioFabricacion!=''" class="alert alert-danger" role="alert">
+            <strong>Error: </strong> {{error.anioFabricacion}}
           </div>
         </div>
 
@@ -94,7 +94,7 @@
         </div>
 
         <div class="form-group">
-          <button [disabled]="vehiculo.dueno==null || error.placa!='' || vehiculo.placa=='' || error.marca!='' || vehiculo.marca=='' || error.modelo!='' || vehiculo.marca=='' || error.anio!='' || vehiculo.anio=='' || error.numeroChasis!='' || error.numeroMotor!='' || error.placa!='' || vehiculo.placa=='' "
+          <button [disabled]="vehiculo.dueno==null || error.placa!='' || vehiculo.placa=='' || error.marca!='' || vehiculo.marca=='' || error.modelo!='' || vehiculo.marca=='' || error.anioFabricacion!='' || vehiculo.anioFabricacion=='' || error.numeroChasis!='' || error.numeroMotor!='' || error.placa!='' || vehiculo.placa=='' "
             (click)="guardarVehiculo()" class="btn btn-primary">Guardar</button>
         </div>
 

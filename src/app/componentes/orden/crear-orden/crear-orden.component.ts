@@ -5,6 +5,7 @@ import { ServicioService } from '../../../servicios/servicio/servicio.service';
 import { OrdenService } from '../../../servicios/orden/orden.service';
 import { ActivatedRoute, Router } from '../../../../../node_modules/@angular/router';
 import { NgbModal, ModalDismissReasons } from '../../../../../node_modules/@ng-bootstrap/ng-bootstrap';
+import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-crear-orden',
@@ -36,6 +37,7 @@ export class CrearOrdenComponent implements OnInit {
   registros: any
   pagina: any
   skip: any
+  usuario:any
 
   constructor(
     private clienteService: ClienteService,
@@ -45,7 +47,8 @@ export class CrearOrdenComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private modalService: NgbModal,
-    private modalService2: NgbModal
+    private modalService2: NgbModal,
+    private localStorage: LocalStorage
 
   ) {
 
@@ -64,9 +67,8 @@ export class CrearOrdenComponent implements OnInit {
     this.skip = 0
 
     this.orden = { cliente: null, vehiculo: null, servicios: [] }
-
+    this.buscarSesion()
     if (this.id != 'nuevo') {
-
       this.ordenService.obtenerUnaOrden(this.id).subscribe((res: any) => {
         if (res) {
           this.orden = res
@@ -80,9 +82,7 @@ export class CrearOrdenComponent implements OnInit {
             this.persona = res.persona
             this.personaSeleccionada = res.persona.cedula + " - " + res.persona.nombre
             this.vehiculos = res.pertenencias
-
           })
-
         }
       })
     }
@@ -114,6 +114,17 @@ export class CrearOrdenComponent implements OnInit {
     }
     this.obtenerPersonas()
   }
+
+  buscarSesion() {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.usuario = usuario
+      }
+    });
+  }
+
 
 
   seleccionarPersona(persona) {
@@ -164,43 +175,42 @@ export class CrearOrdenComponent implements OnInit {
     this.reiniciar()
 
     if (this.terminoCliente.length > 2) {
-      this.personaService.buscarUnaPersonaSeleccionar(this.terminoCliente.toUpperCase(), this.empresa).subscribe((resultados:any) => {
+      this.personaService.buscarUnaPersonaSeleccionar(this.terminoCliente.toUpperCase(), this.usuario.persona.empresa.id).subscribe((resultados:any) => {
         var personas = []
-
-
         resultados.forEach(persona => {
-  
           if (persona.cliente.length == 1) {
             personas.push(persona)
           }
         });
-  
         this.personas = personas
-
       }, error => {
         this.obtenerPersonas()
       })
     } else {
       this.obtenerPersonas()
     }
+  
   }
 
   obtenerPersonas() {
+
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.personaService.obtenerPersonas(usuario.persona.empresa.id, this.registros,this.skip, 'ASC', ).subscribe((res: any) => {
+          var personas = []
+          res.forEach(persona => {
+            if (persona.cliente.length == 1) {
+              personas.push(persona)
+            }
+          });
+          this.personas = personas
+        })
+      }
+    });
     
-    this.personaService.obtenerPersonas(this.empresa, this.registros,this.skip, 'ASC', ).subscribe((res: any) => {
-      var personas = []
-
-
-      res.forEach(persona => {
-
-        if (persona.cliente.length == 1) {
-          personas.push(persona)
-        }
-      });
-
-
-      this.personas = personas
-    })
+   
   }
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -237,9 +247,21 @@ export class CrearOrdenComponent implements OnInit {
 
 
   cargarServicios() {
-    this.servicioService.obtenerServicios(this.empresa).subscribe(res => {
-      this.serviciosDisponibles = res
-    })
+
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.servicioService.obtenerServicios(this.usuario.persona.empresa.id).subscribe(res => {
+          this.serviciosDisponibles = res
+     
+        }, error=>{
+          
+        })
+      }
+    });
+    
+  
   }
 
   eliminarServicio(indice): void {
@@ -275,7 +297,7 @@ export class CrearOrdenComponent implements OnInit {
 
 
 
-      var nuevaOrden = { cliente: this.persona.cliente[0].id, vehiculo: this.vehiculo.id, empresa: this.empresa }
+      var nuevaOrden = { cliente: this.persona.cliente[0].id, vehiculo: this.vehiculo.id, empresa: this.usuario.persona.empresa.id }
       this.ordenService.guardarOrden(nuevaOrden).subscribe((res: any) => {
         if (res.id) {
           this.ordenService.modificarOrden(res.id, { servicios: servicios }).subscribe((res: any) => {
@@ -296,10 +318,18 @@ export class CrearOrdenComponent implements OnInit {
 
   buscarServicio(termino) {
 
-    this.servicioService.buscarUnServicioDescripcion(termino, this.empresa).subscribe(res => {
-      this.serviciosDisponibles = res
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.servicioService.buscarUnServicioDescripcion(termino, usuario.persona.empresa.id).subscribe(res => {
+          this.serviciosDisponibles = res
+    
+        })
+      }
+    });
 
-    })
+    
   }
 
   cambiarFiltro() {

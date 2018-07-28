@@ -6,6 +6,7 @@ import { UsuarioService } from '../../../servicios/usuario/usuario.service';
 import { RolService } from '../../../servicios/rol/rol.service';
 import { VehiculoService } from '../../../servicios/vehiculo/vehiculo.service';
 import { GrupoService } from '../../../servicios/grupo/grupo.service';
+import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-informacion-persona',
@@ -29,7 +30,8 @@ export class InformacionPersonaComponent implements OnInit {
     private usuarioService: UsuarioService,
     private rolService: RolService,
     private grupoService: GrupoService,
-    private router: Router
+    private router: Router,
+    private localStorage: LocalStorage
     ) {
 
     this.grupos = []
@@ -63,47 +65,63 @@ export class InformacionPersonaComponent implements OnInit {
   }
 
   cargarGrupos() {
-    this.grupoService.obtenerGrupos(this.persona.empresa).subscribe(res => {
-      this.grupos = res;
+
+    this.localStorage.getItem('usuario').subscribe((usuario) =>{
+      if (usuario) {
+        this.grupoService.obtenerGrupos(usuario.persona.empresa.id).subscribe(res => {
+          this.grupos = res;
+        })
+      }
     })
+   
   }
 
   buscarUnaPersonaId() {
 
-    this.personaService.buscarUnaPersonaId(
-      this.id,
-      this.persona.empresa).subscribe(res => {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.personaService.buscarUnaPersonaId(
+          this.id,
+          usuario.persona.empresa.id).subscribe(res => {
 
-        if (res[0]) {
+            if (res[0]) {
 
-          this.persona = res[0]
+              this.persona = res[0]
 
 
-          if (this.persona.cliente.length > 0) {
-            this.clienteService.obtenerCliente(this.persona.cliente[0].id)
-              .subscribe(res => {
-                this.persona.cliente[0] = res;
-              })
-          } else {
+              if (this.persona.cliente.length > 0) {
+                this.clienteService.obtenerCliente(this.persona.cliente[0].id)
+                  .subscribe(res => {
+                    this.persona.cliente[0] = res;
+                  })
+              } else {
 
-          }
+              }
 
-          if (this.persona.usuario.length > 0) {
+              if (this.persona.usuario.length > 0) {
 
-            this.usuarioService.obtenerRolesUsuario(this.persona.usuario[0].id).subscribe((res: any) => {
+                this.usuarioService.obtenerRolesUsuario(this.persona.usuario[0].id).subscribe((res: any) => {
 
-              res.forEach(roles => {
+                  res.forEach(roles => {
 
-                if (roles.id == 1) { this.roles.Administrador = true }
-                if (roles.id == 2) { this.roles.Tecnico = true }
-                if (roles.id == 3) { this.roles.AsesorServicio = true }
-              });
-            })
-          } else {
+                    if (roles.id == 1) { this.roles.Administrador = true }
+                    if (roles.id == 2) { this.roles.Tecnico = true }
+                    if (roles.id == 3) { this.roles.AsesorServicio = true }
+                  });
+                })
+              } else {
 
-          }
-        }
-      })
+              }
+            }
+          })
+      }
+    });
+
+
+
+
   }
 
 
@@ -128,7 +146,7 @@ export class InformacionPersonaComponent implements OnInit {
   activarUsuario() {
     var confirmacion = confirm('¿Está seguro que desea activar el modo empleado');
     if (confirmacion) {
-      this.usuarioService.activarUsuario(this.persona.id).subscribe((res: any) => {
+      this.usuarioService.activarUsuario(this.persona).subscribe((res: any) => {
         if (res) {
           alert('Empleado activado');
           this.persona.usuario.push(res)
@@ -276,10 +294,10 @@ export class InformacionPersonaComponent implements OnInit {
 
 
   cambiarGrupo() {
-    this.usuarioService.modificarUsuario(this.persona.usuario[0].id, {grupo: this.persona.usuario[0].grupo})
-    .subscribe(res=>{
-      this.persona.usuario[0].id = res
-    })
+    this.usuarioService.modificarUsuario(this.persona.usuario[0].id, { grupo: this.persona.usuario[0].grupo })
+      .subscribe(res => {
+        this.persona.usuario[0].id = res
+      })
   }
 
 }

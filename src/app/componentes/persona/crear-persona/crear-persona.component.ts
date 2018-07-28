@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { PersonaService } from '../../../servicios/persona/persona.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UsuarioService } from '../../../servicios/usuario/usuario.service';
+import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
+
 
 @Component({
   selector: 'app-crear-persona',
@@ -12,18 +15,17 @@ export class CrearPersonaComponent implements OnInit {
   persona: any;
   error: any;
   id: any;
-
+  usuario: any;
   constructor
     (
     private personaService: PersonaService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private localStorage: LocalStorage
     ) {
     this.id = this.route.snapshot.paramMap.get('id');
-
-
     this.persona = {
-      empresa: 1,
+      empresa: '',
       estado: 'ACTIVO',
       ruc: '',
       cedula: '',
@@ -41,11 +43,22 @@ export class CrearPersonaComponent implements OnInit {
       direccion: '',
       correo: ''
     }
+    this.buscarSesion()
+  }
+
+  buscarSesion() {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.usuario = usuario
+      }
+    });
   }
 
   reanudar() {
     this.persona = {
-      empresa: 1,
+      empresa: this.usuario.persona.empresa.id,
       estado: 'ACTIVO',
       ruc: '',
       cedula: '',
@@ -68,34 +81,34 @@ export class CrearPersonaComponent implements OnInit {
 
   ngOnInit() {
     if (this.id == 'nuevo') {
-
     } else {
-      this.buscarUnaPersonaId();
+      this.buscarUnaPersonaId()
     }
   }
 
   buscarUnaPersonaId() {
-
-    this.personaService.buscarUnaPersonaId(
-      this.id,
-      this.persona.empresa).subscribe(res => {
-
-        if (res[0]) {
-
-          this.persona = res[0]
-        }
-      })
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.personaService.buscarUnaPersonaId(
+          this.id,
+          usuario.persona.empresa.id).subscribe(res => {
+            if (res[0]) {
+              this.persona = res[0]
+            }
+          })
+      }
+    });
   }
 
   buscarUnapersonaCedula() {
     this.personaService.obtenerUnaPersonaCedula
       (
       this.persona.cedula,
-      this.persona.empresa
+      this.usuario.persona.empresa.id
       ).subscribe(res => {
         if (res[0]) {
-
-
           this.error.cedula = "La persona con la cédula o RUC ingresado ya existe en la base de datos"
         } else {
           this.error.cedula = ""
@@ -132,13 +145,9 @@ export class CrearPersonaComponent implements OnInit {
     var total = 0;
     var longitud = cad.length;
     var longcheck = longitud - 1;
-
-
     if (longitud === 10 || longitud === 13) {
-
       if (longitud === 10) {
         for (let i = 0; i < longcheck; i++) {
-
           if (i % 2 === 0) {
             var aux = cad.charAt(i) * 2;
             if (aux > 9) aux -= 9;
@@ -147,21 +156,16 @@ export class CrearPersonaComponent implements OnInit {
             total += parseInt(cad.charAt(i)); // parseInt o concatenará en lugar de sumar
           }
         }
-
         total = total % 10 ? 10 - total % 10 : 0;
-
         if (cad.charAt(longitud - 1) == total) {
-
           this.error.cedula = ("");
           this.buscarUnapersonaCedula()
         } else {
-
           this.error.cedula = ("Formato de la cédula incorrecta");
         }
       }
 
       if (longitud === 13) {
-
         if (cad.substring(10, 13) != "001") {
           this.error.cedula = ("Los tres últimos dígitos no tienen el código del RUC 001");
         } else {
@@ -169,39 +173,30 @@ export class CrearPersonaComponent implements OnInit {
           this.buscarUnapersonaCedula()
         }
       }
-
-
     } else {
       this.error.cedula = 'Ingrese 10 digitos para cédula y 13 para RUC'
     }
   }
 
   validarEmail() {
-
     var email = this.persona.correo;
-
     var emailRegex = /^[-\w.%+]{1,64}@(?:[A-Z0-9-]{1,63}\.){1,125}[A-Z]{2,63}$/i;
     if (emailRegex.test(email)) {
-
       this.error.correo = "";
     } else {
-
       this.error.correo = "Formato del correo incorrecto";
     }
   }
 
-
-
-
   guardarPersona() {
-
+    this.persona.empresa = this.usuario.persona.empresa.id
     if (this.id == 'nuevo') {
       var confirmacion = confirm("¿Está seguro que desea guardar a la persona?");
       if (confirmacion) {
         this.personaService.guardarPersona(this.persona).subscribe(res => {
           this.persona = res
           this.reanudar()
-          alert('persona guardada correctamente correctamente');
+          alert('Persona guardada correctamente correctamente');
         }, error => {
           alert('Existió un error')
         })
@@ -211,20 +206,16 @@ export class CrearPersonaComponent implements OnInit {
       if (confirmacion) {
         this.personaService.modificarPersona(
           this.persona.id,
-          { nombre: this.persona.nombre, estado: this.persona.estado, telefono: this.persona.telefono, direccion: this.persona.direccion, correo: this.persona.correo }
+          { nombre: this.persona.nombre, estado: this.persona.estado, telefono: this.persona.telefono, direccion: this.persona.direccion, correo: this.persona.correo, cedula: this.persona.cedula }
         ).subscribe(res => {
           this.persona = res
           this.reanudar()
-     
           alert('Persona modificada correctamente');
-
         }, error => {
           alert('Existió un error' + JSON.stringify(error))
         })
       }
     }
-
-
   }
 
 }

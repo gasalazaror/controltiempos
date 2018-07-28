@@ -3,7 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { FullComponent } from './layouts/full/full.component';
-import { LoginComponent } from './login/login/login.component';
+import { EmptyComponent } from './layouts/empty/empty/empty.component';
+import { RegistroComponent } from './layouts/registro/registro.component';
+
 
 export const Approutes: Routes = [
 {
@@ -18,6 +20,25 @@ export const Approutes: Routes = [
         { path: 'servicio', loadChildren: './component/component.module#ComponentsModule' },
         { path: 'orden', loadChildren: './component/component.module#ComponentsModule' },
         { path: 'tarea', loadChildren: './component/component.module#ComponentsModule' },
+    ]
+    
+},
+
+{
+    path: 'login',
+    component: EmptyComponent,
+    children: [
+        { path: '', redirectTo: '/login', pathMatch: 'full' },
+        { path: 'login', loadChildren: './starter/starter.module#StarterModule' },
+    ]
+    
+},
+{
+    path: 'registro',
+    component: RegistroComponent,
+    children: [
+        { path: '', redirectTo: '/registro', pathMatch: 'full' },
+        { path: 'registro', loadChildren: './starter/starter.module#StarterModule' },
     ]
     
 },

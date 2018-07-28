@@ -4,8 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal, ModalDismissReasons } from '../../../../../node_modules/@ng-bootstrap/ng-bootstrap';
 import { PersonaService } from '../../../servicios/persona/persona.service';
 import { ClienteService } from '../../../servicios/cliente/cliente.service';
-import { THIS_EXPR } from '../../../../../node_modules/@angular/compiler/src/output/output_ast';
-
+import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-crear-vehiculo',
@@ -22,10 +21,12 @@ export class CrearVehiculoComponent implements OnInit {
   personaSeleccionada: any
   terminoCliente: any
   empresa: any
+  usuario:any
 
   registros: any
   pagina: any
   skip: any
+
 
   constructor
     (
@@ -35,7 +36,8 @@ export class CrearVehiculoComponent implements OnInit {
     private modalService: NgbModal,
     private modalService2: NgbModal,
     private personaService: PersonaService,
-    private clienteService: ClienteService
+    private clienteService: ClienteService,
+    private localStorage: LocalStorage
 
     ) {
 
@@ -50,7 +52,7 @@ export class CrearVehiculoComponent implements OnInit {
       empresa: { id: 1 },
       marca: '',
       modelo: '',
-      anio: '',
+      anioFabricacion: '',
       numeroChasis: '',
       numeroMotor: '',
       placa: '',
@@ -61,7 +63,7 @@ export class CrearVehiculoComponent implements OnInit {
     this.error = {
       marca: '',
       modelo: '',
-      anio: '',
+      anioFabricacion: '',
       numeroChasis: '',
       numeroMotor: '',
       placa: '',
@@ -84,6 +86,18 @@ export class CrearVehiculoComponent implements OnInit {
   }
 
   ngOnInit() {
+  this.buscarSesion()
+  }
+
+  buscarSesion() {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+
+        this.router.navigate(['login']);
+      }else{
+        this.usuario = usuario
+      }
+    });
   }
 
   open(content) {
@@ -92,18 +106,28 @@ export class CrearVehiculoComponent implements OnInit {
   }
 
   obtenerPersonas() {
-    this.personaService.obtenerPersonas(this.empresa, this.registros,this.skip, 'ASC').subscribe((res: any) => {
-      var personas = []
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+
+        
+      }else{
+        this.personaService.obtenerPersonas(usuario.persona.empresa.id, this.registros, this.skip, 'ASC').subscribe((res: any) => {
+          var personas = []
+    
+    
+          res.forEach(persona => {
+    
+            if (persona.cliente.length == 1) {
+              personas.push(persona)
+            }
+          });
+          this.personas = personas
+        })
+      }
+    });
 
 
-      res.forEach(persona => {
-
-        if (persona.cliente.length == 1) {
-          personas.push(persona)
-        }
-      });
-      this.personas = personas
-    })
+    
   }
 
   buscarVehiculoId() {
@@ -134,7 +158,7 @@ export class CrearVehiculoComponent implements OnInit {
       empresa: 1,
       marca: '',
       modelo: '',
-      anio: '',
+      anioFabricacion: '',
       numeroChasis: '',
       numeroMotor: '',
       placa: '',
@@ -144,7 +168,7 @@ export class CrearVehiculoComponent implements OnInit {
     this.error = {
       marca: '',
       modelo: '',
-      anio: '',
+      anioFabricacion: '',
       numeroChasis: '',
       numeroMotor: '',
       placa: '',
@@ -155,7 +179,8 @@ export class CrearVehiculoComponent implements OnInit {
 
 
   buscarUnVehiculoPlaca() {
-    this.vehiculoService.obtenerUnVehiculo(this.empresa, 'placa', this.vehiculo.placa.trim().toUpperCase()).subscribe(res => {
+ 
+    this.vehiculoService.obtenerUnVehiculo(this.usuario.persona.empresa.id, 'placa', this.vehiculo.placa.trim().toUpperCase()).subscribe(res => {
       if (res[0]) {
         this.error.placa = "El vehículo con la placa ingresada ya existe en la base de datos "
       } else {
@@ -199,14 +224,14 @@ export class CrearVehiculoComponent implements OnInit {
 
   validarAnio() {
     var anio = ''
-    anio = this.vehiculo.anio + ""
+    anio = this.vehiculo.anioFabricacion + ""
     if (anio.trim() == '') {
 
-      this.error.anio = 'El año del vehículo es requerido'
+      this.error.anioFabricacion = 'El año del vehículo es requerido'
     } else if (anio.length != 4) {
-      this.error.anio = "El año del vehículo debe constar de 4 digitos"
+      this.error.anioFabricacion = "El año del vehículo debe constar de 4 digitos"
     } else {
-      this.error.anio = ''
+      this.error.anioFabricacion = ''
     }
   }
 
@@ -224,17 +249,17 @@ export class CrearVehiculoComponent implements OnInit {
   buscarPersona() {
 
     if (this.terminoCliente.length > 2) {
-      this.personaService.buscarUnaPersonaSeleccionar(this.terminoCliente.toUpperCase(), this.empresa).subscribe((resultados:any) => {
+      this.personaService.buscarUnaPersonaSeleccionar(this.terminoCliente.toUpperCase(), this.usuario.persona.empresa.id).subscribe((resultados: any) => {
         var personas = []
 
 
         resultados.forEach(persona => {
-  
+
           if (persona.cliente.length == 1) {
             personas.push(persona)
           }
         });
-  
+
         this.personas = personas
 
       }, error => {
@@ -247,7 +272,7 @@ export class CrearVehiculoComponent implements OnInit {
 
   guardarVehiculo() {
 
-    this.vehiculo.empresa = this.empresa
+    this.vehiculo.empresa = this.usuario.persona.empresa.id
     var confirmacion = confirm('¿Está seguro que desea guardar la información del vehículo');
     if (confirmacion) {
 
@@ -261,12 +286,13 @@ export class CrearVehiculoComponent implements OnInit {
           this.router.navigate(['/vehiculo/informacionvehiculo/' + this.vehiculo.id]);
         }, error => {
           alert("Existió un error al guardar el vehículo")
+          alert(JSON.stringify(error))
         })
 
       } else {
 
 
-        alert(JSON.stringify(this.vehiculo))
+      
 
         this.vehiculoService.modificarVehiculo
           (

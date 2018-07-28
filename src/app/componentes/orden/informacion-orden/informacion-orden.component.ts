@@ -5,7 +5,7 @@ import { ServicioService } from '../../../servicios/servicio/servicio.service';
 import { OrdenService } from '../../../servicios/orden/orden.service';
 import { ActivatedRoute, Router } from '../../../../../node_modules/@angular/router';
 import { GrupoService } from '../../../servicios/grupo/grupo.service';
-import { Alert } from '../../../../../node_modules/@types/selenium-webdriver';
+import { LocalStorage } from '@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-informacion-orden',
@@ -23,6 +23,7 @@ export class InformacionOrdenComponent implements OnInit {
   persona: any
   orden: any
   id: any
+  usuario: any
 
   vehiculoSeleccionado: any
   serviciosDisponibles: any
@@ -38,6 +39,7 @@ export class InformacionOrdenComponent implements OnInit {
     private ordenService: OrdenService,
     private route: ActivatedRoute,
     private router: Router,
+    private localStorage: LocalStorage,
     private grupoService: GrupoService
     ) {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -71,18 +73,35 @@ export class InformacionOrdenComponent implements OnInit {
     }
   }
 
+  buscarSesion() {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        // this.router.navigate(['/']);
+      } else {
+        this.usuario = usuario
+      }
+    });
+  }
+
   obtenerGrupos() {
-    this.grupoService.obtenerGrupos(this.empresa).subscribe((res: any) => {
-      var grupos = []
 
-      grupos.push({ id: '', descripcion: 'SIN ASIGNAR' });
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        // this.router.navigate(['/']);
+      } else {
+        this.grupoService.obtenerGrupos(usuario.persona.empresa.id).subscribe((res: any) => {
+          var grupos = []
 
-      res.forEach(grupo => {
-        grupos.push(grupo)
-      });
+          grupos.push({ id: '', descripcion: 'SIN ASIGNAR' });
 
-      this.grupos = grupos;
-    })
+          res.forEach(grupo => {
+            grupos.push(grupo)
+          });
+
+          this.grupos = grupos;
+        })
+      }
+    });
   }
 
   cambiarGrupo(servicio, grupo) {
@@ -103,7 +122,7 @@ export class InformacionOrdenComponent implements OnInit {
 
           if (grupo == '') {
             this.ordenService.modificarOrdenServicio(servicio.id, { grupo: null, estado: 'CITA/RECEPCIÓN' }).subscribe((res: any) => {
-              servicio.grupo = {id:'', descripcion:'SIN ASIGNAR'}
+              servicio.grupo = { id: '', descripcion: 'SIN ASIGNAR' }
               servicio.estado = res.estado
             })
 

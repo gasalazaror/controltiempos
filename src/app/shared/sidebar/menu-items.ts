@@ -1,6 +1,10 @@
 import { RouteInfo } from './sidebar.metadata';
 
+
+
 export const ROUTES: RouteInfo[] = [
+
+    
 
     {
         path: '/starter', title: 'Panel de control', icon: 'mdi mdi-gauge', class: '', label: '', labelClass: '', extralink: false, submenu: []

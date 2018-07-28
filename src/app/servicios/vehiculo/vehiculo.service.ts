@@ -25,7 +25,7 @@ export class VehiculoService {
   }
 
   buscarUnVehiculo(termino, empresa) {
-    return this.apiService.get('vehiculo?empresa='+empresa+'&where={"or":[{"placa": {"contains":"'+termino+'"}}, {"modelo": {"contains":"'+termino+'"}} , {"marca": {"contains":"'+termino+'"}}, {"anio": {"contains":"'+termino+'"}}, {"numeroChasis": {"contains":"'+termino+'"}}, {"numeroMotor": {"contains":"'+termino+'"}}    ]}')
+    return this.apiService.get('vehiculo?where={"and":[{"empresa":"'+empresa+'"}],"or":[{"placa": {"contains":"'+termino+'"}}, {"modelo": {"contains":"'+termino+'"}} , {"marca": {"contains":"'+termino+'"}}, {"anioFabricacion": {"contains":"'+termino+'"}}, {"numeroChasis": {"contains":"'+termino+'"}}, {"numeroMotor": {"contains":"'+termino+'"}}    ]}')
   }
 
   modificarVehiculo(id,vehiculo){

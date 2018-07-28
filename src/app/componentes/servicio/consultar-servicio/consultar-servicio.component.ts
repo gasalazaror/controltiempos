@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServicioService } from '../../../servicios/servicio/servicio.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
 @Component({
   selector: 'app-consultar-servicio',
   templateUrl: './consultar-servicio.component.html',
@@ -10,42 +12,74 @@ export class ConsultarServicioComponent implements OnInit {
   termino: any
   servicios: any;
   empresa: any;
+  usuario:any
 
-  constructor(private servicioService: ServicioService) {
+  constructor
+  (
+    private servicioService: ServicioService,
+    private localStorage: LocalStorage,
+    private router: Router,
+  ) {
     this.termino = '';
     this.servicios = []
     this.empresa = 1;
   }
 
   ngOnInit() {
+    this.buscarSesion()
     this.cargarServicios()
   }
 
+  buscarSesion() {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.usuario = usuario
+      }
+    });
+  }
+
   buscarServicios() {
-    if (this.termino.length > 2) {
-      this.servicioService.buscarUnServicio(this.termino.toUpperCase(), this.empresa).subscribe(res => {
-        this.servicios = res
-      }, error => {
-        this.cargarServicios()
-      })
-    } else {
-      this.cargarServicios()
-    }
+
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+   
+        if (this.termino.length > 2) {
+          this.servicioService.buscarUnServicio(this.termino.toUpperCase(), usuario.persona.empresa.id ).subscribe(res => {
+            this.servicios = res
+          }, error => {
+            this.cargarServicios()
+          })
+        } else {
+          this.cargarServicios()
+        }
+      }
+    });
+ 
 
   }
 
   cargarServicios() {
-    this.servicioService.obtenerServicios(this.empresa).subscribe(res => {
-      this.servicios = res;
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
 
+        this.servicioService.obtenerServicios(usuario.persona.empresa.id).subscribe(res => {
+          this.servicios = res;
     
-      var date = new Date(null);
-      date.setMinutes(res[0].tiempoEstandar); // specify value for SECONDS here
-      var timeString = date.toISOString().substr(11, 8);
-  
-
-      //alert(timeString)
-    })
+        
+          var date = new Date(null);
+          date.setMinutes(res[0].tiempoEstandar); // specify value for SECONDS here
+          var timeString = date.toISOString().substr(11, 8);
+          //alert(timeString)
+        })
+      }
+    });
+ 
   }
 
   eliminarServicio(servicio) {

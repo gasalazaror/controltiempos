@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { VehiculoService } from '../../../servicios/vehiculo/vehiculo.service';
+import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-consultar-vehiculo',
@@ -11,25 +13,56 @@ export class ConsultarVehiculoComponent implements OnInit {
   termino: any
   vehiculos: any;
   empresa: any;
+  usuario: any
 
-  constructor(private vehiculoService: VehiculoService) {
+  constructor
+    (
+    private vehiculoService: VehiculoService,
+    private localStorage: LocalStorage,
+    private router: Router,
+    ) {
     this.termino = '';
     this.vehiculos = []
     this.empresa = 1;
   }
 
   ngOnInit() {
-    this.cargarVehiculos()
+    this.cargarVehiculos();
+    this.buscarSesion()
+  }
+
+  buscarSesion() {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+
+        this.router.navigate(['login']);
+      }else{
+        this.usuario = usuario
+     
+      }
+    });
   }
 
   buscarVehiculo() {
+
+    
     if (this.termino.length > 2) {
 
-      this.vehiculoService.buscarUnVehiculo(this.termino.toUpperCase(), this.empresa).subscribe(res => {
-        this.vehiculos = res
-      }, error => {
-        this.cargarVehiculos()
-      })
+      this.localStorage.getItem('usuario').subscribe((usuario) => {
+        if (!usuario) {
+  
+          this.router.navigate(['login']);
+        }else{
+       
+          this.vehiculoService.buscarUnVehiculo(this.termino.toUpperCase(), this.usuario.persona.empresa.id).subscribe(res => {
+            this.vehiculos = res
+          }, error => {
+            this.cargarVehiculos()
+          })
+        }
+      });
+
+     
 
     } else {
       this.cargarVehiculos();
@@ -38,9 +71,20 @@ export class ConsultarVehiculoComponent implements OnInit {
   }
 
   cargarVehiculos() {
-    this.vehiculoService.obtenerVehiculos(this.empresa).subscribe(res => {
-      this.vehiculos = res
-    })
+
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+
+        this.router.navigate(['login']);
+      }else{
+        this.vehiculoService.obtenerVehiculos(usuario.persona.empresa.id).subscribe(res => {
+          this.vehiculos = res
+        })
+     
+      }
+    });
+
+  
   }
 
   eliminarVehiculo(vehiculo) {

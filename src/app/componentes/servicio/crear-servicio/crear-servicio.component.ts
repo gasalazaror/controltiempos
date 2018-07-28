@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ServicioService } from '../../../servicios/servicio/servicio.service';
+import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
+
 
 @Component({
   selector: 'app-crear-servicio',
@@ -15,12 +17,14 @@ export class CrearServicioComponent implements OnInit {
   empresa: any
   categoriaSeleccionada: any
   id: any
+  usuario:any
 
   constructor
     (
     private route: ActivatedRoute,
     private servicioService: ServicioService,
-    private router: Router
+    private router: Router,
+    private localStorage: LocalStorage
     ) {
 
     this.id = this.route.snapshot.paramMap.get('id');
@@ -39,24 +43,30 @@ export class CrearServicioComponent implements OnInit {
 
     this.categorias = []
 
-    this.empresa = 1
+   this.buscarSesion()
     this.categoriaSeleccionada = { id: null, descripcion: '' }
-
-
   }
 
-  obtenerUnServicio() {
+  buscarSesion() {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.usuario = usuario
+      }
+    });
+  }
 
+
+  obtenerUnServicio() {
     if (this.id != 'nuevo') {
       this.servicioService.obtenerUnServicio(this.id).subscribe(res => {
         this.servicio = res;
       })
     }
-
   }
 
   reanudar() {
-
     this.servicio = {
       empresa: 1,
       descripcion: '',
@@ -76,24 +86,30 @@ export class CrearServicioComponent implements OnInit {
   }
 
   obtenerCategoriasPadre() {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.servicioService.obtenerCategorias(usuario.persona.empresa.id).subscribe((res: any) => {
+          var categorias = []
+          res.forEach(element => {
+            if (element.padre == null) {
+              categorias.push(element)
+            }
+          });
+          this.categorias = categorias;
+          this.categoriaSeleccionada = { id: null, descripcion: '' }
+        })
+      }
+    });
 
-    this.servicioService.obtenerCategorias(this.empresa).subscribe((res: any) => {
-      var categorias = []
-      res.forEach(element => {
-        if (element.padre == null) {
-          categorias.push(element)
-        }
-      });
-      this.categorias = categorias;
-      this.categoriaSeleccionada = { id: null, descripcion: '' }
-    })
+    
   }
 
   obtenerCategoriasHijas(id) {
     this.servicioService.obtenerCategoria(id).subscribe((res: any) => {
       if (res.categorias.length == 0) {
         this.servicio.categoria = { id: res.id, descripcion: res.descripcion };
-
       } else {
         this.categoriaSeleccionada.descripcion = res.descripcion
         this.categoriaSeleccionada.id = res.id
@@ -104,22 +120,18 @@ export class CrearServicioComponent implements OnInit {
 
   agregarCategoria() {
     var categoria = prompt('Ingrese el nombre de la categoría', '');
-
     if (categoria.trim() != '') {
-
-      this.servicioService.buscarCategoria('descripcion', categoria, this.empresa)
+      this.servicioService.buscarCategoria('descripcion', categoria, this.usuario.persona.empresa.id)
         .subscribe(res => {
           if (res[0]) {
             alert('La categoría ' + categoria.toUpperCase() + ' ya existe')
           } else {
-
             if (this.categoriaSeleccionada.id == null) {
-              this.servicioService.guardarCategoria({ empresa: this.empresa, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
+              this.servicioService.guardarCategoria({ empresa: this.usuario.persona.empresa.id, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
                 this.obtenerCategoriasPadre()
               }, error => { alert('Existió un error') })
             } else {
-
-              this.servicioService.guardarCategoria({ padre: this.categoriaSeleccionada.id, empresa: this.empresa, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
+              this.servicioService.guardarCategoria({ padre: this.categoriaSeleccionada.id, empresa: this.usuario.persona.empresa.id, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
                 this.obtenerCategoriasHijas(this.categoriaSeleccionada.id);
               }, error => { alert('Existió un error') })
 
@@ -138,13 +150,13 @@ export class CrearServicioComponent implements OnInit {
 
     if (categoria.trim() != '') {
 
-      this.servicioService.buscarCategoria('descripcion', categoria, this.empresa)
+      this.servicioService.buscarCategoria('descripcion', categoria, this.usuario.persona.empresa.id)
         .subscribe(res => {
           if (res[0]) {
             alert('La categoría ' + categoria.toUpperCase() + ' ya existe')
           } else {
 
-            this.servicioService.guardarCategoria({ padre: id, empresa: this.empresa, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
+            this.servicioService.guardarCategoria({ padre: id, empresa: this.usuario.persona.empresa.id, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
               this.obtenerCategoriasHijas(id);
             }, error => { alert('Existió un error') })
 
@@ -188,7 +200,7 @@ export class CrearServicioComponent implements OnInit {
 
       if (this.id == 'nuevo') {
 
-        this.servicioService.guardarServicio({empresa: this.servicio.empresa, descripcion: this.servicio.descripcion.toUpperCase().trim(), tiempoEstandar: this.servicio.tiempoEstandar, categoria: this.servicio.categoria.id }).subscribe(res => {
+        this.servicioService.guardarServicio({empresa: this.usuario.persona.empresa.id, descripcion: this.servicio.descripcion.toUpperCase().trim(), tiempoEstandar: this.servicio.tiempoEstandar, categoria: this.servicio.categoria.id }).subscribe(res => {
           alert('Servicio guardado correctamente')
           this.reanudar();
         }, error => {
@@ -215,7 +227,7 @@ export class CrearServicioComponent implements OnInit {
 
 
   buscarUnServicio() {
-    this.servicioService.buscarUnServicioDescripcion(this.servicio.descripcion.trim().toUpperCase(), this.servicio.empresa).subscribe(res => {
+    this.servicioService.buscarUnServicioDescripcion(this.servicio.descripcion.trim().toUpperCase(), this.usuario.persona.empresa.id).subscribe(res => {
       if (res[0]) {
         this.error.descripcion = "El servicio ya existe en la base de datos"
       } else {

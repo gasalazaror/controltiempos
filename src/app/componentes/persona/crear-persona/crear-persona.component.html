@@ -15,7 +15,7 @@
           </div>
           <div class="form-group input-group-sm">
             <label for="cedula">Cédula / RUC</label>
-            <input [disabled]="id!='nuevo'" type="text" (input)="validarCedula()" maxlength="13" [(ngModel)]="persona.cedula" class="form-control input-sm"
+            <input  type="text" (input)="validarCedula()" maxlength="13" [(ngModel)]="persona.cedula" class="form-control input-sm"
               id="cedula">
             <div *ngIf="error.cedula!=''" class="alert alert-danger" role="alert">
               <strong>Error: </strong> {{error.cedula}}

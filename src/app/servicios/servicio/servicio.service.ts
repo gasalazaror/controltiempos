@@ -12,7 +12,8 @@ export class ServicioService {
   }
 
   buscarUnServicio(termino, empresa) {
-    return this.apiService.get('servicio?empresa='+empresa+'&where={"or":[{"descripcion": {"contains":"' + termino + '"}}, {"tiempoEstandar": {"contains":"' + termino + '"}}]}')
+
+    return this.apiService.get('servicio?where={"and":[{"empresa":"'+empresa+'"}],"or":[{"descripcion": {"contains":"' + termino + '"}}, {"tiempoEstandar": {"contains":"' + termino + '"}}]}')
   }
 
   obtenerServicios(empresa) {

@@ -36,6 +36,10 @@ import { CrearOrdenComponent } from '../componentes/orden/crear-orden/crear-orde
 import { ConsultarOrdenComponent } from '../componentes/orden/consultar-orden/consultar-orden.component';
 import { InformacionOrdenComponent } from '../componentes/orden/informacion-orden/informacion-orden.component';
 import { MisTareasComponent } from '../componentes/servicio/misTareas/mis-tareas/mis-tareas.component';
+import { LoginComponent } from '../componentes/login/login/login.component';
+import { ConsultarGrupoComponent } from '../componentes/grupo/consultar-grupo/consultar-grupo.component';
+import { CrearGrupoComponent } from '../componentes/grupo/crear-grupo/crear-grupo.component';
+import { InformacionGrupoComponent } from '../componentes/grupo/informacion-grupo/informacion-grupo.component';
 
 @NgModule({
   imports: [
@@ -75,7 +79,11 @@ import { MisTareasComponent } from '../componentes/servicio/misTareas/mis-tareas
     CrearOrdenComponent,
     ConsultarOrdenComponent,
     InformacionOrdenComponent,
-    MisTareasComponent
+    MisTareasComponent,
+    LoginComponent,
+    ConsultarGrupoComponent,
+    CrearGrupoComponent,
+    InformacionGrupoComponent
   ]
 })
 

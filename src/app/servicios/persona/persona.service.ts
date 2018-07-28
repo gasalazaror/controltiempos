@@ -35,7 +35,7 @@ export class PersonaService {
  
 
   buscarUnaPersonaSeleccionar(termino, empresa) {
-    return this.apiService.get('persona?empresa=' + empresa + '&where={"or":[{"cedula": {"contains":"' + termino + '"}}, {"nombre": {"contains":"' + termino + '"}}     ]}')
+    return this.apiService.get('persona?where={"and":[{"empresa":"'+empresa+'"}],"or":[{"cedula": {"contains":"' + termino + '"}}, {"nombre": {"contains":"' + termino + '"}}     ]}')
   }
 
   buscarUnaPersonaFiltro(termino,valor, empresa) {
@@ -48,7 +48,7 @@ export class PersonaService {
   }
 
   buscarUnaPersona(termino, empresa,limit, skip,orden) {
-    return this.apiService.get('persona?empresa=' + empresa + '&where={"or":[{"cedula": {"contains":"' + termino + '"}}, {"nombre": {"contains":"' + termino + '"}} , {"telefono": {"contains":"' + termino + '"}}, {"correo": {"contains":"' + termino + '"}}    ]}'+'&limit='+limit+'&skip='+skip +"&sort=nombre "+orden)
+    return this.apiService.get('persona?where={"and":[{"empresa":"'+empresa+'"}],"or":[{"cedula": {"contains":"' + termino + '"}}, {"nombre": {"contains":"' + termino + '"}} , {"telefono": {"contains":"' + termino + '"}}, {"correo": {"contains":"' + termino + '"}}    ]}'+'&limit='+limit+'&skip='+skip +"&sort=nombre "+orden)
   }
 
   modificarRoles(usuario, roles) {

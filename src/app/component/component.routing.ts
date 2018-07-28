@@ -27,6 +27,10 @@ import { CrearOrdenComponent } from '../componentes/orden/crear-orden/crear-orde
 import { ConsultarOrdenComponent } from '../componentes/orden/consultar-orden/consultar-orden.component';
 import { InformacionOrdenComponent } from '../componentes/orden/informacion-orden/informacion-orden.component';
 import { MisTareasComponent } from '../componentes/servicio/misTareas/mis-tareas/mis-tareas.component';
+import { LoginComponent } from '../componentes/login/login/login.component';
+import { CrearGrupoComponent } from '../componentes/grupo/crear-grupo/crear-grupo.component';
+import { ConsultarGrupoComponent } from '../componentes/grupo/consultar-grupo/consultar-grupo.component';
+import { InformacionGrupoComponent } from '../componentes/grupo/informacion-grupo/informacion-grupo.component';
 
 export const ComponentsRoutes: Routes = [
   {
@@ -37,6 +41,22 @@ export const ComponentsRoutes: Routes = [
         component: CrearPersonaComponent,
         data: {
           title: 'Crear Vehículo',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
+        }
+      },
+      {
+        path: 'creargrupo/:id',
+        component: CrearGrupoComponent,
+        data: {
+          title: 'Crear Grupo',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
+        }
+      },
+      {
+        path: 'login',
+        component: LoginComponent,
+        data: {
+          title: 'login',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
         }
       },
@@ -81,6 +101,14 @@ export const ComponentsRoutes: Routes = [
         }
       },
       {
+        path: 'consultargrupo',
+        component: ConsultarGrupoComponent,
+        data: {
+          title: 'Consultar Persona',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Consultar' }]
+        }
+      },
+      {
         path: 'consultarorden',
         component: ConsultarOrdenComponent,
         data: {
@@ -109,6 +137,14 @@ export const ComponentsRoutes: Routes = [
         component: InformacionPersonaComponent,
         data: {
           title: 'Información Persona',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Información' }]
+        }
+      },
+      {
+        path: 'informaciongrupo/:id',
+        component: InformacionGrupoComponent,
+        data: {
+          title: 'Información Grupo',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Información' }]
         }
       },

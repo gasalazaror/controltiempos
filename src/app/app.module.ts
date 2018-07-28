@@ -24,7 +24,9 @@ import { ApiService } from './servicios/api/api.service';
 
 import { SweetAlert2Module } from '@toverux/ngx-sweetalert2';
 import { TiempoPipe } from './pipes/tiempo/tiempo.pipe';
-
+import { EmptyComponent } from './layouts/empty/empty/empty.component';
+import { RegistroComponent } from './layouts/registro/registro.component';
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
@@ -41,13 +43,15 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
     NavigationComponent,
     BreadcrumbComponent,
     SidebarComponent,
-    TiempoPipe
+    TiempoPipe,
+    EmptyComponent,
+    RegistroComponent
   ],
   imports: [
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
-
+    ReactiveFormsModule,
     FormsModule,
     HttpClientModule,
     NgbModule.forRoot(),
@@ -58,7 +62,7 @@ const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
       customClass: 'modal-content',
       confirmButtonClass: 'btn btn-primary',
       cancelButtonClass: 'btn'
-  })
+    })
   ],
   providers: [
     ApiService,

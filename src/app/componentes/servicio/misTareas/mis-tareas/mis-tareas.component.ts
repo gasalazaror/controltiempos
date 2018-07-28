@@ -3,6 +3,7 @@ import { UsuarioService } from '../../../../servicios/usuario/usuario.service';
 import { ServicioService } from '../../../../servicios/servicio/servicio.service';
 import { switchMap } from '../../../../../../node_modules/rxjs-compat/operator/switchMap';
 import { Action } from '../../../../../../node_modules/rxjs/internal/scheduler/Action';
+import { LocalStorage } from '../../../../../../node_modules/@ngx-pwa/local-storage';
 
 @Component({
   selector: 'app-mis-tareas',
@@ -16,73 +17,79 @@ export class MisTareasComponent implements OnInit {
   usuario: any
   servicios: any
   termino: any
- 
+
   registros: any
   orden: any
   pagina: any
   skip: any
 
-
-
   constructor
     (
     private usuarioService: UsuarioService,
-    private servicioService: ServicioService
+    private servicioService: ServicioService,
+    private localStorage: LocalStorage
     ) {
-
     this.usuarioLogueado = 1
     this.servicios = []
     this.usuario = { persona: { nombre: '' }, grupo: { descripcion: '' } }
     this.termino = '0'
-    
-    
     this.registros = '10'
     this.orden = 'DESC'
     this.pagina = 1
     this.skip = 0
+  }
+
+  obtenerUnUsuario() {
+
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        //his.router.navigate(['login']);
+      } else {
+        this.usuario = usuario
+
+        this.usuarioService.obtenerUnUsuario(usuario.id).subscribe(res => {
+          this.usuario = res
+          this.obtenerServiciosGrupo(this.usuario.grupo.id)
+        })
+      }
+    });
+
 
   }
 
 
-  obtenerUnUsuario() {
-    this.usuarioService.obtenerUnUsuario(this.usuarioLogueado).subscribe(res => {
-      this.usuario = res
-      this.obtenerServiciosGrupo(this.usuario.grupo.id)
-    })
+  buscarSesion() {
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        //his.router.navigate(['login']);
+      } else {
+        this.usuario = usuario
+      }
+    });
   }
 
   obtenerServiciosGrupo(grupo) {
-
+ 
     switch (this.termino) {
       case '0':
         this.servicioService.obtenerServiciosGrupo(grupo, this.registros, this.skip, this.orden).subscribe(res => {
           this.servicios = res;
         })
-
         break;
-
       case '1':
-
         this.servicioService.obtenerServiciosGrupoEstado(grupo, 'EN ESPERA DE PRODUCCIÓN', this.registros, this.skip, this.orden).subscribe(res => {
           this.servicios = res;
         })
-
         break;
-
       case '2':
-
         this.servicioService.obtenerServiciosGrupoEstado(grupo, 'EN PRODUCCIÓN', this.registros, this.skip, this.orden).subscribe(res => {
           this.servicios = res;
         })
-
         break;
-
       case '3':
-
         this.servicioService.obtenerServiciosGrupoEstado(grupo, 'EN PRODUCCIÓN - PAUSADO', this.registros, this.skip, this.orden).subscribe(res => {
           this.servicios = res;
         })
-
         break;
 
       case '4':
@@ -98,13 +105,17 @@ export class MisTareasComponent implements OnInit {
     }
   }
 
+
   iniciarServicio(servicio) {
     var confirmacion = confirm("Está seguro que desea dar por iniciada la tarea!");
     if (confirmacion) {
       var fechaActual = new Date();
 
       this.servicioService.iniciarServicio(servicio.id, fechaActual).subscribe((serv: any) => {
-        this.obtenerServiciosGrupo(this.usuario.grupo.id)
+        if (this.usuario.grupo.id) {
+          this.obtenerServiciosGrupo(this.usuario.grupo.id)
+        } 
+       
       })
     } else {
     }
@@ -140,7 +151,7 @@ export class MisTareasComponent implements OnInit {
     }
   }
 
-  reiniciar(){
+  reiniciar() {
     this.pagina = 1
     this.skip = 0
 
@@ -164,7 +175,6 @@ export class MisTareasComponent implements OnInit {
   }
 
   reanudarServicio(servicio) {
-
     var confirmacion = confirm("Está seguro que desea reanudar la tarea?");
     if (confirmacion) {
       var fechaActual = new Date();
