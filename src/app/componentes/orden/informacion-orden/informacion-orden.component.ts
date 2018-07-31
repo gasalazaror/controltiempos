@@ -34,11 +34,8 @@ export class InformacionOrdenComponent implements OnInit {
   constructor
     (
     private clienteService: ClienteService,
-    private personaService: PersonaService,
-    private servicioService: ServicioService,
     private ordenService: OrdenService,
     private route: ActivatedRoute,
-    private router: Router,
     private localStorage: LocalStorage,
     private grupoService: GrupoService
     ) {
@@ -57,11 +54,17 @@ export class InformacionOrdenComponent implements OnInit {
           this.orden = res
           this.ordenService.obtenerServiciosOrden(this.orden.id).subscribe((res: any) => {
             res.forEach(servicio => {
-              if (!servicio.grupo) {
-                servicio.grupo = { id: '', descripcion: 'SIN ASIGNAR' }
+              if (!servicio.operador) {
+                servicio.operador = { id: '', descripcion: 'SIN ASIGNAR' }
               }
             });
+
+         
+
+            
+
             this.orden.servicios = res
+
           })
           this.clienteService.obtenerCliente(res.cliente.id).subscribe(res => {
             this.orden.cliente = res
@@ -84,52 +87,44 @@ export class InformacionOrdenComponent implements OnInit {
   }
 
   obtenerGrupos() {
-
     this.localStorage.getItem('usuario').subscribe((usuario) => {
       if (!usuario) {
         // this.router.navigate(['/']);
       } else {
         this.grupoService.obtenerGrupos(usuario.persona.empresa.id).subscribe((res: any) => {
           var grupos = []
-
           grupos.push({ id: '', descripcion: 'SIN ASIGNAR' });
-
           res.forEach(grupo => {
-            grupos.push(grupo)
+            if (grupo.usuarios.length>0) {
+              grupos.push(grupo)  
+            }
+            
           });
-
           this.grupos = grupos;
+     
         })
       }
     });
   }
 
-  cambiarGrupo(servicio, grupo) {
-
-
-
+  cambiarGrupo(servicio, operador) {
     this.ordenService.obtenerServiciosOrdenId(servicio.id).subscribe((res: any) => {
       if (res) {
-
-        if (!res.grupo) {
-          res.grupo = { id: '', descripcion: 'SIN ASIGNAR' }
+        if (!res.operador) {
+          res.operador = { id: '', descripcion: 'SIN ASIGNAR' }
         }
-
-
-        var configuracion = confirm('¿Está seguro que desea cambiar el grupo asignado');
-
+        var configuracion = confirm('¿Está seguro que desea cambiar el operador asignado');
         if (configuracion) {
-
-          if (grupo == '') {
-            this.ordenService.modificarOrdenServicio(servicio.id, { grupo: null, estado: 'CITA/RECEPCIÓN' }).subscribe((res: any) => {
-              servicio.grupo = { id: '', descripcion: 'SIN ASIGNAR' }
+          if (operador == '') {
+            this.ordenService.modificarOrdenServicio(servicio.id, { operador: null, estado: 'CITA/RECEPCIÓN' }).subscribe((res: any) => {
+              servicio.operador = { id: '', descripcion: 'SIN ASIGNAR' }
               servicio.estado = res.estado
             })
 
           } else {
 
-            this.ordenService.modificarOrdenServicio(servicio.id, { grupo: grupo, estado: 'EN ESPERA DE PRODUCCIÓN' }).subscribe((res: any) => {
-              servicio.grupo = res.grupo
+            this.ordenService.modificarOrdenServicio(servicio.id, { operador: operador, estado: 'EN ESPERA DE PRODUCCIÓN' }).subscribe((res: any) => {
+              servicio.operador = res.operador
               servicio.estado = res.estado
             }, error => {
 
@@ -137,7 +132,7 @@ export class InformacionOrdenComponent implements OnInit {
           }
 
         } else {
-          servicio.grupo = res.grupo;
+          servicio.operador = res.operador;
         }
       }
     })

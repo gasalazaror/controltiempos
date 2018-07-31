@@ -5,6 +5,7 @@ import { UsuarioService } from '../../../servicios/usuario/usuario.service';
 import { LocalStorage } from '@ngx-pwa/local-storage';
 import { Router, ActivatedRoute } from '../../../../../node_modules/@angular/router';
 import { GrupoService } from '../../../servicios/grupo/grupo.service';
+import { PersonaService } from '../../../servicios/persona/persona.service';
 
 @Component({
   selector: 'app-crear-grupo',
@@ -13,21 +14,19 @@ import { GrupoService } from '../../../servicios/grupo/grupo.service';
 })
 export class CrearGrupoComponent implements OnInit {
 
-
   usuario: any
   error: any
   usuarioLogueado: any
   id: any;
   usuariosSeleccionados: any
   usuarios: any
-  continuar: any
+  operador: any
+  haSidoSeleccionado: any
 
   grupo = this.fb.group({
     id: [''],
     empresa: ['', [Validators.required]],
     descripcion: ['', [Validators.required],],
-    capacidad: [1, [Validators.required, Validators.min(1)],],
-    contrasena: ['', [Validators.required],],
   });
 
 
@@ -38,7 +37,8 @@ export class CrearGrupoComponent implements OnInit {
     private localStorage: LocalStorage,
     private grupoService: GrupoService,
     private route: ActivatedRoute,
-    private usuarioService: UsuarioService
+    private usuarioService: UsuarioService,
+    private personaService: PersonaService
 
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
@@ -46,7 +46,7 @@ export class CrearGrupoComponent implements OnInit {
     this.error = ''
     this.usuariosSeleccionados = []
     this.usuarios = []
-    this.continuar =false
+    this.haSidoSeleccionado = false
   }
 
   ngOnInit() {
@@ -63,30 +63,41 @@ export class CrearGrupoComponent implements OnInit {
       if (!usuario) {
         this.router.navigate(['login']);
       } else {
-
+        this.usuariosSeleccionados = []
         this.usuarioService.obtenerUsuarios(usuario.persona.empresa.id).subscribe(res => {
           this.usuarios = res
+          this.grupoService.obtenerUnGrupo(
+            this.id,
+            usuario.persona.empresa.id).subscribe((res: any) => {
+              if (res[0]) {
+                res[0].usuarios.forEach(usuario => {
+                  this.personaService.buscarUnaPersonaId(usuario.id, this.usuario.persona.empresa.id).subscribe((resultado: any) => {
+                    this.usuarios.forEach(usuario => {
+                      usuario.esSeleccionado = false
+                      if (usuario.id == resultado[0].id) {
+                        this.usuariosSeleccionados.push(resultado[0])
+                        //usuario.esSeleccionado = true
+                      } else {
+                      }
+                    });
+                  })
+                });
+                this.grupo = this.fb.group({
+                  id: [res[0].id],
+                  empresa: [res[0].empresa.id, [Validators.required]],
+                  descripcion: [res[0].descripcion, [Validators.required],],
+                });
+              }
+              this.haSidoSeleccionado = true
+
+            })
         })
 
 
-
-
-        this.grupoService.obtenerUnGrupo(
-          this.id,
-          usuario.persona.empresa.id).subscribe(res => {
-            if (res[0]) {
-              this.grupo = this.fb.group({
-                id: [res[0].id],
-                empresa: [res[0].empresa.id, [Validators.required]],
-                descripcion: [res[0].descripcion, [Validators.required],],
-                capacidad: [res[0].capacidad, [Validators.required, Validators.min(1)],],
-                contrasena: [res[0].contrasena, [Validators.required],],
-              });
-            }
-          })
       }
     });
   }
+
 
 
   seleccionarUsuario(usuario) {
@@ -94,7 +105,7 @@ export class CrearGrupoComponent implements OnInit {
     this.usuariosSeleccionados = []
 
     switch (usuario.esSeleccionado) {
-      
+
       case true:
         usuario.esSeleccionado = false
         break;
@@ -108,15 +119,25 @@ export class CrearGrupoComponent implements OnInit {
     }
 
     this.usuarios.forEach(usuario => {
-    
-      if (usuario.esSeleccionado==true) {
+
+      if (usuario.esSeleccionado == true) {
         usuarios.push(usuario)
       }
 
       this.usuariosSeleccionados = usuarios
-   
+
     });
 
+  }
+
+
+  continuar() {
+   
+    this.haSidoSeleccionado = true
+  }
+
+  seguirSeleccionando() {
+    this.haSidoSeleccionado = false
   }
 
 
@@ -146,9 +167,7 @@ export class CrearGrupoComponent implements OnInit {
         this.grupo = this.fb.group({
           id: [''],
           empresa: [this.usuario.persona.empresa.id, [Validators.required]],
-          capacidad: [1, [Validators.required, Validators.min(1)],],
           descripcion: ['', [Validators.required],],
-          contrasena: ['', [Validators.required],],
         });
       }
     });
@@ -164,10 +183,13 @@ export class CrearGrupoComponent implements OnInit {
         if (res[0]) {
           this.error = 'El grupo ya existe'
         } else {
-          var confirmacion = confirm("¿Está seguro que desea guardar el grupo: " + descripcion + " con contraseña " + this.grupo.value.contrasena);
-
+          var confirmacion = confirm("¿Está seguro que desea guardar el operador: " + descripcion);
           if (confirmacion) {
-            this.grupoService.guardarGrupo({ empresa: this.grupo.value.empresa, capacidad: this.grupo.value.capacidad, descripcion: this.grupo.value.descripcion.trim().toUpperCase(), contrasena: this.grupo.value.contrasena })
+            var usuariosSeleccionados = []
+            this.usuariosSeleccionados.forEach(element => {
+              usuariosSeleccionados.push(element.usuario[0].id)
+            });
+            this.grupoService.guardarGrupo({ usuarios: usuariosSeleccionados, empresa: this.grupo.value.empresa, descripcion: this.grupo.value.descripcion.trim().toUpperCase() })
               .subscribe(res => {
                 if (res) {
                   alert('Grupo guardado satisfactoriamente');
@@ -177,13 +199,13 @@ export class CrearGrupoComponent implements OnInit {
                       // this.router.navigate(['/']);
                     } else {
                       this.usuario = usuario
-
+                      this.usuariosSeleccionados = []
+                      this.haSidoSeleccionado = false
+                      this.buscarSesion()
                       this.grupo = this.fb.group({
                         id: [''],
                         empresa: [this.usuario.persona.empresa.id, [Validators.required]],
-                        capacidad: [1, [Validators.required, Validators.min(1)],],
                         descripcion: ['', [Validators.required],],
-                        contrasena: ['', [Validators.required],],
                       });
                     }
                   });
@@ -194,27 +216,27 @@ export class CrearGrupoComponent implements OnInit {
           }
         }
       })
-
-
     } else {
-      var confirmacion = confirm("¿Está seguro que desea modificar el grupo: " + descripcion + " con contraseña " + this.grupo.value.contrasena);
+      var confirmacion = confirm("¿Está seguro que desea modificar el grupo: " + descripcion);
 
       if (confirmacion) {
-        this.grupoService.modificarGrupo(this.grupo.value.id, { descripcion: this.grupo.value.descripcion.trim().toUpperCase(), contrasena: this.grupo.value.contrasena.trim(), capacidad: this.grupo.value.capacidad })
+        var usuariosSeleccionados = []
+        this.usuariosSeleccionados.forEach(element => {
+          usuariosSeleccionados.push(element.usuario[0].id)
+        });
+        this.grupoService.modificarGrupo(this.grupo.value.id, {usuarios: usuariosSeleccionados, descripcion: this.grupo.value.descripcion.trim().toUpperCase() })
           .subscribe((res) => {
-            alert('Grupo guardado satisfactoriamente');
+            alert('Grupo modificado satisfactoriamente');
             this.grupo = this.fb.group({
               id: [res[0].id],
               empresa: [res[0].empresa, [Validators.required]],
-              capacidad: [res[0].capacidad, [Validators.required, Validators.min(1)],],
               descripcion: [res[0].descripcion, [Validators.required],],
-              contrasena: [res[0].contrasena, [Validators.required],],
             });
 
             this.error = ''
 
           }, error => {
-            this.error = 'Existió un error al modificar el grupo' + JSON.stringify(error)
+            this.error = 'Existió un error al modificar el grupo'
           })
       }
 

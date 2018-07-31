@@ -3,8 +3,6 @@
     <div class="card">
       <div class="card-header bg-primary text-white">
         Información
-
-
       </div>
 
       <div class="card-body">
@@ -181,18 +179,11 @@
             <input [checked]="roles.Tecnico" [(ngModel)]="roles.Tecnico" (change)="modificarRoles()" class="form-check-input" type="checkbox"
               value="2" id="rol2">
             <label class="form-check-label" for="rol2">
-              Técnico
+              Operador
             </label>
             <br>
 
-            <div *ngIf="roles.Tecnico">
-              <label for="grupo" class="form-label">Seleccionar un grupo</label>
-              <select id="grupo" [(ngModel)]="persona.usuario[0].grupo" (change)="cambiarGrupo()" name="" id="">
-
-                <option *ngFor="let grupo of grupos" value="{{grupo.id}}">{{grupo.descripcion}}</option>
-              </select>
-              <br>
-            </div>
+        
 
 
 

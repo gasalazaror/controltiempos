@@ -13,12 +13,7 @@
           </div>
           <div class="col-md-9">{{usuario.persona.nombre}}</div>
         </div>
-        <div class="row">
-          <div class="col-md-3">
-            <strong>Grupo:</strong>
-          </div>
-          <div class="col-md-9">{{usuario.grupo.descripcion}}</div>
-        </div>
+       
 
 
 
@@ -82,12 +77,7 @@
         </select>
 
       </div>
-      <div class="col-md-2">
-        <button class="btn btn-primary" (click)="reiniciar">
-          <i class="mdi mdi-refresh"></i>
-        </button>
-
-      </div>
+      
     </div>
 
 
@@ -100,6 +90,7 @@
           <th scope="col">No. orden</th>
           <th scope="col">Fecha</th>
           <th scope="col">Tarea</th>
+          <th scope="col">Operador</th>
           <th scope="col">Tiempo estandar</th>
           <th scope="col">Estado</th>
         </tr>
@@ -133,6 +124,7 @@
           <td>{{servicio.orden.id}}</td>
           <td>{{servicio.orden.createdAt}}</td>
           <td>{{servicio.servicio.descripcion}}</td>
+          <td>{{servicio.operador.descripcion}}</td>
           <td>{{servicio.servicio.tiempoEstandar}}</td>
           <td class="">{{servicio.estado}}</td>
 

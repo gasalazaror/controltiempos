@@ -95,6 +95,8 @@ export class ConsultarGrupoComponent implements OnInit {
   cargarGrupos() {
     this.grupoService.obtenerGruposConsulta(this.usuario.persona.empresa.id, this.registros, this.skip, this.orden).subscribe(res => {
       this.grupos = res;
+
+    
     })
   }
 

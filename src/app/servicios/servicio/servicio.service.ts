@@ -66,12 +66,15 @@ export class ServicioService {
     return this.apiService.get('')
   }
 
-  obtenerServiciosGrupo(grupo, limit, skip, orden){
-    return this.apiService.get('ordenservicio?grupo='+grupo+'&limit='+limit+'&skip='+skip+"&sort=createdAt "+orden)
+  obtenerServiciosGrupo(operadores, limit, skip, orden){
+    var url = 'ordenservicio?where={"or":'+operadores+'}&limit='+limit+'&skip='+skip+'&sort=createdAt '+orden
+    return this.apiService.get(url)
   }
 
-  obtenerServiciosGrupoEstado(grupo, estado, limit, skip, orden){
-    return this.apiService.get('ordenservicio?grupo='+grupo+"&estado="+estado+'&limit='+limit+'&skip='+skip +"&sort=createdAt "+orden)
+  obtenerServiciosGrupoEstado(operadores, estado, limit, skip, orden){
+    var url = 'ordenservicio?where={"and":[{"estado":"'+estado+'"}],"or":'+operadores+'}&limit='+limit+'&skip='+skip+'&sort=createdAt '+orden
+    console.log(url)
+    return this.apiService.get(url)
   }
 
   reanudarServicio(pausa, horaFin) {

@@ -7,6 +7,8 @@ import { RolService } from '../../../servicios/rol/rol.service';
 import { VehiculoService } from '../../../servicios/vehiculo/vehiculo.service';
 import { GrupoService } from '../../../servicios/grupo/grupo.service';
 import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
+import { Alert } from '../../../../../node_modules/@types/selenium-webdriver';
+import { THIS_EXPR } from '../../../../../node_modules/@angular/compiler/src/output/output_ast';
 
 @Component({
   selector: 'app-informacion-persona',
@@ -275,8 +277,25 @@ export class InformacionPersonaComponent implements OnInit {
     if (this.roles.Administrador) { roles.push(1) }
     if (this.roles.Tecnico) {
       roles.push(2)
+
+    
+
+      this.localStorage.getItem('usuario').subscribe((usuario) =>{
+        if (usuario) {
+          this.usuarioService.crearOperador({descripcion: this.persona.nombre, empresa: usuario.persona.empresa.id})
+          .subscribe((res:any)=>{
+            if (res) {
+              this.usuarioService.modificarUsuario(this.persona.usuario[0].id, { operadores: [res.id] }).subscribe(res => {
+
+              })
+            }
+          })
+        }
+      })
+
+     
     } else {
-      this.usuarioService.modificarUsuario(this.persona.usuario[0].id, { grupo: null }).subscribe(res => {
+      this.usuarioService.modificarUsuario(this.persona.usuario[0].id, { operadores: [] }).subscribe(res => {
 
       })
     }

@@ -1,3 +1,24 @@
-<p>
-  informacion-grupo works!
-</p>
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Informaión del operador
+  </div>
+  <div class="card-body">
+      <div class=" float-md-right">
+
+          <a class="btn btn-pencil" href="#/persona/creargrupo/{{id}}" title="Editar" >
+            <i class="mdi mdi-pencil"></i>
+          </a>
+        </div>
+
+    Nombre del operador: {{operador.descripcion}}
+
+    <div>
+      Usuario(s):
+      <div *ngFor="let usuario of usuariosSeleccionados">
+        {{usuario.nombre}}
+      </div>
+    </div>
+
+
+  </div>
+</div>

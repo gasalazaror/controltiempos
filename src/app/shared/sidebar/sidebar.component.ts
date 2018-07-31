@@ -59,9 +59,9 @@ export class SidebarComponent implements OnInit {
                 submenu: [
                     { path: '/persona/crearpersona/nuevo', title: 'Registrar Persona', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
                     { path: '/persona/consultarpersona', title: 'Consultar Persona', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
-                    { path: '', title: 'Grupos', icon: '', class: 'has-arrow', label: '', labelClass: '', extralink: false, submenu: [
-                        { path: '/persona/creargrupo/nuevo', title: 'Registrar Grupo', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
-                        { path: '/persona/consultargrupo', title: 'Consultar Grupo', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },  
+                    { path: '', title: 'Operadores', icon: '', class: 'has-arrow', label: '', labelClass: '', extralink: false, submenu: [
+                        { path: '/persona/creargrupo/nuevo', title: 'Registrar operador', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+                        { path: '/persona/consultargrupo', title: 'Consultar operador', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },  
                     ] },
         
                 ]
@@ -92,9 +92,9 @@ export class SidebarComponent implements OnInit {
             },
         
             {
-                path: '', title: 'Tareas', icon: 'mdi mdi-format-list-numbers', class: 'has-arrow', label: '', labelClass: '', extralink: false,
+                path: '', title: 'Operaciones', icon: 'mdi mdi-format-list-numbers', class: 'has-arrow', label: '', labelClass: '', extralink: false,
                 submenu: [
-                    { path: '/servicio/mistareas', title: 'Mis tareas', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+                    { path: '/servicio/mistareas', title: 'Mis operaciones', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
         
                 ]
             },

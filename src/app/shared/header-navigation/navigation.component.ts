@@ -14,7 +14,7 @@ export class NavigationComponent implements AfterViewInit {
   	constructor(private modalService: NgbModal, private localStorage: LocalStorage, public router: Router) {
         
         this.usuario = {
-            persona: {nombre: '', correo:''}
+            persona: {nombre: '', correo:'', empresa:{nombreComercial: ''}}
         }
         
         this.buscarSesion()

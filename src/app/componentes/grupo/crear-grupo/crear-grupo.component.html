@@ -5,41 +5,57 @@
   <div class="card-body">
     <div class="row"></div>
 
-    <div *ngIf="continuar == false" class="col-md-6">
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-            <div *ngFor="let usuario of usuariosSeleccionados" class="btn-group mr-2" role="group" aria-label="First group">
-              <div class="btn-group mr-2 group-sm" role="group" aria-label="First group">
-                <button type="button" class="btn btn-secondary">{{usuario.nombre}}</button>
-              </div>
-            </div>
+    <div class="col-md-8">
+      <!--   <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div *ngFor="let usuario of usuariosSeleccionados" class="btn-group mr-2" role="group" aria-label="First group">
+          <div class="btn-group mr-2 group-sm" role="group" aria-label="First group">
+            <button type="button" class="btn btn-secondary">{{usuario.nombre}}</button>
           </div>
-          <hr>
-          <table class="table">
-            <thead>
-              <tr>
-                <th scope="col"></th>
-                <th scope="col">Identificaciön</th>
-                <th scope="col">Nombre</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let usuario of usuarios" style="cursor: pointer" (click)="seleccionarUsuario(usuario)" [class.table-info]="usuario.esSeleccionado">
-                <td scope="row"></td>
-                <td>{{usuario.cedula}}</td>
-                <td>{{usuario.nombre}}</td>
-      
-              </tr>
-      
-            </tbody>
-          </table>
-          
-          <button [disabled]="usuariosSeleccionados.length<1" class="btn btn-primary">Continuar</button>
+        </div>
+
+
+
+        <button *ngIf="haSidoSeleccionado == true" (click)="seguirSeleccionando()" class="btn btn-primary">
+          <i class="mdi mdi-plus"></i>
+        </button>
+      </div> -->
+
+      <ul class="" *ngFor="let usuario of usuariosSeleccionados">
+        <li class="">{{usuario.nombre}}</li>
+      </ul>
+      <button *ngIf="haSidoSeleccionado == true" (click)="seguirSeleccionando()" class="btn btn-primary btn-sm">
+        <i class="mdi mdi-plus"></i> 
+      </button>
+      <hr>
+      <table *ngIf="haSidoSeleccionado == false" class="table">
+        <thead>
+          <tr>
+            <th scope="col"></th>
+            <th scope="col">Identificaciön</th>
+            <th scope="col">Nombre</th>
+            <th style="text-align: center" scope="col">Seleccionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let usuario of usuarios" style="cursor: pointer" (click)="seleccionarUsuario(usuario)" [class.table-info]="usuario.esSeleccionado">
+            <td scope="row"></td>
+            <td>{{usuario.cedula}}</td>
+            <td>{{usuario.nombre}}</td>
+            <td style="text-align: center" scope="col">
+              <input class="" [checked]="usuario.esSeleccionado" type="checkbox">
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+
+      <button [disabled]="usuariosSeleccionados.length<2" *ngIf="haSidoSeleccionado == false" (click)="continuar()" class="btn btn-primary">Continuar</button>
     </div>
-  
+
   </div>
 </div>
 
-<div *ngIf="usuariosSeleccionados.length>25000" class="card">
+<div *ngIf="haSidoSeleccionado" class="card">
   <div class="card-header bg-primary text-white">
     Información del grupo
   </div>
@@ -50,21 +66,14 @@
         <form [formGroup]="grupo" (ngSubmit)="guardarGrupo()">
 
           <label>
-            Grupo
+            Nombre del operador
             <input autofocus type="text" class="" formControlName="descripcion">
           </label>
-          <label>
-            Capacidad
-            <input autofocus type="number" class="" formControlName="capacidad">
-          </label>
-          <label>
-            Contraseña
-            <input type="text" class="" formControlName="contrasena">
-          </label>
+
           <div *ngIf="error!=''" class="alert alert-danger" role="alert">
             <strong>Error: </strong> {{error}}
           </div>
-          <button [disabled]="!grupo.valid" class="btn  btn-primary btn-block" type="submit">Guardar grupo</button>
+          <button [disabled]="!grupo.valid" class="btn  btn-primary btn-block" type="submit">Guardar operador</button>
         </form>
       </div>
     </div>

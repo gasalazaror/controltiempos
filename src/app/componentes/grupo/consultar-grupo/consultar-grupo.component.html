@@ -59,27 +59,30 @@
               <thead class=" ">
                 <tr>
                   <th></th>
-                  <th scope="col">Grupo</th>
-                  <th scope="col">Capacidad</th>
+                  <th scope="col">Operador</th>
+  
                 </tr>
               </thead>
               <tbody>
-                <tr *ngFor="let grupo of grupos">
-                  <td>
-                    <a class="btn btn-sm btn-primary" title="Editar grupo" href="#/persona/creargrupo/{{grupo.id}}">
-                      <i class="mdi mdi-pencil"></i>
-                    </a>
-                    <button [disabled]="grupo.usuarios.length>0 || grupo.serviciosAsignados.length>0" (click)="eliminarGrupo(grupo.id)" class="btn btn-sm btn-danger"
-                      title="Elimina grupo">
-                      <i class="mdi mdi-delete"></i>
-                    </button>
-        
-                  </td>
-                  <td>
-                    <a class="btn btn-link" href="#/persona/informaciongrupo/{{grupo.id}}">{{grupo.descripcion}}</a>
-                  </td>
-                  <td>{{grupo.usuarios.length}} - {{grupo.capacidad}}</td>
-                </tr>
+                <div *ngFor="let grupo of grupos">
+                    <tr  *ngIf="grupo.usuarios.length>0">
+                        <td>
+                          <a class="btn btn-sm btn-primary" title="Editar grupo" href="#/persona/creargrupo/{{grupo.id}}">
+                            <i class="mdi mdi-pencil"></i>
+                          </a>
+                          <button  (click)="eliminarGrupo(grupo.id)" class="btn btn-sm btn-danger"
+                            title="Elimina grupo">
+                            <i class="mdi mdi-delete"></i>
+                          </button>
+              
+                        </td>
+                        <td>
+                          <a class="btn btn-link" href="#/persona/informaciongrupo/{{grupo.id}}"> {{grupo.descripcion}}</a>
+                        </td>
+                    
+                      </tr>
+                </div>
+            
               </tbody>
             </table>
             <hr>

@@ -49,7 +49,17 @@ export class MisTareasComponent implements OnInit {
 
         this.usuarioService.obtenerUnUsuario(usuario.id).subscribe(res => {
           this.usuario = res
-          this.obtenerServiciosGrupo(this.usuario.grupo.id)
+
+          var operadores = '['
+
+          this.usuario.operadores.forEach(operador => {
+            operadores += '{"operador":"'+operador.id+'"},'
+          });
+
+          operadores = operadores.slice(0, operadores.length-1)+"]"
+      
+        
+          this.obtenerServiciosGrupo(operadores)
         })
       }
     });
@@ -112,9 +122,7 @@ export class MisTareasComponent implements OnInit {
       var fechaActual = new Date();
 
       this.servicioService.iniciarServicio(servicio.id, fechaActual).subscribe((serv: any) => {
-        if (this.usuario.grupo.id) {
-          this.obtenerServiciosGrupo(this.usuario.grupo.id)
-        } 
+        this.reiniciar()
        
       })
     } else {
@@ -144,7 +152,7 @@ export class MisTareasComponent implements OnInit {
       var fechaActual = new Date();
 
       this.servicioService.finalizarServicio(servicio.id, fechaActual).subscribe(serv => {
-        this.obtenerServiciosGrupo(this.usuario.grupo.id)
+       this.reiniciar()
       })
     } else {
 
@@ -155,18 +163,25 @@ export class MisTareasComponent implements OnInit {
     this.pagina = 1
     this.skip = 0
 
-    this.obtenerServiciosGrupo(this.usuario.grupo.id)
+    var operadores = '['
+
+    this.usuario.operadores.forEach(operador => {
+      operadores += '{"operador":"'+operador.id+'"},'
+    });
+    operadores = operadores.slice(0, operadores.length-1)+"]"
+    this.obtenerServiciosGrupo(operadores)
   }
 
   pausarServicio(servicio) {
-    var confirmacion = confirm("Está seguro que desea pausar la tarea!");
+    var confirmacion = confirm("Está seguro que desea pausar la operación!");
     if (confirmacion) {
       var fechaActual = new Date();
 
       this.servicioService.pausarServicio(servicio.id, fechaActual).subscribe((serv: any) => {
 
         this.servicioService.modificarEstado(servicio.id, 'EN PRODUCCIÓN - PAUSADO', serv.id).subscribe(res => {
-          this.obtenerServiciosGrupo(this.usuario.grupo.id)
+        
+          this.reiniciar()
         })
       })
     } else {
@@ -182,7 +197,7 @@ export class MisTareasComponent implements OnInit {
       this.servicioService.reanudarServicio(servicio.pausaActual, fechaActual).subscribe(serv => {
 
         this.servicioService.modificarEstado(servicio.id, 'EN PRODUCCIÓN', '').subscribe(res => {
-          this.obtenerServiciosGrupo(this.usuario.grupo.id)
+          this.reiniciar()
         })
       })
     } else {

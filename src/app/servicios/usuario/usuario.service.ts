@@ -14,6 +14,10 @@ export class UsuarioService {
     
     return this.apiService.post('usuario', { persona: persona.id, password: persona.password });
   }
+
+  crearOperador(usuario){
+    return this.apiService.post('operador', usuario);
+  }
     
 
   obtenerUsuarios(empresa){
