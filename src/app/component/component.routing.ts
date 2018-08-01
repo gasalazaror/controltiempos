@@ -31,6 +31,8 @@ import { LoginComponent } from '../componentes/login/login/login.component';
 import { CrearGrupoComponent } from '../componentes/grupo/crear-grupo/crear-grupo.component';
 import { ConsultarGrupoComponent } from '../componentes/grupo/consultar-grupo/consultar-grupo.component';
 import { InformacionGrupoComponent } from '../componentes/grupo/informacion-grupo/informacion-grupo.component';
+import { TiempoEstandarComponent } from '../componentes/reportes/tiempo-estandar/tiempo-estandar.component';
+import { TiempoRealComponent } from '../componentes/reportes/tiempo-real/tiempo-real.component';
 
 export const ComponentsRoutes: Routes = [
   {
@@ -39,6 +41,22 @@ export const ComponentsRoutes: Routes = [
       {
         path: 'crearpersona/:id',
         component: CrearPersonaComponent,
+        data: {
+          title: 'Crear Vehículo',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
+        }
+      },
+      {
+        path: 'tiempoestandar',
+        component: TiempoEstandarComponent,
+        data: {
+          title: 'Crear Vehículo',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
+        }
+      },
+      {
+        path: 'tiemporeal',
+        component: TiempoRealComponent,
         data: {
           title: 'Crear Vehículo',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]

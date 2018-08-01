@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { FullComponent } from './layouts/full/full.component';
@@ -20,6 +20,7 @@ export const Approutes: Routes = [
         { path: 'servicio', loadChildren: './component/component.module#ComponentsModule' },
         { path: 'orden', loadChildren: './component/component.module#ComponentsModule' },
         { path: 'tarea', loadChildren: './component/component.module#ComponentsModule' },
+        { path: 'reporte', loadChildren: './component/component.module#ComponentsModule' },
     ]
     
 },

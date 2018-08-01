@@ -1,0 +1,190 @@
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Filtros
+  </div>
+  <div class="card-body">
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="radio">
+          <label>
+            <input type="radio" checked value="1" [(ngModel)]="filtro" name="optradio">Reporte por operador</label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" value="2" [(ngModel)]="filtro" name="optradio">Reporte por Orden de trabajo</label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" value="3" [(ngModel)]="filtro" name="optradio">Reporte por Tarea</label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" value="4" [(ngModel)]="filtro" name="optradio">Reporte por Fecha</label>
+        </div>
+      </div>
+
+      <div class="col-md-8">
+        <div *ngIf="filtro==1">
+          <div class="input-group input-group-sm mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="inputGroup-sizing-sm">Seleccionar operador</span>
+            </div>
+            <input [(ngModel)]="personaSeleccionada" (click)="open(content)" readonly type="text" class="form-control" aria-label="Sizing example input"
+              aria-describedby="inputGroup-sizing-sm">
+            <button class="btn btn-light" (click)="open(content)">
+              <i class="mdi mdi-magnify"></i>
+            </button>
+           
+          </div>
+
+          <div *ngIf="personaSeleccionada!=''">
+              Desde: <input [(ngModel)]="filtroTiempo.inicio" type="date">
+              Hasta: <input [(ngModel)]="filtroTiempo.fin" type="date">
+              <button (click)="buscarPorOperador()">Buscar</button>
+          </div>
+        </div>
+        <div *ngIf="filtro==2">
+          Reporte por Orden de trabajo
+        </div>
+        <div *ngIf="filtro==3">
+          Reporte por Tarea
+        </div>
+
+        <div *ngIf="filtro==4">
+          Reporte por Fecha
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-body">
+      <ngb-tabset>
+          <ngb-tab title="Reporte tiempo estandar" class="bg-primary">
+            <ng-template ngbTabContent>
+                <table class="table table-responsive-sm">
+                    <thead class="">
+                      <tr>
+                        <th scope="col"># Orden</th>
+                        <th scope="col">Tarea</th>
+                        <th scope="col">Tiempo estandar</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Operador</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                        <td>Mark</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                 
+            </ng-template>
+          </ngb-tab>
+          <ngb-tab>
+            <ng-template ngbTabTitle><b>Reporte de tiempo real</b></ng-template>
+            <ng-template ngbTabContent>
+              <p class="p-t-20">Exercitation +1 labore velit, blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table
+              craft beer twee. Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl
+              cillum PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS salvia
+              yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit, sustainable jean
+              shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester stumptown, tumblr butcher vero
+              sint qui sapiente accusamus tattooed echo park.</p>
+            </ng-template>
+          </ngb-tab>
+         
+        </ngb-tabset>
+  </div>
+</div>
+
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header bg-primary text-white">
+      <h4 class="modal-title text-white">Seleccionar operadores</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+  
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">Filtro</span>
+        </div>
+        <input [(ngModel)]="terminoCliente" (input)="buscarPersona()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+      </div>
+  
+  
+      <table class="table table-responsive table-sm">
+        <thead>
+          <tr>
+  
+            <th scope="col">Identificación</th>
+            <th scope="col">Nombre</th>
+  
+            <th scope="col">Seleccionar</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let persona of personas">
+  
+            <td>{{persona.cedula}}</td>
+            <td>{{persona.nombre}}</td>
+  
+            <td>
+              <button class="btn btn-success btn-sm" (click)="seleccionarPersona(persona); c('Close click')">
+                <i class="mdi mdi-arrow-down"></i>
+              </button>
+            </td>
+          </tr>
+  
+        </tbody>
+      </table>
+      <hr>
+      <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+  
+          <li class="page-item " [class.disabled]="pagina==1">
+            <button class="page-link" (click)="navegarPaginas('-')" tabindex="-1">
+              <<</button>
+          </li>
+          <li class="page-item">
+            <span class="page-link">
+              Página {{pagina}}
+              <span class="sr-only">(current)</span>
+            </span>
+          </li>
+          <li class="page-item " [class.disabled]="personas.length < registros">
+            <button class="page-link" (click)="navegarPaginas('+')">>></button>
+          </li>
+        </ul>
+      </nav>
+  
+  
+  
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-inverse" (click)="c('Close click')">Cerrar</button>
+    </div>
+  </ng-template>

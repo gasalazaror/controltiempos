@@ -81,6 +81,7 @@ export class SidebarComponent implements OnInit {
         
                 ]
             },
+           
         
             {
                 path: '', title: 'Ordenes', icon: 'mdi mdi-file-document', class: 'has-arrow', label: '', labelClass: '', extralink: false,
@@ -99,6 +100,14 @@ export class SidebarComponent implements OnInit {
                 ]
             },
         
+            {
+                path: '', title: 'Reportes', icon: 'mdi mdi-bullseye', class: 'has-arrow', label: '', labelClass: '', extralink: false,
+                submenu: [
+                    { path: '/reporte/tiempoestandar', title: 'Reporte tiempo estandar', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+                    { path: '/reporte/tiemporeal', title: 'Reporte tiempo real', icon: '', class: '', label: '', labelClass: '', extralink: false, submenu: [] },
+        
+                ]
+            },
         
         ];
         $(function () {
