@@ -3,6 +3,7 @@ import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage
 import { NgbModal, ModalDismissReasons } from '../../../../../node_modules/@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute, Router } from '../../../../../node_modules/@angular/router';
 import { PersonaService } from '../../../servicios/persona/persona.service';
+import { ReporteService } from '../../../servicios/reporte/reporte.service';
 
 @Component({
   selector: 'app-tiempo-estandar',
@@ -27,6 +28,7 @@ export class TiempoEstandarComponent implements OnInit {
     private modalService2: NgbModal,
     private personaService: PersonaService,
     private router: Router,
+    private reporteService: ReporteService
   ) {
     this.registros = '10'
     this.pagina = 1
@@ -85,11 +87,7 @@ export class TiempoEstandarComponent implements OnInit {
     var inicio = new Date(this.filtroTiempo.inicio)
     var fin = new Date(this.filtroTiempo.inicio)
 
-    if (inicio>fin) {
-      alert('La fecha de inicio no puede ser mayor a la fecha fin')
-    } else {
-      
-    }
+   
   }
 
   

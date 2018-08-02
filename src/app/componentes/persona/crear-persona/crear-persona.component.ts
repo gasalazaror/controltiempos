@@ -5,6 +5,8 @@ import { UsuarioService } from '../../../servicios/usuario/usuario.service';
 import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
 import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
+import { THIS_EXPR } from '../../../../../node_modules/@angular/compiler/src/output/output_ast';
+import { ClienteService } from '../../../servicios/cliente/cliente.service';
 
 
 @Component({
@@ -23,7 +25,7 @@ export class CrearPersonaComponent implements OnInit {
     direccion: ['', [Validators.required]],
     telefono: ['', [Validators.required]],
     correo: ['', [Validators.required, Validators.email]],
-    esCliente: [true],
+    esCliente: [false],
     esEmpleado: [false],
   })
 
@@ -41,6 +43,8 @@ export class CrearPersonaComponent implements OnInit {
     private router: Router,
     private localStorage: LocalStorage,
     private fb: FormBuilder,
+    private usuarioService: UsuarioService,
+    private clienteService: ClienteService
   ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.persona = {
@@ -94,6 +98,8 @@ export class CrearPersonaComponent implements OnInit {
 
     this.error = ''
 
+  
+
   }
 
   ngOnInit() {
@@ -115,9 +121,9 @@ export class CrearPersonaComponent implements OnInit {
               this.persona = res[0]
 
               this.personaForm = this.fb.group({
-                empresa: [this.persona.empresa.id,Validators.required],
+                empresa: [this.persona.empresa,Validators.required],
                 estado: [this.persona.estado, [Validators.required]],
-                tipo: [this.persona.estado, [Validators.required]],
+                tipo: [this.persona.tipo, [Validators.required]],
                 cedula: [this.persona.cedula, [Validators.required, Validators.minLength(10), Validators.maxLength(13)]],
                 nombre: [this.persona.nombre, [Validators.required]],
                 direccion: [this.persona.direccion, [Validators.required]],
@@ -222,14 +228,33 @@ export class CrearPersonaComponent implements OnInit {
 
 
   guardarPersona() {
-
     this.persona.empresa = this.usuario.persona.empresa.id
     if (this.id == 'nuevo') {
       var confirmacion = confirm("¿Está seguro que desea guardar a la persona?");
       if (confirmacion) {
-        this.personaService.guardarPersona(this.persona).subscribe(res => {
+        this.personaService.guardarPersona(this.personaForm.value).subscribe((res:any) => {
+     
           this.persona = res
-          this.reanudar()
+          this.reanudar();
+      
+          if (this.personaForm.value.esEmpleado) {
+            this.usuarioService.activarUsuario({id: res.id, password: this.personaForm.value.cedula}).subscribe(res=>{
+
+            }, error=>{
+              console.log(error)
+            })
+          } 
+
+          if (this.personaForm.value.esCliente) {
+           
+
+            this.clienteService.activarCliente(res.id).subscribe(res=>{
+
+            })
+          } 
+
+         
+          
           alert('Persona guardada correctamente correctamente');
         }, error => {
           alert('Existió un error')
