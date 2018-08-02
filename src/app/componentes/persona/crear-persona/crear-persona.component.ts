@@ -3,6 +3,8 @@ import { PersonaService } from '../../../servicios/persona/persona.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from '../../../servicios/usuario/usuario.service';
 import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage';
+import { FormBuilder } from '@angular/forms';
+import { Validators } from '@angular/forms';
 
 
 @Component({
@@ -11,6 +13,22 @@ import { LocalStorage } from '../../../../../node_modules/@ngx-pwa/local-storage
   styleUrls: ['./crear-persona.component.css']
 })
 export class CrearPersonaComponent implements OnInit {
+
+  personaForm = this.fb.group({
+    empresa: ['', Validators.required],
+    estado: ['ACTIVO', Validators.required],
+    tipo: ['NATURAL', Validators.required],
+    cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(13)]],
+    nombre: ['', [Validators.required]],
+    direccion: ['', [Validators.required]],
+    telefono: ['', [Validators.required]],
+    correo: ['', [Validators.required, Validators.email]],
+    esCliente: [true],
+    esEmpleado: [false],
+  })
+
+  esCliente: any
+  esEmpleado: any
 
   persona: any;
   error: any;
@@ -21,8 +39,9 @@ export class CrearPersonaComponent implements OnInit {
     private personaService: PersonaService,
     private route: ActivatedRoute,
     private router: Router,
-    private localStorage: LocalStorage
-    ) {
+    private localStorage: LocalStorage,
+    private fb: FormBuilder,
+  ) {
     this.id = this.route.snapshot.paramMap.get('id');
     this.persona = {
       empresa: '',
@@ -35,14 +54,7 @@ export class CrearPersonaComponent implements OnInit {
       correo: ''
     }
 
-    this.error = {
-      ruc: '',
-      cedula: '',
-      nombre: '',
-      telefono: '',
-      direccion: '',
-      correo: ''
-    }
+    this.error = ''
     this.buscarSesion()
   }
 
@@ -52,6 +64,18 @@ export class CrearPersonaComponent implements OnInit {
         this.router.navigate(['login']);
       } else {
         this.usuario = usuario
+        this.personaForm = this.fb.group({
+          empresa: [this.usuario.persona.empresa.id,],
+          estado: ['ACTIVO', [Validators.required]],
+          tipo: ['NATURAL', [Validators.required]],
+          cedula: ['', [Validators.required, Validators.minLength(10), Validators.maxLength(13)]],
+          nombre: ['', [Validators.required]],
+          direccion: ['', [Validators.required]],
+          telefono: ['', [Validators.required]],
+          correo: ['', [Validators.required, Validators.email]],
+          esCliente: [true],
+          esEmpleado: [false],
+        })
       }
     });
   }
@@ -68,14 +92,7 @@ export class CrearPersonaComponent implements OnInit {
       correo: ''
     }
 
-    this.error = {
-      ruc: '',
-      cedula: '',
-      nombre: '',
-      telefono: '',
-      direccion: '',
-      correo: ''
-    }
+    this.error = ''
 
   }
 
@@ -96,6 +113,21 @@ export class CrearPersonaComponent implements OnInit {
           usuario.persona.empresa.id).subscribe(res => {
             if (res[0]) {
               this.persona = res[0]
+
+              this.personaForm = this.fb.group({
+                empresa: [this.persona.empresa.id,Validators.required],
+                estado: [this.persona.estado, [Validators.required]],
+                tipo: [this.persona.estado, [Validators.required]],
+                cedula: [this.persona.cedula, [Validators.required, Validators.minLength(10), Validators.maxLength(13)]],
+                nombre: [this.persona.nombre, [Validators.required]],
+                direccion: [this.persona.direccion, [Validators.required]],
+                telefono: [this.persona.telefono, [Validators.required]],
+                correo: [this.persona.correo, [Validators.required, Validators.email]],
+                esCliente: [true],
+                esEmpleado: [false],
+              })
+
+
             }
           })
       }
@@ -188,7 +220,9 @@ export class CrearPersonaComponent implements OnInit {
     }
   }
 
+
   guardarPersona() {
+
     this.persona.empresa = this.usuario.persona.empresa.id
     if (this.id == 'nuevo') {
       var confirmacion = confirm("¿Está seguro que desea guardar a la persona?");

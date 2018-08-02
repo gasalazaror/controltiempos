@@ -3,7 +3,7 @@ import { UsuarioService } from '../../servicios/usuario/usuario.service';
 
 import { EmpresaService } from '../../servicios/empresa/empresa.service';
 import { PersonaService } from '../../servicios/persona/persona.service';
-import { FormGroup, FormControl, FormBuilder } from '@angular/forms';
+import { FormBuilder } from '@angular/forms';
 import { Validators } from '@angular/forms';
 
 @Component({
