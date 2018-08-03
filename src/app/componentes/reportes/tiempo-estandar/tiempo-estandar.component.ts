@@ -19,8 +19,9 @@ export class TiempoEstandarComponent implements OnInit {
   skip:any
   personaSeleccionada: any
   persona: any
-
   filtroTiempo: any
+  reportes: any;
+  sumas:any
 
   constructor
   (
@@ -33,9 +34,14 @@ export class TiempoEstandarComponent implements OnInit {
     this.registros = '10'
     this.pagina = 1
     this.skip = 0
+    this.sumas = []
+
     this.personaSeleccionada = ''
 
     this.filtroTiempo = {inicio: this.convertir(Date.now()), fin: this.convertir(Date.now())}
+
+    this.obtenerReporteGlobal()
+    this.obtenerSumatoriaGlobal()
   }
 
   open(content) {
@@ -54,7 +60,6 @@ export class TiempoEstandarComponent implements OnInit {
   }
 
   obtenerPersonas() {
-
     this.localStorage.getItem('usuario').subscribe((usuario) => {
       if (!usuario) {
         this.router.navigate(['login']);
@@ -69,9 +74,33 @@ export class TiempoEstandarComponent implements OnInit {
           this.personas = personas
         })
       }
-    });
-    
-   
+    }); 
+  }
+
+  obtenerReporteGlobal(){
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.reporteService.obtenerReporteGlobal(usuario.persona.empresa.id).subscribe((res:any)=>{
+          this.reportes=res.rows; 
+     
+        })
+      }
+    }); 
+  }
+
+  obtenerSumatoriaGlobal(){
+    this.localStorage.getItem('usuario').subscribe((usuario) => {
+      if (!usuario) {
+        this.router.navigate(['login']);
+      } else {
+        this.reporteService.obtenerSumatoriasGlobal(usuario.persona.empresa.id).subscribe((res:any)=>{
+          this.sumas=res.rows; 
+     
+        })
+      }
+    }); 
   }
 
   ngOnInit() {

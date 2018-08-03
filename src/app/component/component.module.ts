@@ -42,6 +42,8 @@ import { CrearGrupoComponent } from '../componentes/grupo/crear-grupo/crear-grup
 import { InformacionGrupoComponent } from '../componentes/grupo/informacion-grupo/informacion-grupo.component';
 import { TiempoRealComponent } from '../componentes/reportes/tiempo-real/tiempo-real.component';
 import { TiempoEstandarComponent } from '../componentes/reportes/tiempo-estandar/tiempo-estandar.component';
+import { DetalleTareaComponent } from '../componentes/reportes/detalle-tarea/detalle-tarea.component';
+
 
 @NgModule({
   imports: [
@@ -87,7 +89,8 @@ import { TiempoEstandarComponent } from '../componentes/reportes/tiempo-estandar
     CrearGrupoComponent,
     InformacionGrupoComponent,
     TiempoEstandarComponent,
-    TiempoRealComponent
+    TiempoRealComponent,
+    DetalleTareaComponent
   ]
 })
 

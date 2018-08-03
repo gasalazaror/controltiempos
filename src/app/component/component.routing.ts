@@ -33,6 +33,7 @@ import { ConsultarGrupoComponent } from '../componentes/grupo/consultar-grupo/co
 import { InformacionGrupoComponent } from '../componentes/grupo/informacion-grupo/informacion-grupo.component';
 import { TiempoEstandarComponent } from '../componentes/reportes/tiempo-estandar/tiempo-estandar.component';
 import { TiempoRealComponent } from '../componentes/reportes/tiempo-real/tiempo-real.component';
+import { DetalleTareaComponent } from '../componentes/reportes/detalle-tarea/detalle-tarea.component';
 
 export const ComponentsRoutes: Routes = [
   {
@@ -67,6 +68,14 @@ export const ComponentsRoutes: Routes = [
         component: CrearGrupoComponent,
         data: {
           title: 'Crear Grupo',
+          urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
+        }
+      },
+      {
+        path: 'detalletarea/:id',
+        component: DetalleTareaComponent,
+        data: {
+          title: 'detale',
           urls: [{ title: 'Inicio', url: '/' }, { title: 'Persona' }, { title: 'Crear' }]
         }
       },

@@ -1,0 +1,62 @@
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Información de la tarea
+  </div>
+
+  <div class="card-body">
+
+    <div class="container">
+      <strong>Orden de trabajo #:</strong> {{ordenServicio.orden.id}}
+      <br>
+      <strong>Tarea :</strong> {{ordenServicio.servicio.descripcion}}
+      <br>
+      <strong>Estado:</strong> {{ordenServicio.estado}}
+      <hr>
+      <strong>Operador:</strong> {{tarea.operador}}
+      <hr>
+      <strong>Hora de inicio:</strong> {{tarea.inicio}}
+      <br>
+      <strong>Hora de finalización:</strong> {{tarea.fin}}
+      <hr>
+      <strong>Tiempo estandar :</strong> {{tarea.tiempoEstandar}} <br>
+      <strong>Tiempo Real :</strong> {{tarea.tiempoReal}}
+    </div>
+
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Pausas
+  </div>
+  <div class="card-body">
+      <table class="table table-responsive-sm table-responsive-md">
+          <thead class="">
+            <tr>
+              <th scope="col">Hora inicio</th>
+              <th scope="col">Hora finalización</th>
+              <th scope="col">Tiempo transcurrido</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pausa of pausas">
+              <td>{{pausa.inicio}}</td>
+              <td>{{pausa.fin}}</td>
+              <td>{{pausa.tiempoTranscurrido}}</td>
+             
+    
+            </tr>
+            <hr>
+            <tr *ngFor="let suma of sumas">
+              <td></td>
+              <td></td>
+              <th>{{suma.sumaTiempoEstandar}}</th>
+              <td></td>
+              <td></td>
+              <th>{{suma.sumaTiempoReal}}</th>
+            </tr>
+          </tbody>
+        </table>
+  </div>
+
+</div>
