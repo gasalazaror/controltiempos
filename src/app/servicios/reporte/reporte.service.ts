@@ -19,6 +19,10 @@ export class ReporteService {
     return this.api.post('reporte', { sql: sql });
   }
 
+  obtenerReporteSql(sql){
+    return this.api.post('reporte', { sql: sql });
+  }
+
   obtenerSumatoriasGlobal(empresa) {
     var sql = "SELECT TIME_FORMAT(SEC_TO_TIME(SUM(tiempoEstandarSec)),'%H:%i:%s') as sumaTiempoEstandar, TIME_FORMAT(SEC_TO_TIME(SUM(tiempoRealSec)),'%H:%i:%s') as sumaTiempoReal, FORMAT(((SUM(tiempoEstandarSec)/SUM(tiempoRealSec))*100),0) as eficiencia FROM vista_reporte where empresa='"+empresa+"'"
     return this.api.post('reporte', { sql: sql });
@@ -31,5 +35,9 @@ export class ReporteService {
   obtenerPausas(ordenServicio){
     var sql = "SELECT * from vista_pausas where ordenservicio = '"+ordenServicio+"'"
     return this.api.post('reporte', {sql:sql})
+  }
+
+  obtenerOperadores(empresa){
+    return this.api.get('operador?empresa='+empresa)
   }
 }

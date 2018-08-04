@@ -40,8 +40,11 @@
 
           <div *ngIf="personaSeleccionada!=''">
             Desde:
-            <input [(ngModel)]="filtroTiempo.inicio" type="date"> Hasta:
+            <input [(ngModel)]="filtroTiempo.inicio" type="date">
+            <input [(ngModel)]="filtroTiempo.iniciohora" type="time"><br>
+             Hasta:
             <input [(ngModel)]="filtroTiempo.fin" type="date">
+            <input [(ngModel)]="filtroTiempo.finhora" type="time"><br>
             <button (click)="buscarPorOperador()">Buscar</button>
           </div>
         </div>
@@ -51,7 +54,6 @@
         <div *ngIf="filtro==3">
           Reporte por Tarea
         </div>
-
         <div *ngIf="filtro==4">
           Reporte por Fecha
         </div>
@@ -89,7 +91,7 @@
           <td>{{reporte.tarea}}</td>
           <td>{{reporte.tiempoEstandar}}</td>
           <td>{{reporte.tiempoTranscurrido}}</td>
-          <td>{{reporte.tiempoPausas}}</td>
+          <td>{{reporte.tiempoPausas}}</td> 
           <td>{{reporte.eficiencia}}%</td>
           <td>{{reporte.operador}}</td>
           <td>
@@ -115,39 +117,34 @@
 
 <ng-template #content let-c="close" let-d="dismiss">
   <div class="modal-header bg-primary text-white">
-    <h4 class="modal-title text-white">Seleccionar operadores</h4>
+    <h4 class="modal-title text-white">Seleccionar operador</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <span class="input-group-text" id="basic-addon1">Filtro</span>
-      </div>
-      <input [(ngModel)]="terminoCliente" (input)="buscarPersona()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
-    </div>
+   
 
 
     <table class="table table-responsive table-sm">
       <thead>
         <tr>
 
-          <th scope="col">Identificación</th>
-          <th scope="col">Nombre</th>
+    
+          <th scope="col">Operador</th>
 
           <th scope="col">Seleccionar</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let persona of personas">
+        <tr *ngFor="let operador of operadores">
 
-          <td>{{persona.cedula}}</td>
-          <td>{{persona.nombre}}</td>
+          <td>{{operador.descripcion}}</td>
+         
 
           <td>
-            <button class="btn btn-success btn-sm" (click)="seleccionarPersona(persona); c('Close click')">
+            <button class="btn btn-success btn-sm" (click)="seleccionarPersona(operador); c('Close click')">
               <i class="mdi mdi-arrow-down"></i>
             </button>
           </td>
@@ -169,7 +166,7 @@
             <span class="sr-only">(current)</span>
           </span>
         </li>
-        <li class="page-item " [class.disabled]="personas.length < registros">
+        <li class="page-item " [class.disabled]="operadores.length < registros">
           <button class="page-link" (click)="navegarPaginas('+')">>></button>
         </li>
       </ul>
