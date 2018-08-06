@@ -36,6 +36,7 @@ export class TiempoEstandarComponent implements OnInit {
     this.registros = '10'
     this.pagina = 1
     this.skip = 0
+    this.filtro = 1
     this.sumas = []
     this.operadores = []
     this.operadoresSeleccionados = []
@@ -101,7 +102,15 @@ export class TiempoEstandarComponent implements OnInit {
         this.router.navigate(['login']);
       } else {
         this.reporteService.obtenerOperadores(usuario.persona.empresa.id).subscribe((res: any) => {
-          this.operadores = res
+        var operadores = []
+
+        res.forEach(element => {
+          if (element.usuarios.length>0) {
+            operadores.push(element)
+          } 
+        });
+        
+          this.operadores = operadores
 
         })
       }
@@ -137,7 +146,7 @@ export class TiempoEstandarComponent implements OnInit {
       } else {
         var sql = "SELECT * FROM vista_reporte WHERE inicio >= '" + this.convertirFechaSql(this.filtroTiempo.inicio) + " " + this.filtroTiempo.iniciohora + "' AND inicio <= '" + this.convertirFechaSql(this.filtroTiempo.fin) + " " + this.filtroTiempo.finhora + "' and fin >= '" + this.convertirFechaSql(this.filtroTiempo.inicio) + " " + this.filtroTiempo.iniciohora + "' AND fin <= '" + this.convertirFechaSql(this.filtroTiempo.fin) + " " + this.filtroTiempo.finhora + "' AND operador = '" + this.persona.descripcion + "' AND empresa = " + usuario.persona.empresa.id
         this.reporteService.obtenerReporteSql(sql).subscribe((res: any) => {
-          console.log(sql)
+       
           this.reportes = res.rows
         }, error => {
           alert(JSON.stringify(error))

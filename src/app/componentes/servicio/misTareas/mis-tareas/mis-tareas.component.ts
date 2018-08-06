@@ -120,7 +120,6 @@ export class MisTareasComponent implements OnInit {
     var confirmacion = confirm("Está seguro que desea dar por iniciada la tarea!");
     if (confirmacion) {
       var fechaActual = new Date();
-
       this.servicioService.iniciarServicio(servicio.id, fechaActual).subscribe((serv: any) => {
         this.reiniciar()
        

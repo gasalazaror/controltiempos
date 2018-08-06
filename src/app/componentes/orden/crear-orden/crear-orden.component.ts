@@ -37,7 +37,7 @@ export class CrearOrdenComponent implements OnInit {
   registros: any
   pagina: any
   skip: any
-  usuario:any
+  usuario: any
 
   constructor(
     private clienteService: ClienteService,
@@ -61,7 +61,7 @@ export class CrearOrdenComponent implements OnInit {
     this.vehiculos = []
     this.personaSeleccionada = ''
     this.serviciosDisponibles = []
-    
+
     this.registros = '10'
     this.pagina = 1
     this.skip = 0
@@ -150,20 +150,28 @@ export class CrearOrdenComponent implements OnInit {
 
   open(content) {
     this.obtenerPersonas()
-    this.modalService2.open(content, { windowClass: 'dark-modal' });
+    this.modalService2.open(content, { size: 'lg' });
   }
+
+  openVehiculo(content) {
+    this.obtenerVehiculos()
+    this.modalService2.open(content, { size: 'lg' });
+  }
+
+  
 
   openServicio(content) {
     this.cargarServicios()
 
-    this.modalService2.open(content, { windowClass: 'dark-modal' });
+    this.modalService2.open(content, { size: 'lg' });
   }
 
   open3(content) {
-    this.modalService2.open(content, { windowClass: 'dark-modal' });
+    this.obtenerVehiculos()
+    this.modalService2.open(content, { size: 'lg' });
   }
 
-  reiniciar(){
+  reiniciar() {
     this.registros = '10'
     this.pagina = 1
     this.skip = 0
@@ -175,7 +183,7 @@ export class CrearOrdenComponent implements OnInit {
     this.reiniciar()
 
     if (this.terminoCliente.length > 2) {
-      this.personaService.buscarUnaPersonaSeleccionar(this.terminoCliente.toUpperCase(), this.usuario.persona.empresa.id).subscribe((resultados:any) => {
+      this.personaService.buscarUnaPersonaSeleccionar(this.terminoCliente.toUpperCase(), this.usuario.persona.empresa.id).subscribe((resultados: any) => {
         var personas = []
         resultados.forEach(persona => {
           if (persona.cliente.length == 1) {
@@ -189,16 +197,15 @@ export class CrearOrdenComponent implements OnInit {
     } else {
       this.obtenerPersonas()
     }
-  
+
   }
 
   obtenerPersonas() {
-
     this.localStorage.getItem('usuario').subscribe((usuario) => {
       if (!usuario) {
         this.router.navigate(['login']);
       } else {
-        this.personaService.obtenerPersonas(usuario.persona.empresa.id, this.registros,this.skip, 'ASC', ).subscribe((res: any) => {
+        this.personaService.obtenerPersonas(usuario.persona.empresa.id, this.registros, this.skip, 'ASC', ).subscribe((res: any) => {
           var personas = []
           res.forEach(persona => {
             if (persona.cliente.length == 1) {
@@ -209,9 +216,20 @@ export class CrearOrdenComponent implements OnInit {
         })
       }
     });
-    
-   
   }
+
+  obtenerVehiculos() {
+    this.clienteService.obtenerCliente(this.persona.cliente[0].id).subscribe(res => {
+      this.orden.cliente = res
+      if (this.orden.cliente.pertenencias.length != 0) {
+        this.vehiculos = this.orden.cliente.pertenencias
+        this.vehiculoSeleccionado = ''
+        this.orden.vehiculo = this.vehiculoSeleccionado.vehiculo
+      } else {
+      }
+    })
+  }
+
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
       return 'by pressing ESC';
@@ -254,14 +272,14 @@ export class CrearOrdenComponent implements OnInit {
       } else {
         this.servicioService.obtenerServicios(this.usuario.persona.empresa.id).subscribe(res => {
           this.serviciosDisponibles = res
-     
-        }, error=>{
-          
+
+        }, error => {
+
         })
       }
     });
-    
-  
+
+
   }
 
   eliminarServicio(indice): void {
@@ -324,12 +342,12 @@ export class CrearOrdenComponent implements OnInit {
       } else {
         this.servicioService.buscarUnServicioDescripcion(termino, usuario.persona.empresa.id).subscribe(res => {
           this.serviciosDisponibles = res
-    
+
         })
       }
     });
 
-    
+
   }
 
   cambiarFiltro() {

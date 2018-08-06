@@ -10,14 +10,15 @@
           <div class="input-group-prepend">
             <span class="input-group-text" id="inputGroup-sizing-sm">Persona</span>
           </div>
-          <input [(ngModel)]="personaSeleccionada" (click)="open(content)" readonly type="text" class="form-control" aria-label="Sizing example input"
+          <input [(ngModel)]="personaSeleccionada"  readonly type="text" class="form-control" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-sm">
           <button class="btn btn-light" (click)="open(content)">
             <i class="mdi mdi-magnify"></i>
           </button>
-          <a class="btn btn-light " target="_blank" href="/#/persona/crearpersona/nuevo">
+          <button class="btn btn-light " (click)="open(content2)" >
             <i class="mdi mdi-plus"></i>
-          </a>
+          </button>
+       
 
         </div>
       </div>
@@ -33,12 +34,12 @@
           </div>
           <input (click)="open3(content3)" [(ngModel)]="vehiculoSeleccionado" readonly type="text" class="form-control" aria-label="Sizing example input"
             aria-describedby="inputGroup-sizing-sm">
-          <button class="btn btn-light" (click)="open(content3)">
+          <button class="btn btn-light" (click)="open3(content3)">
             <i class="mdi mdi-magnify"></i>
           </button>
-          <a class="btn btn-light " target="_blank" href="/#/vehiculo/crearvehiculo/nuevo">
+          <button class="btn btn-light " (click)="openVehiculo(content5)" >
             <i class="mdi mdi-plus"></i>
-          </a>
+          </button>
 
         </div>
       </div>
@@ -117,7 +118,8 @@
 
 <button [disabled]="!orden.servicios.length>0 || persona== null || vehiculo==null" (click)="guardarOrden()" class="btn btn-primary">Guardar</button>
 
-<ng-template #content2 let-c="close" let-d="dismiss">
+<ng-template #content2 let-c="close" class="modal-dialog modal-lg" let-d="dismiss">
+ 
   <div class="modal-header bg-primary text-white">
     <h4 class="modal-title text-white">Crear persona</h4>
     <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
@@ -127,6 +129,22 @@
   <div class="modal-body">
 
     <app-crear-persona></app-crear-persona>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-inverse" (click)="c('Close click')">Cerrar</button>
+  </div>
+</ng-template>
+
+<ng-template #content5 let-c="close" let-d="dismiss">
+  <div class="modal-header bg-primary text-white">
+    <h4 class="modal-title text-white">Crear Vehículo</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+
+    <app-crear-vehiculo></app-crear-vehiculo>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-inverse" (click)="c('Close click')">Cerrar</button>
@@ -150,7 +168,7 @@
     </div>
 
 
-    <table class="table table-responsive table-sm">
+    <table class="table table-responsive-sm table-sm">
       <thead>
         <tr>
 
@@ -215,7 +233,7 @@
 
 
 
-    <table class="table table-responsive table-sm">
+    <table class="table table-responsive-sm table-sm">
       <thead>
         <tr>
 
@@ -266,7 +284,7 @@
 
 
 
-    <table class="table table-responsive table-sm">
+    <table class="table table-responsive-sm table-sm">
       <thead>
         <tr>
 

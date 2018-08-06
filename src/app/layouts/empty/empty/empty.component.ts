@@ -70,7 +70,6 @@ export class EmptyComponent implements OnInit {
           if (rol.id == 3) { this.usuarioLogueado.isAsesor = true }
         });
 
-        console.log(this.usuarioLogueado)
 
 
 

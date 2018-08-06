@@ -4,12 +4,12 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-3">
 
 
-        <div class="form-group">
+        <div class="form-group form-group-sm">
           <label for="placa">Placa</label>
-          <input [disabled]="id!='nuevo'" (input)="validarPlaca()" maxlength="10" type="text" [(ngModel)]="vehiculo.placa" class="form-control"
+          <input [disabled]="id!='nuevo'" (input)="validarPlaca()" maxlength="10" type="text" [(ngModel)]="vehiculo.placa" class="form-control form-control-sm"
             id="placa">
 
           <div *ngIf="error.placa!=''" class="alert alert-danger" role="alert">
@@ -19,7 +19,7 @@
 
         <div class="form-group">
           <label for="marca">Marca</label>
-          <input type="text" (input)="validarMarca()" maxlength="20" [(ngModel)]="vehiculo.marca" class="form-control" id="marca">
+          <input type="text" (input)="validarMarca()" maxlength="20" [(ngModel)]="vehiculo.marca" class="form-control form-control-sm" id="marca">
           <div *ngIf="error.marca!=''" class="alert alert-danger" role="alert">
             <strong>Error: </strong> {{error.marca}}
           </div>
@@ -27,7 +27,7 @@
 
         <div class="form-group">
           <label for="modelo">Modelo</label>
-          <input (input)="validarModelo()" type="text" [(ngModel)]="vehiculo.modelo" maxlength="50" class="form-control" id="modelo">
+          <input (input)="validarModelo()" type="text" [(ngModel)]="vehiculo.modelo" maxlength="50" class="form-control form-control-sm" id="modelo">
           <div *ngIf="error.modelo!=''" class="alert alert-danger" role="alert">
             <strong>Error: </strong> {{error.modelo}}
           </div>
@@ -35,11 +35,37 @@
 
         <div class="form-group">
           <label for="modelo">Color</label>
-          <input (input)="validarColor()" type="text" [(ngModel)]="vehiculo.color" class="form-control" id="color">
+          <input (input)="validarColor()" type="text" [(ngModel)]="vehiculo.color" class="form-control form-control-sm" id="color">
           <div *ngIf="error.color!=''" class="alert alert-danger" role="alert">
             <strong>Error: </strong> {{error.color}}
           </div>
         </div>
+
+        <div class="form-group">
+            <label for="anio">Año</label>
+            <input (input)="validarAnio()" type="number" [(ngModel)]="vehiculo.anioFabricacion" maxlength="4" class="form-control form-control-sm" id="anio">
+            <div *ngIf="error.anioFabricacion!=''" class="alert alert-danger" role="alert">
+              <strong>Error: </strong> {{error.anioFabricacion}}
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="numeroChasis">Número de chasis</label>
+            <input (input)="validarNumeroChasis()" type="text" [(ngModel)]="vehiculo.numeroChasis" maxlength="20" class="form-control form-control-sm"
+              id="numeroChasis">
+            <div *ngIf="error.numeroChasis!=''" class="alert alert-danger" role="alert">
+              <strong>Error: </strong> {{error.numeroChasis}}
+            </div>
+          </div>
+  
+          <div class="form-group">
+            <label for="numeroMotor">Número de motor</label>
+            <input (input)="validarNumeroMotor()" type="text" [(ngModel)]="vehiculo.numeroMotor" maxlength="20" class="form-control form-control-sm"
+              id="numeroMotor">
+            <div *ngIf="error.numeroMotor!=''" class="alert alert-danger" role="alert">
+              <strong>Error: </strong> {{error.numeroMotor}}
+            </div>
+          </div>
 
 
 
@@ -48,38 +74,14 @@
       </div>
 
       <div class="col-md-6">
-        <div class="form-group">
-          <label for="anio">Año</label>
-          <input (input)="validarAnio()" type="number" [(ngModel)]="vehiculo.anioFabricacion" maxlength="4" class="form-control" id="anio">
-          <div *ngIf="error.anioFabricacion!=''" class="alert alert-danger" role="alert">
-            <strong>Error: </strong> {{error.anioFabricacion}}
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="numeroChasis">Número de chasis</label>
-          <input (input)="validarNumeroChasis()" type="text" [(ngModel)]="vehiculo.numeroChasis" maxlength="20" class="form-control"
-            id="numeroChasis">
-          <div *ngIf="error.numeroChasis!=''" class="alert alert-danger" role="alert">
-            <strong>Error: </strong> {{error.numeroChasis}}
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="numeroMotor">Número de motor</label>
-          <input (input)="validarNumeroMotor()" type="text" [(ngModel)]="vehiculo.numeroMotor" maxlength="20" class="form-control"
-            id="numeroMotor">
-          <div *ngIf="error.numeroMotor!=''" class="alert alert-danger" role="alert">
-            <strong>Error: </strong> {{error.numeroMotor}}
-          </div>
-        </div>
+       
         <div class="form-group ">
             <label for="numeroMotor">Dueño actual</label><br>
           <div class="input-group">
               <div class="input-group-prepend">
                   <span class="input-group-text" id="inputGroup-sizing-sm">Persona</span>
                 </div>
-                <input [(ngModel)]="personaSeleccionada" (click)="open(content)" readonly type="text" class="form-control" aria-label="Sizing example input"
+                <input [(ngModel)]="personaSeleccionada" (click)="open(content)" readonly type="text" class="form-control form-control-sm" aria-label="Sizing example input"
                   aria-describedby="inputGroup-sizing-sm">
                 <button class="btn btn-light" (click)="open(content)">
                   <i class="mdi mdi-magnify"></i>
@@ -88,17 +90,11 @@
                   <i class="mdi mdi-plus"></i>
                 </a>
           </div>
-            
-         
-
         </div>
-
         <div class="form-group">
           <button [disabled]="vehiculo.dueno==null || error.placa!='' || vehiculo.placa=='' || error.marca!='' || vehiculo.marca=='' || error.modelo!='' || vehiculo.marca=='' || error.anioFabricacion!='' || vehiculo.anioFabricacion=='' || error.numeroChasis!='' || error.numeroMotor!='' || error.placa!='' || vehiculo.placa=='' "
             (click)="guardarVehiculo()" class="btn btn-primary">Guardar</button>
         </div>
-
-
       </div>
     </div>
   </div>

@@ -217,11 +217,7 @@ export class InformacionPersonaComponent implements OnInit {
   }
 
   agregarVehiculo() {
-
-
-
     var placa = prompt('Por favor ingrese el id del vehículo', '');
-
     if (placa.trim() != '') {
       this.vehiculoService.obtenerUnVehiculo(this.persona.empresa.id, 'placa', placa)
         .subscribe(res => {

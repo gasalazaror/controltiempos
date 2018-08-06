@@ -5,32 +5,64 @@
   <div class="card-body">
 
     <div class="row">
-      <div class="col-md-4">
+      <!-- <div class="col-md-4">
         <div class="radio">
           <label>
-            <input type="radio" checked value="1" [(ngModel)]="filtro" name="optradio">Reporte por operador</label>
+            <input type="radio"  value="1" [(ngModel)]="filtro" name="optradio1">Reporte por operador</label>
         </div>
         <div class="radio">
           <label>
-            <input type="radio" value="2" [(ngModel)]="filtro" name="optradio">Reporte por Orden de trabajo</label>
+            <input type="radio" value="2" [(ngModel)]="filtro" name="optradio2">Reporte por Orden de trabajo</label>
         </div>
         <div class="radio">
           <label>
-            <input type="radio" value="3" [(ngModel)]="filtro" name="optradio">Reporte por Tarea</label>
+            <input type="radio" value="3" [(ngModel)]="filtro" name="optradio3">Reporte por Tarea</label>
         </div>
         <div class="radio">
           <label>
-            <input type="radio" value="4" [(ngModel)]="filtro" name="optradio">Reporte por Fecha</label>
+            <input type="radio" value="4" [(ngModel)]="filtro" name="optradio4">Reporte por Fecha</label>
+        </div>
+      </div> -->
+
+      <div class="row">
+        <div class="col-md-12">
+
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">Seleccionar operador</span>
+                </div>
+                <input [(ngModel)]="personaSeleccionada" readonly type="text" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                <button class="btn btn-light" (click)="open(content)">
+                  <i class="mdi mdi-magnify"></i>
+                </button>
+        
+              </div>
+        
+              <div *ngIf="personaSeleccionada!=''">
+                Desde:
+                <input [(ngModel)]="filtroTiempo.inicio" type="date">
+                <input [(ngModel)]="filtroTiempo.iniciohora" type="time">
+                <br> Hasta:
+                <input [(ngModel)]="filtroTiempo.fin" type="date">
+                <input [(ngModel)]="filtroTiempo.finhora" type="time">
+                <br>
+                <button (click)="buscarPorOperador()">Buscar</button>
+              </div>
+
         </div>
       </div>
 
-      <div class="col-md-8">
+    
+
+      <!-- <div class="col-md-8">
         <div *ngIf="filtro==1">
+        
+        
           <div class="input-group input-group-sm mb-3">
             <div class="input-group-prepend">
               <span class="input-group-text" id="inputGroup-sizing-sm">Seleccionar operador</span>
             </div>
-            <input [(ngModel)]="personaSeleccionada" (click)="open(content)" readonly type="text" class="form-control" aria-label="Sizing example input"
+            <input [(ngModel)]="personaSeleccionada"readonly type="text" class="form-control" aria-label="Sizing example input"
               aria-describedby="inputGroup-sizing-sm">
             <button class="btn btn-light" (click)="open(content)">
               <i class="mdi mdi-magnify"></i>
@@ -47,6 +79,7 @@
             <input [(ngModel)]="filtroTiempo.finhora" type="time"><br>
             <button (click)="buscarPorOperador()">Buscar</button>
           </div>
+       
         </div>
         <div *ngIf="filtro==2">
           Reporte por Orden de trabajo
@@ -57,7 +90,9 @@
         <div *ngIf="filtro==4">
           Reporte por Fecha
         </div>
-      </div>
+      </div> -->
+
+
     </div>
 
 
@@ -82,16 +117,13 @@
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let reporte of reportes"
-         [class.table-success]="reporte.eficiencia>=90"
-         [class.table-warning]="reporte.eficiencia>=30 && reporte.eficiencia<90"
-         [class.table-danger]="reporte.eficiencia<30"
-         >
+        <tr *ngFor="let reporte of reportes" [class.table-success]="reporte.eficiencia>=90" [class.table-warning]="reporte.eficiencia>=30 && reporte.eficiencia<90"
+          [class.table-danger]="reporte.eficiencia<30">
           <td>{{reporte.orden}}</td>
           <td>{{reporte.tarea}}</td>
           <td>{{reporte.tiempoEstandar}}</td>
           <td>{{reporte.tiempoTranscurrido}}</td>
-          <td>{{reporte.tiempoPausas}}</td> 
+          <td>{{reporte.tiempoPausas}}</td>
           <td>{{reporte.eficiencia}}%</td>
           <td>{{reporte.operador}}</td>
           <td>
@@ -100,14 +132,14 @@
 
         </tr>
         <hr>
-        <tr *ngFor="let suma of sumas">
+        <!-- <tr *ngFor="let suma of sumas">
           <td></td>
           <td></td>
           <th>{{suma.sumaTiempoEstandar}}</th>
           <td></td>
           <td></td>
           <th>{{suma.sumaTiempoReal}}</th>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
   </div>
@@ -124,14 +156,14 @@
   </div>
   <div class="modal-body">
 
-   
+
 
 
     <table class="table table-responsive table-sm">
       <thead>
         <tr>
 
-    
+
           <th scope="col">Operador</th>
 
           <th scope="col">Seleccionar</th>
@@ -141,7 +173,7 @@
         <tr *ngFor="let operador of operadores">
 
           <td>{{operador.descripcion}}</td>
-         
+
 
           <td>
             <button class="btn btn-success btn-sm" (click)="seleccionarPersona(operador); c('Close click')">

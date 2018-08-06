@@ -1,80 +1,95 @@
 <div class="row">
   <div class="col-md-12">
     <div class="card">
-      <div class="card-header">
-
-        <div class="float-md-right">
-          <a class="btn btn-primary" href="#/vehiculo/crearvehiculo/{{vehiculo.id}}">
-            <i class="mdi mdi-pencil"></i>
-          </a>
-        </div>
-
+      <div class="card-header bg-primary text-white">
+        Información del vehículo
       </div>
-      <ul class="list-group list-group-flush">
 
+      <div class="card-body">
 
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>Identificación:</strong>
+        <div class="row">
+
+          <div class="col-md-12">
+            <div class=" float-md-right">
+
+              <a class="btn btn-pencil" href="#/vehiculo/crearvehiculo/{{vehiculo.id}}" title="Editar">
+                <i class="mdi mdi-pencil"></i>
+              </a>
             </div>
-            <div class="col-md-9">{{vehiculo.placa}}</div>
           </div>
-        </li>
-
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>Marca:</strong>
+        </div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-3">
+                <strong>Identificación:</strong>
+              </div>
+              <div class="col-md-9">{{vehiculo.placa}}</div>
             </div>
-            <div class="col-md-9">{{vehiculo.marca}}</div>
-          </div>
-        </li>
-
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>Modelo:</strong>
+          </li>
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-3">
+                <strong>Marca:</strong>
+              </div>
+              <div class="col-md-9">{{vehiculo.marca}}</div>
             </div>
-            <div class="col-md-9">{{vehiculo.modelo}}</div>
-          </div>
-        </li>
+          </li>
 
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>Color:</strong>
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-3">
+                <strong>Modelo:</strong>
+              </div>
+              <div class="col-md-9">{{vehiculo.modelo}}</div>
             </div>
-            <div class="col-md-9">{{vehiculo.color}}</div>
-          </div>
-        </li>
+          </li>
 
-
-       
-
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>No. de chasis:</strong>
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-3">
+                <strong>Color:</strong>
+              </div>
+              <div class="col-md-9">{{vehiculo.color}}</div>
             </div>
-            <div class="col-md-9">{{vehiculo.numeroChasis}}</div>
-          </div>
-        </li>
+          </li>
 
-        <li class="list-group-item">
-          <div class="row">
-            <div class="col-md-3">
-              <strong>No. de motor:</strong>
+
+
+
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-3">
+                <strong>No. de chasis:</strong>
+              </div>
+              <div class="col-md-9">{{vehiculo.numeroChasis}}</div>
             </div>
-            <div class="col-md-9">{{vehiculo.numeroMotor}}</div>
-          </div>
-        </li>
+          </li>
+
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-md-3">
+                <strong>No. de motor:</strong>
+              </div>
+              <div class="col-md-9">{{vehiculo.numeroMotor}}</div>
+            </div>
+          </li>
+
+          <li class="list-group-item">
+              <div class="row">
+                <div class="col-md-3">
+                  <strong>Dueño actual:</strong>
+                </div>
+                <div class="col-md-9">{{duenoActual}}</div>
+              </div>
+            </li>
 
 
-      </ul>
+        </ul>
+      </div>
+
     </div>
   </div>
 
 
 </div>
-

@@ -10,10 +10,11 @@
           </a>
         </div>
 
-    Nombre del operador: {{operador.descripcion}}
+    <strong>Nombre del operador:</strong> {{operador.descripcion}}
+    <br>
 
     <div>
-      Usuario(s):
+      <strong>Usuario(s) asignados:</strong>
       <div *ngFor="let usuario of usuariosSeleccionados">
         {{usuario.nombre}}
       </div>

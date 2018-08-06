@@ -49,10 +49,12 @@ export class InformacionOrdenComponent implements OnInit {
     this.orden = { cliente: null, vehiculo: null, servicios: [] }
 
     if (this.id != 'nuevo') {
+ 
       this.ordenService.obtenerUnaOrden(this.id).subscribe((res: any) => {
         if (res) {
           this.orden = res
           this.ordenService.obtenerServiciosOrden(this.orden.id).subscribe((res: any) => {
+         
             res.forEach(servicio => {
               if (!servicio.operador) {
                 servicio.operador = { id: '', descripcion: 'SIN ASIGNAR' }

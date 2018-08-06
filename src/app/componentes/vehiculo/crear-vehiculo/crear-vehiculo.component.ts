@@ -283,7 +283,8 @@ export class CrearVehiculoComponent implements OnInit {
         this.vehiculoService.guardarVehiculo(this.vehiculo).subscribe(res => {
           alert("Vehículo guardado correctamente")
           this.vehiculo = res
-          this.router.navigate(['/vehiculo/informacionvehiculo/' + this.vehiculo.id]);
+          this.reanudar()
+         // this.router.navigate(['/vehiculo/informacionvehiculo/' + this.vehiculo.id]);
         }, error => {
           alert("Existió un error al guardar el vehículo")
           alert(JSON.stringify(error))
@@ -300,7 +301,7 @@ export class CrearVehiculoComponent implements OnInit {
           { modelo: this.vehiculo.modelo.toUpperCase(), marca: this.vehiculo.marca, color: this.vehiculo.color, numeroChasis: this.vehiculo.numeroChasis, numeroMotor: this.vehiculo.numeroMotor, dueno: this.vehiculo.dueno }
           ).subscribe(res => {
             alert('Vehículo modificado correctamente')
-            this.router.navigate(['/vehiculo/informacionvehiculo/' + this.vehiculo.id]);
+           // this.router.navigate(['/vehiculo/informacionvehiculo/' + this.vehiculo.id]);
           }, error => {
             alert("Existió un error al modificar el vehículo")
           })

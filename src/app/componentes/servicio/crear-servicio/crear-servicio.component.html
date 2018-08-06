@@ -3,27 +3,40 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header bg-primary text-white">
-        Categorías
+        Creación de categorías
       </div>
       <div class="card-body">
-        Categorías:
-        <button class="btn btn-link" (click)="obtenerCategoriasPadre()">Todas</button> {{categoriaSeleccionada.descripcion}}
-        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-          <div *ngFor="let categoria of categorias" class="btn-group mr-2" role="group" aria-label="First group">
 
-            <div class="btn-group mr-2 group-sm" role="group" aria-label="First group">
-              <button type="button" (click)="obtenerCategoriasHijas(categoria.id)" class="btn btn-secondary">{{categoria.descripcion}}</button>
-              <button type="button" (click)="agregarCategoriaConPadre(categoria.id)" class="btn btn-secondary">
+        <div class="card">
+          <div class="card-body">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb">
+                <button (click)="obtenerCategoriasPadre()" class="breadcrumb-item btn btn-link">Todas las categorías</button>
+                <li *ngFor="let categoria of arbolCategoria" class="breadcrumb-item">
+
+                  <a>
+                    <strong>{{categoria.descripcion}}</strong>
+                  </a>
+                </li>
+
+              </ol>
+            </nav>
+          </div>
+        </div>
+
+        <div>
+
+
+
+          <ul>
+
+            <li *ngFor="let categoria of categorias">
+              <button type="button" (click)="obtenerCategoriasHijas(categoria.id)" class="btn btn-link">{{categoria.descripcion}}</button>
+            </li>
+            <button class="btn btn-primary" (click)=agregarCategoria()>
                 <i class="mdi mdi-plus"></i>
               </button>
-
-
-            </div>
-
-          </div>
-          <button class="btn btn-primary" (click)=agregarCategoria()>
-            <i class="mdi mdi-plus"></i>
-          </button>
+          </ul>
         </div>
       </div>
     </div>

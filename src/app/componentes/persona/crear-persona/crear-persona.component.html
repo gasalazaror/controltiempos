@@ -48,12 +48,12 @@
             <input type="email" class="form-control form-control-sm" formControlName="correo">
           </div>
 
-          <div class="form-check">
+          <div *ngIf="id=='nuevo'" class="form-check">
             <input type="checkbox"  class="form-check-input" id="exampleCheck1" formControlName="esCliente">
             <label class="form-check-label" for="exampleCheck1">Cliente</label>
           </div>
 
-          <div class="form-check">
+          <div *ngIf="id=='nuevo'" class="form-check">
             <input type="checkbox" class="form-check-input" id="exampleCheck2" formControlName="esEmpleado">
             <label class="form-check-label" for="exampleCheck2">Empleado</label>
           </div>

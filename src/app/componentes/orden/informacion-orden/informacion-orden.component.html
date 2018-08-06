@@ -109,17 +109,14 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let servicio of orden.servicios;let i = index" [attr.data-index]="i">
+            <tr *ngFor="let servicio of orden.servicios;let i = index"  [attr.data-index]="i">
 
-              <td>{{servicio.servicio.descripcion}}</td>
-              <td>{{servicio.servicio.tiempoEstandar}}</td>
-              <td>{{servicio.estado}}</td>
-              <td>
-                <select (change)="cambiarGrupo(servicio, servicio.operador.id)" [(ngModel)]="servicio.operador.id">
-       
+              <td *ngIf="servicio.servicio">{{servicio.servicio.descripcion}}</td>
+              <td *ngIf="servicio.servicio">{{servicio.servicio.tiempoEstandar}}</td>
+              <td *ngIf="servicio.servicio">{{servicio.estado}}</td>
+              <td *ngIf="servicio.servicio">
+                <select  *ngIf="servicio.operador" [disabled]="servicio.estado=='EN PRODUCCIÓN' || servicio.estado=='EN PRODUCCIÓN - PAUSADO' || servicio.estado=='POR FACTURAR'" (change)="cambiarGrupo(servicio, servicio.operador.id)" [(ngModel)]="servicio.operador.id">
                     <option *ngFor="let grupo of grupos" value="{{grupo.id}}">{{grupo.descripcion}}</option>
-                
-
                 </select>
               </td>
             </tr>

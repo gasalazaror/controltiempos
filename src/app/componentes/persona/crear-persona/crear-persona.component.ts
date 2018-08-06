@@ -77,7 +77,7 @@ export class CrearPersonaComponent implements OnInit {
           direccion: ['', [Validators.required]],
           telefono: ['', [Validators.required]],
           correo: ['', [Validators.required, Validators.email]],
-          esCliente: [true],
+          esCliente: [false],
           esEmpleado: [false],
         })
       }
@@ -129,7 +129,7 @@ export class CrearPersonaComponent implements OnInit {
                 direccion: [this.persona.direccion, [Validators.required]],
                 telefono: [this.persona.telefono, [Validators.required]],
                 correo: [this.persona.correo, [Validators.required, Validators.email]],
-                esCliente: [true],
+                esCliente: [false],
                 esEmpleado: [false],
               })
 
@@ -253,9 +253,10 @@ export class CrearPersonaComponent implements OnInit {
             })
           } 
 
-         
-          
+
+
           alert('Persona guardada correctamente correctamente');
+          this.buscarSesion()
         }, error => {
           alert('Existió un error')
         })
@@ -265,7 +266,7 @@ export class CrearPersonaComponent implements OnInit {
       if (confirmacion) {
         this.personaService.modificarPersona(
           this.persona.id,
-          { nombre: this.persona.nombre, estado: this.persona.estado, telefono: this.persona.telefono, direccion: this.persona.direccion, correo: this.persona.correo, cedula: this.persona.cedula }
+          { nombre: this.personaForm.value.nombre, estado: this.personaForm.value.estado, telefono: this.personaForm.value.telefono, direccion: this.personaForm.value.direccion, correo: this.personaForm.value.correo, cedula: this.personaForm.value.cedula, tipo: this.personaForm.value.tipo }
         ).subscribe(res => {
           this.persona = res
           this.reanudar()
@@ -273,6 +274,8 @@ export class CrearPersonaComponent implements OnInit {
         }, error => {
           alert('Existió un error' + JSON.stringify(error))
         })
+      }else{
+       
       }
     }
   }

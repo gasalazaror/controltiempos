@@ -18,6 +18,7 @@ export class CrearServicioComponent implements OnInit {
   categoriaSeleccionada: any
   id: any
   usuario:any
+  arbolCategoria:any
 
   constructor
     (
@@ -35,6 +36,8 @@ export class CrearServicioComponent implements OnInit {
       tiempoEstandar: null,
       categoria: { id: '', descripcion: '' },
     }
+
+    this.arbolCategoria = []
 
     this.error = {
       descripcion: '',
@@ -92,8 +95,10 @@ export class CrearServicioComponent implements OnInit {
       } else {
         this.servicioService.obtenerCategorias(usuario.persona.empresa.id).subscribe((res: any) => {
           var categorias = []
+          this.arbolCategoria = []
           res.forEach(element => {
             if (element.padre == null) {
+           
               categorias.push(element)
             }
           });
@@ -107,6 +112,35 @@ export class CrearServicioComponent implements OnInit {
   }
 
   obtenerCategoriasHijas(id) {
+
+    this.servicioService.obtenerCategoria(id).subscribe((res: any) => {
+      if (res.categorias.length == 0) {
+
+        var aux = false;
+        this.arbolCategoria.forEach(element => {
+          if(element.id == id){aux=true}
+        });
+        if(!aux){
+          this.arbolCategoria.push(res);
+          this.categoriaSeleccionada = res
+          this.categorias=[]
+        }
+        
+
+
+
+        this.servicio.categoria = { id: res.id, descripcion: res.descripcion };
+      } else {
+        this.categoriaSeleccionada.descripcion = res.descripcion
+        this.categoriaSeleccionada.id = res.id
+        this.categorias = res.categorias
+        this.arbolCategoria.push(res)
+      }
+    })
+  }
+
+  obtenerCategoriasHijasMenu(id) {
+
     this.servicioService.obtenerCategoria(id).subscribe((res: any) => {
       if (res.categorias.length == 0) {
         this.servicio.categoria = { id: res.id, descripcion: res.descripcion };
@@ -114,35 +148,42 @@ export class CrearServicioComponent implements OnInit {
         this.categoriaSeleccionada.descripcion = res.descripcion
         this.categoriaSeleccionada.id = res.id
         this.categorias = res.categorias
+   
       }
     })
   }
 
   agregarCategoria() {
     var categoria = prompt('Ingrese el nombre de la categoría', '');
-    if (categoria.trim() != '') {
-      this.servicioService.buscarCategoria('descripcion', categoria, this.usuario.persona.empresa.id)
-        .subscribe(res => {
-          if (res[0]) {
-            alert('La categoría ' + categoria.toUpperCase() + ' ya existe')
-          } else {
-            if (this.categoriaSeleccionada.id == null) {
-              this.servicioService.guardarCategoria({ empresa: this.usuario.persona.empresa.id, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
-                this.obtenerCategoriasPadre()
-              }, error => { alert('Existió un error') })
+
+    if (categoria) {
+      if (categoria.trim() != '') {
+        this.servicioService.buscarCategoria('descripcion', categoria, this.usuario.persona.empresa.id)
+          .subscribe(res => {
+            if (res[0]) {
+              alert('La categoría ' + categoria.toUpperCase() + ' ya existe')
             } else {
-              this.servicioService.guardarCategoria({ padre: this.categoriaSeleccionada.id, empresa: this.usuario.persona.empresa.id, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
-                this.obtenerCategoriasHijas(this.categoriaSeleccionada.id);
-              }, error => { alert('Existió un error') })
-
+              if (this.categoriaSeleccionada.id == null) {
+                this.servicioService.guardarCategoria({ empresa: this.usuario.persona.empresa.id, descripcion: categoria.toUpperCase().trim() }).subscribe(res => {
+                  this.obtenerCategoriasPadre()
+                }, error => { alert('Existió un error') })
+              } else {
+                this.servicioService.guardarCategoria({ padre: this.categoriaSeleccionada.id, empresa: this.usuario.persona.empresa.id, descripcion: categoria.toUpperCase().trim() }).subscribe((res:any) => {
+                  this.obtenerCategoriasHijas(res.id);
+                }, error => { alert('Existió un error') })
+  
+              }
+  
+  
+  
             }
-
-
-
-          }
-        })
-
+          })
+  
+      }
+    } else {
+      
     }
+ 
   }
 
   agregarCategoriaConPadre(id) {
