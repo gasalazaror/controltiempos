@@ -1,55 +1,101 @@
 <div class="card">
-    <div class="card-header bg-primary text-white">
-      Búsqueda
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-6">
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon3">Filtro</span>
-            </div>
-            <input [(ngModel)]="termino" (input)="buscarServicios()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
+  <div class="card-header bg-primary text-white">
+    Búsqueda
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+
+        <div class="input-group mb-3">
+          <div class="input-group-prepend">
+            <span class="input-group-text" id="basic-addon3">Filtro</span>
           </div>
+          <input [(ngModel)]="termino" (input)="buscarServicios()" type="text" class="form-control" id="basic-url" aria-describedby="basic-addon3">
         </div>
-        <div class="col-md-1">
-            <a class="btn btn-primary" href="#/servicio/crearservicio/nuevo"><i class="mdi mdi-plus"></i></a>
-          </div>
+      </div>
+      <div class="col-md-2">
+        
+        <select id="selectPaginas" class="form-control" [(ngModel)]="paginacion.registros" (change)="reiniciar()">
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="20">20</option>
+          <option value="40">40</option>
+        </select>
+        <label class="label-sm" style="font-size: 10px; font-weight: bold" for="selectPaginas">Registros por página</label>
+      </div>
+
+      <div class="col-md-2">
+        <select id="selectOrden" class="form-control" [(ngModel)]="paginacion.orden" (change)="reiniciar()">
+          <option value="ASC">Ascendente</option>
+          <option value="DESC">Descendente</option>
+        </select>
+        <label style="font-size: 10px; font-weight: bold" class="label-sm" for="selectOrden">Orden</label>
+      </div>
+
+
+
+
+      <div class="col-md-1">
+
+        <a class="btn btn-primary" href="#/servicio/crearservicio/nuevo">
+          <i class="mdi mdi-plus"></i>
+        </a>
       </div>
     </div>
   </div>
-  <div class="card">
-    <div class="card-header bg-primary text-white">
-      Resultados
-    </div>
-    <div class="card-body">
-      <table class="table table-sm table-striped table-responsive-sm">
-        <thead class=" ">
-          <tr>
-            <th></th>
-            <th scope="col">Descripción</th>
-            <th scope="col">Tiempo estandar</th>
-            <th scope="col">Categoría</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let servicio of servicios">
-  
-            <td>
-                <a class="btn btn-sm btn-primary" href="#/servicio/crearservicio/{{servicio.id}}">
-                    <i class="mdi mdi-pencil"></i>
-                </a>
-              <button [disabled]="servicio.ordenes.length!=0" (click)="eliminarServicio(servicio)" class="btn btn-sm btn-danger">
-                <i class="mdi mdi-delete"></i>
-              </button>
-            </td>
-            <td>
-                {{servicio.descripcion}}
-            </td>
-            <td>{{servicio.tiempoEstandar }}</td>
-            <td>{{servicio.categoria.descripcion}}</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+</div>
+<div class="card">
+  <div class="card-header bg-primary text-white">
+    Resultados
   </div>
+  <div class="card-body">
+    <table class="table table-sm table-striped table-responsive-sm">
+      <thead class=" ">
+        <tr>
+          <th></th>
+          <th scope="col">Código</th>
+          <th scope="col">Descripción</th>
+          <th scope="col">Tiempo estandar</th>
+          <th scope="col">Categoría</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let servicio of servicios">
+
+          <td>
+            <a class="btn btn-sm btn-primary" href="#/servicio/crearservicio/{{servicio.id}}">
+              <i class="mdi mdi-pencil"></i>
+            </a>
+            <button [disabled]="servicio.ordenes.length!=0" (click)="eliminarServicio(servicio)" class="btn btn-sm btn-danger">
+              <i class="mdi mdi-delete"></i>
+            </button>
+          </td>
+          <td>{{servicio.codigo}}</td>
+          <td>
+            {{servicio.descripcion}}
+          </td>
+          <td>{{servicio.tiempoEstandar }}</td>
+          <td>{{servicio.categoria.descripcion}}</td>
+        </tr>
+      </tbody>
+    </table>
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+
+        <li class="page-item " [class.disabled]="paginacion.pagina==1">
+          <button class="page-link" (click)="navegarPaginas('-')" tabindex="-1">
+            <<</button>
+        </li>
+        <li class="page-item">
+          <span class="page-link">
+            Página {{paginacion.pagina}}
+            <span class="sr-only">(current)</span>
+          </span>
+        </li>
+        <li class="page-item " [class.disabled]="servicios.length < paginacion.registros">
+          <button class="page-link" (click)="navegarPaginas('+')">>></button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

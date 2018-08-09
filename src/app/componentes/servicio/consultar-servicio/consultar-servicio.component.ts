@@ -12,10 +12,12 @@ export class ConsultarServicioComponent implements OnInit {
   termino: any
   servicios: any;
   empresa: any;
-  usuario:any
+  usuario: any
+
+  paginacion: any
 
   constructor
-  (
+    (
     private servicioService: ServicioService,
     private localStorage: LocalStorage,
     private router: Router,
@@ -23,6 +25,9 @@ export class ConsultarServicioComponent implements OnInit {
     this.termino = '';
     this.servicios = []
     this.empresa = 1;
+    this.paginacion = {
+      registros: '10', orden: 'ASC', pagina: 1, skip: 0
+    }
   }
 
   ngOnInit() {
@@ -42,15 +47,17 @@ export class ConsultarServicioComponent implements OnInit {
 
   buscarServicios() {
 
+
     this.localStorage.getItem('usuario').subscribe((usuario) => {
       if (!usuario) {
         this.router.navigate(['login']);
       } else {
-   
+
         if (this.termino.length > 2) {
-          this.servicioService.buscarUnServicio(this.termino.toUpperCase(), usuario.persona.empresa.id ).subscribe(res => {
+          this.servicioService.buscarServicioPaginacion(this.termino.toUpperCase(), usuario.persona.empresa.id, this.paginacion.registros, this.paginacion.skip, this.paginacion.orden).subscribe(res => {
             this.servicios = res
           }, error => {
+            console.log(error)
             this.cargarServicios()
           })
         } else {
@@ -58,7 +65,7 @@ export class ConsultarServicioComponent implements OnInit {
         }
       }
     });
- 
+
 
   }
 
@@ -67,11 +74,8 @@ export class ConsultarServicioComponent implements OnInit {
       if (!usuario) {
         this.router.navigate(['login']);
       } else {
-
-        this.servicioService.obtenerServicios(usuario.persona.empresa.id).subscribe(res => {
+        this.servicioService.obtenerServiciosPaginacion(usuario.persona.empresa.id, this.paginacion.registros, this.paginacion.skip, this.paginacion.orden).subscribe(res => {
           this.servicios = res;
-    
-        
           var date = new Date(null);
           date.setMinutes(res[0].tiempoEstandar); // specify value for SECONDS here
           var timeString = date.toISOString().substr(11, 8);
@@ -79,7 +83,42 @@ export class ConsultarServicioComponent implements OnInit {
         })
       }
     });
- 
+
+  }
+
+
+  navegarPaginas(accion) {
+    switch (accion) {
+      case '+':
+        this.paginacion.pagina = this.paginacion.pagina + 1
+        this.paginacion.skip = parseInt(this.paginacion.skip) + parseInt(this.paginacion.registros)
+        break;
+      case '-':
+        this.paginacion.pagina = this.paginacion.pagina - 1
+        this.paginacion.skip = parseInt(this.paginacion.skip) - parseInt(this.paginacion.registros)
+        break;
+      default:
+        break;
+    }
+    if (this.termino == '') {
+      this.cargarServicios()
+    } else {
+      this.buscarServicios()
+    }
+
+  }
+
+  reiniciar() {
+    this.paginacion.pagina = 1
+    this.paginacion.skip = 0
+
+    if (this.termino = '') {
+      this.cargarServicios()
+    } else {
+      this.buscarServicios()
+    }
+
+
   }
 
   eliminarServicio(servicio) {

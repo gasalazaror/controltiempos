@@ -49,16 +49,11 @@ export class MisTareasComponent implements OnInit {
 
         this.usuarioService.obtenerUnUsuario(usuario.id).subscribe(res => {
           this.usuario = res
-
           var operadores = '['
-
           this.usuario.operadores.forEach(operador => {
             operadores += '{"operador":"'+operador.id+'"},'
           });
-
           operadores = operadores.slice(0, operadores.length-1)+"]"
-      
-        
           this.obtenerServiciosGrupo(operadores)
         })
       }
@@ -192,15 +187,12 @@ export class MisTareasComponent implements OnInit {
     var confirmacion = confirm("Está seguro que desea reanudar la tarea?");
     if (confirmacion) {
       var fechaActual = new Date();
-
       this.servicioService.reanudarServicio(servicio.pausaActual, fechaActual).subscribe(serv => {
-
         this.servicioService.modificarEstado(servicio.id, 'EN PRODUCCIÓN', '').subscribe(res => {
           this.reiniciar()
         })
       })
     } else {
-
     }
   }
 

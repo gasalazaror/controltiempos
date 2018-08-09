@@ -3,41 +3,43 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header bg-primary text-white">
-        Creación de categorías
+        Seleccionar categoría
       </div>
       <div class="card-body">
 
         <div class="card">
+          
           <div class="card-body">
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb">
                 <button (click)="obtenerCategoriasPadre()" class="breadcrumb-item btn btn-link">Todas las categorías</button>
                 <li *ngFor="let categoria of arbolCategoria" class="breadcrumb-item">
-
                   <a>
                     <strong>{{categoria.descripcion}}</strong>
                   </a>
                 </li>
-
               </ol>
             </nav>
+            <div>
+                <ul class="list-inline border">
+      
+                  <li class="list-inline-item" *ngFor="let categoria of categorias">
+                    <button type="button" (click)="obtenerCategoriasHijas(categoria.id)" class="btn btn-link">{{categoria.descripcion}}</button>
+                  </li>
+                  <li class="list-inline-item">
+                    <button class="btn btn-default btn-sm" (click)=agregarCategoria()>
+                      <i class="mdi mdi-plus"></i>
+                    </button>
+                  </li>
+      
+                </ul>
+              </div>
+
+
+
           </div>
         </div>
-
-        <div>
-
-
-
-          <ul>
-
-            <li *ngFor="let categoria of categorias">
-              <button type="button" (click)="obtenerCategoriasHijas(categoria.id)" class="btn btn-link">{{categoria.descripcion}}</button>
-            </li>
-            <button class="btn btn-primary" (click)=agregarCategoria()>
-                <i class="mdi mdi-plus"></i>
-              </button>
-          </ul>
-        </div>
+        
       </div>
     </div>
   </div>
@@ -46,59 +48,34 @@
 
 
 
-  <div class="col-md-12">
-
-
-
+  <div *ngIf="categoriaSeleccionada.descripcion!=''" class="col-md-12">
     <div class="card">
       <div class="card-header bg-primary text-white">
-        Información
+        Creación del servicio
       </div>
       <div class="card-body">
-
-        <div class="row">
-          <div class="col-md-4">
-
-            <label for="descripcion">Categoria: {{servicio.categoria.descripcion}}</label>
-
+        <div class="form-inline">
+            <label for="inlineFormInputName2">Código: </label>
             <div class="form-group">
-
-              <input maxlength="50" type="hidden" [(ngModel)]="servicio.categoria.id" class="form-control" id="categoria">
-
+              <input (input)="validarCodigo()" style="max-width: 150px;" autofocus type="text" [(ngModel)]="servicio.codigo" class="form-control mb-2 mr-sm-2"
+                id="inlineFormInputName2">
             </div>
-
-
-            <div class="form-group">
-              <label for="descripcion">Servicio</label>
-              <input (input)="validarDescripcion()" maxlength="50" type="text" [(ngModel)]="servicio.descripcion" class="form-control"
-                id="descripcion">
-              <div *ngIf="error.descripcion!=''" class="alert alert-danger" role="alert">
-                <strong>Error: </strong> {{error.descripcion}}
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label for="tiempoEstandar">Tiempo estandar en minutos</label>
-              <input type="number" (input)="validarTiempoEstandar()" [(ngModel)]="servicio.tiempoEstandar" class="form-control" id="tiempoEstandar">
-              <div *ngIf="error.tiempoEstandar!=''" class="alert alert-danger" role="alert">
-                <strong>Error: </strong> {{error.tiempoEstandar}}
-              </div>
-            </div>
-            <div class="form-group">
-              <button [disabled]="error.descripcion!='' || servicio.descripcion==''  || error.tiempoEstandar!='' || servicio.tiempoEstandar==null || servicio.categoria.id ==''  "
-                (click)="guardarServicio()" class="btn btn-primary">Guardar</button>
-            </div>
-
-
+          <label for="inlineFormInputName2">Servicio: </label>
+          <div class="form-group">
+            <input (input)="validarDescripcion()"  type="text" [(ngModel)]="servicio.descripcion" class="form-control mb-2 mr-sm-2"
+              id="inlineFormInputName2">
           </div>
+          <label for="inlineFormInputGroupUsername2">Tiempo estandar: </label>
+          <input type="number" class="form-control mb-1 mr-sm-2" [(ngModel)]="servicio.tiempoEstandar" size="1" style="max-width: 90px;"
+            id="inlineFormInputGroupUsername2">
+          <select id="selectUnidad" class="form-control">
+            <option value="">Minutos</option>
+          </select>
+          <button
+          [disabled]="error.descripcion!='' || servicio.descripcion=='' || servicio.codigo==''  || error.tiempoEstandar!='' || servicio.tiempoEstandar==null || servicio.categoria.id ==''  "
+           type="submit"  (click)="guardarServicio()" class="btn btn-primary mb-2">Guardar</button>
         </div>
-
-
-
       </div>
     </div>
-
-
-
   </div>
 </div>

@@ -12,8 +12,17 @@ export class ServicioService {
   }
 
   buscarUnServicio(termino, empresa) {
+    return this.apiService.get('servicio?where={"and":[{"empresa":"'+empresa+'"}],"or":[{"descripcion": {"contains":"' + termino + '"}}, {"codigo": {"contains":"' + termino + '"}},  {"tiempoEstandar": {"contains":"' + termino + '"}}]}')
+  }
 
-    return this.apiService.get('servicio?where={"and":[{"empresa":"'+empresa+'"}],"or":[{"descripcion": {"contains":"' + termino + '"}}, {"tiempoEstandar": {"contains":"' + termino + '"}}]}')
+  buscarServicioPaginacion(termino, empresa,limit, skip,orden) {
+    return this.apiService.get('servicio?where={"and":[{"empresa":"'+empresa+'"}],"or":[{"descripcion": {"contains":"' + termino + '"}}, {"codigo": {"contains":"' + termino + '"}},  {"tiempoEstandar": {"contains":"' + termino + '"}}]}'+'&limit='+limit+'&skip='+skip +"&sort=descripcion "+orden)
+  }
+
+
+
+  obtenerServiciosPaginacion(empresa,limit, skip,orden) {
+    return this.apiService.get('servicio?empresa=' + empresa+'&limit='+limit+'&skip='+skip +"&sort=descripcion "+orden);
   }
 
   obtenerServicios(empresa) {
@@ -78,7 +87,6 @@ export class ServicioService {
   }
 
   reanudarServicio(pausa, horaFin) {
-    alert
     return this.apiService.put('pausa/' + pausa, { horaFin: horaFin })
   }
 

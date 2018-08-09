@@ -32,6 +32,7 @@ export class CrearServicioComponent implements OnInit {
 
     this.servicio = {
       empresa: 1,
+      codigo: '',
       descripcion: '',
       tiempoEstandar: null,
       categoria: { id: '', descripcion: '' },
@@ -63,8 +64,10 @@ export class CrearServicioComponent implements OnInit {
 
   obtenerUnServicio() {
     if (this.id != 'nuevo') {
-      this.servicioService.obtenerUnServicio(this.id).subscribe(res => {
+      this.servicioService.obtenerUnServicio(this.id).subscribe((res:any) => {
         this.servicio = res;
+        this.categoriaSeleccionada = res.categoria
+        this.arbolCategoria.push(res.categoria)
       })
     }
   }
@@ -72,9 +75,10 @@ export class CrearServicioComponent implements OnInit {
   reanudar() {
     this.servicio = {
       empresa: 1,
+      codigo: '',
       descripcion: '',
       tiempoEstandar: null,
-      categoria: { id: '', descripcion: '' },
+      categoria: { id: this.categoriaSeleccionada.id, descripcion: this.categoriaSeleccionada.descripcion },
     }
 
     this.error = {
@@ -125,10 +129,6 @@ export class CrearServicioComponent implements OnInit {
           this.categoriaSeleccionada = res
           this.categorias=[]
         }
-        
-
-
-
         this.servicio.categoria = { id: res.id, descripcion: res.descripcion };
       } else {
         this.categoriaSeleccionada.descripcion = res.descripcion
@@ -241,7 +241,7 @@ export class CrearServicioComponent implements OnInit {
 
       if (this.id == 'nuevo') {
 
-        this.servicioService.guardarServicio({empresa: this.usuario.persona.empresa.id, descripcion: this.servicio.descripcion.toUpperCase().trim(), tiempoEstandar: this.servicio.tiempoEstandar, categoria: this.servicio.categoria.id }).subscribe(res => {
+        this.servicioService.guardarServicio({empresa: this.usuario.persona.empresa.id, descripcion: this.servicio.descripcion.toUpperCase().trim(), codigo: this.servicio.codigo.toUpperCase().trim(), tiempoEstandar: this.servicio.tiempoEstandar, categoria: this.servicio.categoria.id }).subscribe(res => {
           alert('Servicio guardado correctamente')
           this.reanudar();
         }, error => {
@@ -249,7 +249,7 @@ export class CrearServicioComponent implements OnInit {
         })
 
       } else {
-        this.servicioService.modificarServicio(this.servicio.id, { descripcion: this.servicio.descripcion.toUpperCase().trim(), tiempoEstandar: this.servicio.tiempoEstandar, categoria: this.servicio.categoria.id })
+        this.servicioService.modificarServicio(this.servicio.id, { descripcion: this.servicio.descripcion.toUpperCase().trim(), codigo: this.servicio.codigo.toUpperCase().trim(), tiempoEstandar: this.servicio.tiempoEstandar, categoria: this.servicio.categoria.id })
           .subscribe(res => {
             alert('Servicio modificado correctamente')
             this.servicio = res;
@@ -282,8 +282,13 @@ export class CrearServicioComponent implements OnInit {
     this.obtenerCategoriasPadre();
 
 
-    if (this.servicio != 'nuevo') {
+    if (this.id != 'nuevo') {
       this.obtenerUnServicio()
+      this.servicioService.obtenerUnServicio(this.id).subscribe((res:any) => {
+        this.servicio = res;
+        this.categoriaSeleccionada = res.categoria
+        this.arbolCategoria.push(res.categoria)
+      })
     }
   }
 
